@@ -6,6 +6,9 @@
    <application
         android:label="股市行事曆"
         android:icon="@mipmap/launcher_icon">
+        <meta-data
+        android:name="com.google.android.gms.ads.APPLICATION_ID"
+        android:value="ca-app-pub-3136608336853382~7636902588"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
