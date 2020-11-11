@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "874870813769",
+    "firebase_url": "https://stockcalendar-449ba.firebaseio.com",
+    "project_id": "stockcalendar-449ba",
+    "storage_bucket": "stockcalendar-449ba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:874870813769:android:5c44f7b752871579cf7b98",
+        "android_client_info": {
+          "package_name": "com.wis.stock_calendar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "874870813769-av2npcsv67r597s3o1qfnhklodgqnn86.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wis.stock_calendar",
+            "certificate_hash": "6f15e2a269d92bb85e3b60d24ff806274e103a63"
+          }
+        },
+        {
+          "client_id": "874870813769-rmbkginl1qqp7qhav4gdajeduer4kbsj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5Gw0bbBaOkTSdoAGpAjCFfPLzRUUx31M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "874870813769-rmbkginl1qqp7qhav4gdajeduer4kbsj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "874870813769-9pf1cg1826qv76b6pbfihf8jvg2skpsg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.wis.stockCalendar"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
