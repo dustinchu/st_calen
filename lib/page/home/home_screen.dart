@@ -143,22 +143,22 @@ class _HomeScreenState extends State<HomeScreen>
     print(info);
   }
 
-  @override
-  void didChangeMetrics() {
-    super.didChangeMetrics();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        if (MediaQuery.of(context).viewInsets.bottom == 0) {
-          //关闭键盘
-          print("鍵盤關閉");
-          Provider.of<HomeStatus>(context, listen: false).homeToday(false);
-          _calendarController.swipeCalendarFormat(isSwipeUp: false);
-        } else {
-          //显示键盘
-        }
-      });
-    });
-  }
+  // @override
+  // void didChangeMetrics() {
+  //   super.didChangeMetrics();
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     setState(() {
+  //       if (MediaQuery.of(context).viewInsets.bottom == 0) {
+  //         //关闭键盘
+  //         print("鍵盤關閉");
+  //         Provider.of<HomeStatus>(context, listen: false).homeToday(false);
+  //         _calendarController.swipeCalendarFormat(isSwipeUp: false);
+  //       } else {
+  //         //显示键盘
+  //       }
+  //     });
+  //   });
+  // }
 
   // //鍵盤狀態監聽
   void _onKeyboardVisibilityNotification(bool visible) {
@@ -343,10 +343,10 @@ class _HomeScreenState extends State<HomeScreen>
 
                             OutlineButton(
                               onPressed: () {
-                                // Provider.of<HomeStatus>(context, listen: false)
-                                //     .setCalendarModel(1);
+                                Provider.of<HomeStatus>(context, listen: false)
+                                    .setCalendarModel(2);
 
-                                _capturePng(context);
+                                // _capturePng(context);
                               },
                               child: Text(
                                 "預覽",
@@ -425,10 +425,10 @@ class _HomeScreenState extends State<HomeScreen>
         weekendStyle: TextStyle().copyWith(
             color: '${homeState.getCalendarModel['weekend']}'.toColor()),
         // weekendStyle: TextStyle().copyWith(color: Colors.blue[800]),
-        // holidayStyle: TextStyle().copyWith(color: Colors.black),
+        holidayStyle: TextStyle().copyWith(color: '${homeState.getCalendarModel['weekday_text']}'.toColor()),
       ),
       daysOfWeekStyle: DaysOfWeekStyle(
-        //日期標題樣式
+        //標題日期樣式
         decoration: BoxDecoration(
             color: '${homeState.getCalendarModel['weekend_row']}'.toColor(),
             borderRadius:
@@ -439,6 +439,7 @@ class _HomeScreenState extends State<HomeScreen>
       ),
       headerStyle: HeaderStyle(
         titleTextStyle: TextStyle(
+          //標題
             color: '${homeState.getCalendarModel['header_text']}'.toColor(),
             fontSize: 17),
         centerHeaderTitle: true,
@@ -454,7 +455,7 @@ class _HomeScreenState extends State<HomeScreen>
               margin: const EdgeInsets.all(4.0),
               //對齊
               padding: const EdgeInsets.only(top: 12.0),
-              //點擊顏色
+              //點擊背景
               color: homeState.getHomeButtonStatus
                   ? '${homeState.getCalendarModel['click_today']}'.toColor()
                   : Colors.transparent,
@@ -464,6 +465,7 @@ class _HomeScreenState extends State<HomeScreen>
               child: Text(
                 '${date.day}',
                 textAlign: TextAlign.center,
+                 //點擊顏色
                 style: TextStyle().copyWith(
                     color: '${homeState.getCalendarModel['click_today_text']}'
                         .toColor(),

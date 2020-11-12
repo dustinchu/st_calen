@@ -29,8 +29,7 @@ class TodayClick extends StatelessWidget {
               height: 50,
               child: TextFormField(
                 style: TextStyle(color: Colors.white),
-                keyboardType: TextInputType.numberWithOptions(
-                    signed: true, decimal: true),
+                keyboardType: TextInputType.text,
                 decoration: InputDecoration(
                   counterText: '',
                   enabledBorder: OutlineInputBorder(

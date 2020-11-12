@@ -2,7 +2,7 @@
     package="com.wis.stock_calendar">
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
+    <uses-permission android:name="com.android.vending.BILLING" />
    <application
         android:label="股市行事曆"
         android:icon="@mipmap/launcher_icon">
