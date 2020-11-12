@@ -1,18 +1,9 @@
+import 'dart:async';
+
 import 'package:circular_check_box/circular_check_box.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stock_calendar/common/status/home_status.dart';
-
-import 'select_circular.dart';
-
-// class TypeScreen extends StatelessWidget {
-//   const TypeScreen({Key key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-
-//   }
-// }
 
 class TypeScreen extends StatefulWidget {
   TypeScreen({Key key}) : super(key: key);
@@ -24,6 +15,12 @@ class TypeScreen extends StatefulWidget {
 bool status = false;
 
 class _TypeScreenState extends State<TypeScreen> {
+  @override
+  void initState() {
+    
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var homeState = Provider.of<HomeStatus>(context);
