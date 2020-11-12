@@ -26,7 +26,7 @@ class TodayClick extends StatelessWidget {
           Expanded(
             child: Container(
               width: double.infinity,
-              height: 40,
+              height: 50,
               child: TextFormField(
                 style: TextStyle(color: Colors.white),
                 keyboardType: TextInputType.numberWithOptions(
@@ -61,14 +61,16 @@ class TodayClick extends StatelessWidget {
               ),
               textColor: Colors.red[400],
               splashColor: Colors.white38,
-              borderSide: new BorderSide(color: markStatus ? Colors.red[800] : Colors.white60,),
+              borderSide: new BorderSide(
+                color: markStatus ? Colors.red[800] : Colors.white60,
+              ),
             ),
           ),
           // ),
           SizedBox(
             width: 20,
           ),
-                   SizedBox(
+          SizedBox(
             width: 50,
             child: OutlineButton(
               onPressed: onClickBtn2,
@@ -79,7 +81,8 @@ class TodayClick extends StatelessWidget {
               ),
               textColor: Colors.green[800],
               splashColor: Colors.white38,
-              borderSide: new BorderSide(color:  markStatus ? Colors.white60 : Colors.green[800]),
+              borderSide: new BorderSide(
+                  color: markStatus ? Colors.white60 : Colors.green[800]),
             ),
           ),
         ],

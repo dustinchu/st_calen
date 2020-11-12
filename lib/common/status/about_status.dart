@@ -27,8 +27,7 @@ class AboutStatus extends ChangeNotifier {
       aboutButtonStatus = true;
       notifyListeners();
       //firebase 寫入
-       toastInfo("driver=$driverID   name1=$name  body=$body address=$address datetime=${DateTime.now()}");
-    
+
       await FirebaseFirestore.instance.collection("about").add({
         "driver": driverID,
         "name1": name,
@@ -36,11 +35,12 @@ class AboutStatus extends ChangeNotifier {
         "address": address,
         "datetime": '${DateTime.now()}'
       });
-      toastInfo("driver=$driverID   name1=$name  body=$body address=$address datetime=${DateTime.now()}");
+      // toastInfo("driver=$driverID   name1=$name  body=$body address=$address datetime=${DateTime.now()}");
+      toastInfo("謝謝您的建議，會盡快回覆您");
       aboutButtonStatus = false;
       notifyListeners();
     } catch (e) {
-      toastInfo("寫入發生錯誤");
+      toastInfo("發生錯誤");
       aboutButtonStatus = false;
       notifyListeners();
     }

@@ -6,7 +6,6 @@ class TitleTextField extends StatelessWidget {
   TitleTextField({@required this.titleFieldController});
   @override
   Widget build(BuildContext context) {
-    
     return Container(
       height: 60,
       width: double.infinity,
@@ -17,7 +16,7 @@ class TitleTextField extends StatelessWidget {
           Expanded(
             child: Container(
               width: double.infinity,
-              height: 40,
+              height: 50,
               child: TextFormField(
                 style: TextStyle(color: Colors.white),
                 keyboardType: TextInputType.text,
@@ -29,6 +28,8 @@ class TitleTextField extends StatelessWidget {
                       width: 0.5, //边线宽度为2
                     ),
                   ),
+                //      labelText: "请输入内容",//输入框内无文字时提示内容，有内容时会自动浮在内容上方
+                // helperText: "随便输入文字或数字", //输入框底部辅助性说明文字
                   labelStyle: TextStyle(color: Colors.white54),
                   labelText: "請輸入標題",
                 ),
@@ -37,6 +38,7 @@ class TitleTextField extends StatelessWidget {
               ),
             ),
           ),
+          
           // SizedBox(
           //   width: 20,
           // ),
