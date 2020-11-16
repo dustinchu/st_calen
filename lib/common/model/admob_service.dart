@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:firebase_admob/firebase_admob.dart';
 
-
 String getadMobAppid() {
   if (Platform.isIOS) {
     return 'ca-app-pub-3136608336853382~4599675706';
@@ -31,7 +30,9 @@ String getInterstitialAdUnitId() {
 }
 
 MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
-  keywords: <String>['game', 'words'],
+  // keywords: <String>['game', 'words'],
+  nonPersonalizedAds: true,
+  // keywords: <String>['Fitness', 'Yoga', 'Health', 'Exercise', 'Game', 'Doctor', 'Medical'],
 );
 BannerAd createBannerAd() {
   return BannerAd(

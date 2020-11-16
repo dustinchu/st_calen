@@ -1,6 +1,7 @@
 // import 'package:admob_flutter/admob_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:stock_calendar/common/status/home_status.dart';
@@ -22,6 +23,12 @@ import 'page/type/type_screen.dart';
 // }
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+    /// 強制豎屏
+  /// 
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown
+  ]);
   await Firebase.initializeApp();
   //推播
   FirebaseMessaging messaging = FirebaseMessaging.instance;

@@ -68,6 +68,8 @@ class _HomeScreenState extends State<HomeScreen>
   bool inside = false;
   Uint8List imageInMemory; //widget to image
   final preferencesRepository = PreferencesRepositoryImpl();
+  double appWidth = 0;
+  double appHeight = 0;
   // AdmobBannerSize bannerSize;
   // AdmobInterstitial interstitialAd;
   // AdmobReward rewardAd;
@@ -264,7 +266,8 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     var homeState = Provider.of<HomeStatus>(context);
-    double appHeight = MediaQuery.of(context).size.height > 700 ? 90 : 42;
+    appWidth = MediaQuery.of(context).size.height;
+    appHeight = MediaQuery.of(context).size.height > 700 ? 90 : 42;
     _bannerAd ??= createBannerAd();
     _bannerAd
       ..load()
@@ -292,7 +295,10 @@ class _HomeScreenState extends State<HomeScreen>
                             // color: Color.fromRGBO(220, 225, 231, 1.00),
                             color: '${homeState.getCalendarModel['frame']}'
                                 .toColor()),
-                        padding: EdgeInsets.all(10),
+                        padding: appWidth > 900
+                            ? EdgeInsets.only(
+                                left: 100, right: 100, bottom: 50, top: 50)
+                            : EdgeInsets.all(10),
                         child: Container(
                           decoration: new BoxDecoration(
                             //行事曆底色
@@ -325,13 +331,15 @@ class _HomeScreenState extends State<HomeScreen>
                   Expanded(
                     child: SingleChildScrollView(
                       child: Padding(
-                        padding: EdgeInsets.only(left: 10, right: 10),
+                        padding: appWidth > 900
+                            ? EdgeInsets.only(left: 100, right: 100)
+                            : EdgeInsets.only(left: 10, right: 10),
                         child: Column(
                           children: [
-                            const SizedBox(height: 10.0),
                             //標題
                             TitleTextField(
                                 titleFieldController: _titleClickController),
+                            const SizedBox(height: 10.0),
                             //是否顯示 編輯價格資料
                             todayClick
                                 ? TodayClick(
@@ -343,10 +351,10 @@ class _HomeScreenState extends State<HomeScreen>
 
                             OutlineButton(
                               onPressed: () {
-                                Provider.of<HomeStatus>(context, listen: false)
-                                    .setCalendarModel(2);
+                                // Provider.of<HomeStatus>(context, listen: false)
+                                // .setCalendarModel(2);
 
-                                // _capturePng(context);
+                                _capturePng(context);
                               },
                               child: Text(
                                 "預覽",
@@ -425,7 +433,8 @@ class _HomeScreenState extends State<HomeScreen>
         weekendStyle: TextStyle().copyWith(
             color: '${homeState.getCalendarModel['weekend']}'.toColor()),
         // weekendStyle: TextStyle().copyWith(color: Colors.blue[800]),
-        holidayStyle: TextStyle().copyWith(color: '${homeState.getCalendarModel['weekday_text']}'.toColor()),
+        holidayStyle: TextStyle().copyWith(
+            color: '${homeState.getCalendarModel['weekday_text']}'.toColor()),
       ),
       daysOfWeekStyle: DaysOfWeekStyle(
         //標題日期樣式
@@ -439,7 +448,7 @@ class _HomeScreenState extends State<HomeScreen>
       ),
       headerStyle: HeaderStyle(
         titleTextStyle: TextStyle(
-          //標題
+            //標題
             color: '${homeState.getCalendarModel['header_text']}'.toColor(),
             fontSize: 17),
         centerHeaderTitle: true,
@@ -465,7 +474,7 @@ class _HomeScreenState extends State<HomeScreen>
               child: Text(
                 '${date.day}',
                 textAlign: TextAlign.center,
-                 //點擊顏色
+                //點擊顏色
                 style: TextStyle().copyWith(
                     color: '${homeState.getCalendarModel['click_today_text']}'
                         .toColor(),
@@ -482,7 +491,7 @@ class _HomeScreenState extends State<HomeScreen>
           if (events.isNotEmpty) {
             children.add(
               Positioned(
-                right: 1,
+                right: appWidth > 900 ? 30 : 1,
                 top: 15,
                 // bottom: 1,
                 child: _buildEventsMarker(date, events),

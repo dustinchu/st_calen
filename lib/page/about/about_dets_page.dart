@@ -97,6 +97,7 @@ class AboutDetailsPage extends StatelessWidget {
         Expanded(
           child: SingleChildScrollView(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _createAboutCompany(),
                 _createCourseScroller(),
@@ -135,7 +136,7 @@ class AboutDetailsPage extends StatelessWidget {
                     splashColor: Colors.white38,
                     borderSide: new BorderSide(color: Colors.white60),
                   )),
-        SizedBox(height: 50),
+        SizedBox(height: 80),
       ],
     );
   }

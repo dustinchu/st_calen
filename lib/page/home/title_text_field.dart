@@ -16,7 +16,7 @@ class TitleTextField extends StatelessWidget {
           Expanded(
             child: Container(
               width: double.infinity,
-              height: 50,
+              height: 60,
               child: TextFormField(
                 style: TextStyle(color: Colors.white),
                 keyboardType: TextInputType.text,
