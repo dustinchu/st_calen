@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../stock/view/stock_chips_bar.dart';
 import '../viewmodel/calendar_view_model.dart';
 import 'widgets/calendar_month_view.dart';
 
@@ -22,6 +23,10 @@ class CalendarScreen extends ConsumerWidget {
             onPressed: () => context.push('/settings'),
           ),
         ],
+        bottom: const PreferredSize(
+          preferredSize: Size.fromHeight(48),
+          child: StockChipsBar(),
+        ),
       ),
       body: symbol == null
           ? const _EmptyState()

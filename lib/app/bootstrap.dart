@@ -27,6 +27,8 @@ Future<void> bootstrap() async {
   await Hive.openBox<dynamic>(kMetaBox);
   // calendar box 在 bootstrap 開啟，讓 CalendarViewModel sync 取得 box。
   await Hive.openBox<dynamic>(kCalendarsBox);
+  // stocks box 在 bootstrap 開啟，讓 StockListViewModel sync 取得 box。
+  await Hive.openBox<dynamic>(kStocksBox);
   await _ensureSignedIn();
 
   tzdata.initializeTimeZones();
