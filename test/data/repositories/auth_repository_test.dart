@@ -87,6 +87,145 @@ void main() {
     });
   });
 
+  group('AuthRepository.linkWithGoogle', () {
+    late _MockAuthService service;
+    late AuthRepository repo;
+
+    setUp(() {
+      service = _MockAuthService();
+      repo = AuthRepository(service);
+    });
+
+    test('成功時包成 Result.success(User)', () async {
+      final user = _MockUser();
+      when(() => user.uid).thenReturn('uid-link');
+      final cred = _MockUserCredential();
+      when(() => cred.user).thenReturn(user);
+      when(() => service.linkWithGoogle()).thenAnswer((_) async => cred);
+
+      final result = await repo.linkWithGoogle();
+
+      expect((result as Success<User, AuthError>).value.uid, 'uid-link');
+    });
+
+    test('AuthCancelledException → AuthCancelledError', () async {
+      when(() => service.linkWithGoogle())
+          .thenThrow(const AuthCancelledException());
+
+      final result = await repo.linkWithGoogle();
+
+      expect(
+          (result as Failure<User, AuthError>).error, isA<AuthCancelledError>());
+    });
+
+    test('credential-already-in-use → AuthAccountExistsError', () async {
+      when(() => service.linkWithGoogle()).thenThrow(
+        FirebaseAuthException(
+            code: 'credential-already-in-use', email: 'a@b.c'),
+      );
+
+      final result = await repo.linkWithGoogle();
+
+      final err =
+          (result as Failure<User, AuthError>).error as AuthAccountExistsError;
+      expect(err.email, 'a@b.c');
+    });
+
+    test('account-exists-with-different-credential → AuthAccountExistsError',
+        () async {
+      when(() => service.linkWithGoogle()).thenThrow(
+        FirebaseAuthException(code: 'account-exists-with-different-credential'),
+      );
+
+      final result = await repo.linkWithGoogle();
+
+      expect((result as Failure<User, AuthError>).error,
+          isA<AuthAccountExistsError>());
+    });
+
+    test('network-request-failed → AuthNetworkError', () async {
+      when(() => service.linkWithGoogle()).thenThrow(
+        FirebaseAuthException(code: 'network-request-failed'),
+      );
+
+      final result = await repo.linkWithGoogle();
+
+      expect((result as Failure<User, AuthError>).error, isA<AuthNetworkError>());
+    });
+
+    test('其他例外 → AuthUnknownError', () async {
+      when(() => service.linkWithGoogle()).thenThrow(StateError('boom'));
+
+      final result = await repo.linkWithGoogle();
+
+      expect(
+          (result as Failure<User, AuthError>).error, isA<AuthUnknownError>());
+    });
+  });
+
+  group('AuthRepository.linkWithApple', () {
+    late _MockAuthService service;
+    late AuthRepository repo;
+
+    setUp(() {
+      service = _MockAuthService();
+      repo = AuthRepository(service);
+    });
+
+    test('AuthCancelledException → AuthCancelledError', () async {
+      when(() => service.linkWithApple())
+          .thenThrow(const AuthCancelledException());
+
+      final result = await repo.linkWithApple();
+
+      expect(
+          (result as Failure<User, AuthError>).error, isA<AuthCancelledError>());
+    });
+
+    test('成功時回 Result.success(User)', () async {
+      final user = _MockUser();
+      when(() => user.uid).thenReturn('uid-apple');
+      final cred = _MockUserCredential();
+      when(() => cred.user).thenReturn(user);
+      when(() => service.linkWithApple()).thenAnswer((_) async => cred);
+
+      final result = await repo.linkWithApple();
+
+      expect((result as Success<User, AuthError>).value.uid, 'uid-apple');
+    });
+  });
+
+  group('AuthRepository.unlinkProvider', () {
+    late _MockAuthService service;
+    late AuthRepository repo;
+
+    setUp(() {
+      service = _MockAuthService();
+      repo = AuthRepository(service);
+    });
+
+    test('成功時回 Result.success(null)', () async {
+      final user = _MockUser();
+      when(() => service.unlinkProvider('google.com'))
+          .thenAnswer((_) async => user);
+
+      final result = await repo.unlinkProvider('google.com');
+
+      expect(result, isA<Success<void, AuthError>>());
+    });
+
+    test('FirebaseAuthException → 對應 AuthError', () async {
+      when(() => service.unlinkProvider('google.com')).thenThrow(
+        FirebaseAuthException(code: 'no-current-user'),
+      );
+
+      final result = await repo.unlinkProvider('google.com');
+
+      expect(
+          (result as Failure<void, AuthError>).error, isA<AuthUnknownError>());
+    });
+  });
+
   group('AuthRepository.signOut', () {
     late _MockAuthService service;
     late AuthRepository repo;
