@@ -105,7 +105,7 @@ git push origin <branch>
   - `features/auth/viewmodel/auth_view_model.dart`
   - 啟動流程：bootstrap 完成後自動匿名登入
   - **驗收**：啟動後 Firebase console 看到匿名用戶；重啟 App UID 不變
-  - **完成紀錄**：
+  - **完成紀錄**：commit `1ed38a4` feat + `943db11` test（2026-05-28）。`fvm flutter analyze` 0 issue、`fvm flutter test` 45 passed（31 既有 + 14 新增）。**實機驗收待補**（user 選擇本 session 跳過 device run，code 已完成且通過 unit test，checkbox 暫不勾選；之後需在 Android emulator 或實機跑一次確認 Firebase console 看到匿名用戶 + 重啟 UID 不變後再勾）。決策：(1) AuthError sealed 一次補齊 Network / OperationNotAllowed / Cancelled / AccountExists / Unknown（後三類本 step 不會觸發，留給 Step 6 Google/Apple 重用，user 明確要求預先加完整類型）；(2) AuthViewModel 用 `@Riverpod(keepAlive: true)` StreamNotifier，`build()` 訂閱 `userChanges` 映成 `AuthState`（sealed: AuthSignedIn / AuthSignedOut(lastError)）；imperative `signInAnonymously()` 失敗時把 lastError 寫進 state；(3) bootstrap 直接呼叫 `FirebaseAuth.instance.signInAnonymously()`（不繞 ProviderContainer），失敗 swallow 不 block startup，理由：bootstrap 是 wiring layer 非 ViewModel，且 ProviderScope 尚未掛載；ViewModel 的 stream 之後仍會反映正確狀態；(4) 新建 `analysis_options.yaml` 排除 `*.g.dart` / `*.freezed.dart` —— `riverpod_generator 2.4.0` 仍產 deprecated `ProviderRef`，與 `riverpod 2.6+` 的 `Ref` 不相容會噴 3 個 info；不引入 flutter_lints 以免動到既有 code；(5) firebase console 由 user 預先啟用 Anonymous provider；(6) dev_deps 加 `mocktail ^1.0.4` 對齊 02-architecture.md 測試策略。Test 覆蓋：service 6 cases（含 stream emit 序列、currentUserId null 保護）+ repository 8 cases（每個 FirebaseAuthException code 一例 + 非 FirebaseAuthException fallback + null user 保護 + signOut 兩例）。
 
 - [ ] **Step 6：Account Linking（Google / Apple）**
   - 整合 `google_sign_in`、`sign_in_with_apple`
