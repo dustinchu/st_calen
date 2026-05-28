@@ -19,3 +19,7 @@ const String kSettingsKey = 'app';
 ///   只需 calendarId 即可呼叫 remote DS 的 delete。
 const String kPendingCalendarWritesKey = 'pending_calendar_writes';
 const String kPendingCalendarDeletesKey = 'pending_calendar_deletes';
+
+/// meta box 內「Onboarding 是否已完成」flag key（Step 12）。
+/// 值為 `bool`；首次安裝缺 key 時視為 false。
+const String kOnboardingCompletedKey = 'onboarding_completed';
