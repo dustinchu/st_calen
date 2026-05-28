@@ -25,6 +25,8 @@ Future<void> bootstrap() async {
   await HiveInit.init();
   // meta box 在 bootstrap 開啟，讓 router redirect 可同步讀 onboarding flag。
   await Hive.openBox<dynamic>(kMetaBox);
+  // calendar box 在 bootstrap 開啟，讓 CalendarViewModel sync 取得 box。
+  await Hive.openBox<dynamic>(kCalendarsBox);
   await _ensureSignedIn();
 
   tzdata.initializeTimeZones();
