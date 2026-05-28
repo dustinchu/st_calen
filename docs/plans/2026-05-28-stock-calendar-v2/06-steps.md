@@ -69,14 +69,14 @@ git push origin <branch>
   - **驗收**：`fvm flutter build apk --debug` 成功（Gradle 全鏈通過 = run 不會在原生端 crash；實機安裝因裝置端權限對話框跳過，留待 Step 2）
   - **完成紀錄**：commit `8edb465`（2026-05-28）。重構分支 refactor/v2 啟動。注意：(1) plan 原寫 minSdk 23/compileSdk 35，實際採 minSdk 24（Flutter 3.41 預設）/compileSdk 36（androidx.core 1.17.0 transitive 要求）；(2) share_plus 升 12.x、image_gallery_saver_plus 換成 gal 2.3，已同步 01-tech-stack.md。
 
-- [ ] **Step 2：Bootstrap & 基礎服務**
+- [x] **Step 2：Bootstrap & 基礎服務**
   - `main.dart`、`app/bootstrap.dart`、`app/app.dart`、`app/router.dart`
   - 初始化：WidgetsFlutterBinding、Firebase、Hive、AdMob、timezone、orientation lock
   - go_router 設定空路由表（之後填入）
   - ProviderScope 包住 `MyApp`
   - flutter_native_splash 設定新版啟動畫
   - **驗收**：啟動 App → splash → 空 home 不 crash；console 無 Firebase / Hive 錯誤
-  - **完成紀錄**：
+  - **完成紀錄**：commit `<pending>`（2026-05-28）。`fvm flutter analyze` 0 issue、`fvm flutter build apk --debug` 通過。注意：(1) `Firebase.initializeApp()` 未傳 `options`，靠 Android `google-services.json` 與 iOS `GoogleService-Info.plist` 走 native 初始化（沿用 6 年前舊檔，欄位齊全，firebase_core 3.x 可讀）；(2) iOS `AppDelegate.swift` 補上 `FirebaseApp.configure()`；(3) `flutter_native_splash` 採純色（亮 #FFFFFF / 暗 #121212），無 logo，等 Step 26 上架素材再換正式版；(4) AdMob 用 `MobileAds.instance.initialize()` fire-and-forget（`unawaited`）避免 block 啟動；(5) timezone 鎖 `Asia/Taipei`；(6) 因本機磁碟僅剩 3.7GB，未跑 iOS pod build 與實機驗收，留待後續 step 在裝置上確認 splash → home 流程。
 
 - [ ] **Step 3：Core 層（network / storage / utils）**
   - `core/network/dio_client.dart`（base URL、timeouts、interceptors）

@@ -88,3 +88,13 @@ flutter:
     - assets/calendar_1.jpg
     - assets/img_black.png
     - assets/img_def.png
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  color_dark: "#121212"
+  android_12:
+    color: "#FFFFFF"
+    color_dark: "#121212"
+  android: true
+  ios: true
+  web: false

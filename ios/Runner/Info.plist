@@ -1,84 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
-	<key>CFBundleExecutable</key>
-	<string>$(EXECUTABLE_NAME)</string>
-	<key>CFBundleIdentifier</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>股市行事曆</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>$(MARKETING_VERSION)</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
-	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
-	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-3136608336853382~4599675706</string>
-	<key>LSApplicationCategoryType</key>
-	<string></string>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>可以把照片存到你的相簿嗎？</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>App 需要您的同意, 才能訪問相冊權限</string>
-	<key>NSCalendarsUsageDescription</key>
-	<string>App 需要您的同意, 才能訪問獲取日曆權限</string>
-	<key>NSContactsUsageDescription</key>
-	<string>App 需要您的同意, 才能訪問通信錄權限</string>
-	<key>NSAppleMusicUsageDescription</key>
-	<string>App 需要您的同意, 才能訪問媒體資料庫權限</string>
-	<key>NSMotionUsageDescription</key>
-	<string>App 需要您的同意, 才能訪問運動與健身</string>
-	<key>NSSpeechRecognitionUsageDescription</key> 
-	<string>App 需要您的同意, 才能訪問語音</string> 
-	<key>NSLocationAlwaysUsageDescription</key> 
-	<string>App 需要您的同意, 才能訪問位置</string> 
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>App 需要您的同意, 才能在使用期間訪問位置</string>
-	<key>NSUserTrackingUsageDescription</key>
-	<string>This identifier will be used to deliver personalized ads to you.</string>
-	<key>ITSAppUsesNonExemptEncryption</key><false/>
-	<key>SKADNetworkItems</key>
-	<array>
-		<dict>
-			<key>SKAdNetworkIdentifier</key>
-			<string>cstr6suwn9.skadnetwork</string>
-		</dict>
-	</array>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>fetch</string>
-		<string>remote-notification</string>
-	</array>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
-	<key>UIMainStoryboardFile</key>
-	<string>Main</string>
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
-	<key>io.flutter.embedded_views_preview</key>
-	<true/>
-</dict>
+	<dict>
+		<key>CFBundleDevelopmentRegion</key>
+		<string>en</string>
+		<key>CFBundleExecutable</key>
+		<string>$(EXECUTABLE_NAME)</string>
+		<key>CFBundleIdentifier</key>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+		<key>CFBundleInfoDictionaryVersion</key>
+		<string>6.0</string>
+		<key>CFBundleName</key>
+		<string>股市行事曆</string>
+		<key>CFBundlePackageType</key>
+		<string>APPL</string>
+		<key>CFBundleShortVersionString</key>
+		<string>$(MARKETING_VERSION)</string>
+		<key>CFBundleSignature</key>
+		<string>????</string>
+		<key>CFBundleVersion</key>
+		<string>$(FLUTTER_BUILD_NUMBER)</string>
+		<key>GADApplicationIdentifier</key>
+		<string>ca-app-pub-3136608336853382~4599675706</string>
+		<key>LSApplicationCategoryType</key>
+		<string></string>
+		<key>LSRequiresIPhoneOS</key>
+		<true/>
+		<key>NSPhotoLibraryAddUsageDescription</key>
+		<string>可以把照片存到你的相簿嗎？</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>App 需要您的同意, 才能訪問相冊權限</string>
+		<key>NSCalendarsUsageDescription</key>
+		<string>App 需要您的同意, 才能訪問獲取日曆權限</string>
+		<key>NSContactsUsageDescription</key>
+		<string>App 需要您的同意, 才能訪問通信錄權限</string>
+		<key>NSAppleMusicUsageDescription</key>
+		<string>App 需要您的同意, 才能訪問媒體資料庫權限</string>
+		<key>NSMotionUsageDescription</key>
+		<string>App 需要您的同意, 才能訪問運動與健身</string>
+		<key>NSSpeechRecognitionUsageDescription</key>
+		<string>App 需要您的同意, 才能訪問語音</string>
+		<key>NSLocationAlwaysUsageDescription</key>
+		<string>App 需要您的同意, 才能訪問位置</string>
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>App 需要您的同意, 才能在使用期間訪問位置</string>
+		<key>NSUserTrackingUsageDescription</key>
+		<string>This identifier will be used to deliver personalized ads to you.</string>
+		<key>ITSAppUsesNonExemptEncryption</key>
+		<false/>
+		<key>SKADNetworkItems</key>
+		<array>
+			<dict>
+				<key>SKAdNetworkIdentifier</key>
+				<string>cstr6suwn9.skadnetwork</string>
+			</dict>
+		</array>
+		<key>UIBackgroundModes</key>
+		<array>
+			<string>fetch</string>
+			<string>remote-notification</string>
+		</array>
+		<key>UILaunchStoryboardName</key>
+		<string>LaunchScreen</string>
+		<key>UIMainStoryboardFile</key>
+		<string>Main</string>
+		<key>UISupportedInterfaceOrientations</key>
+		<array>
+			<string>UIInterfaceOrientationPortrait</string>
+			<string>UIInterfaceOrientationLandscapeLeft</string>
+			<string>UIInterfaceOrientationLandscapeRight</string>
+		</array>
+		<key>UISupportedInterfaceOrientations~ipad</key>
+		<array>
+			<string>UIInterfaceOrientationPortrait</string>
+			<string>UIInterfaceOrientationPortraitUpsideDown</string>
+			<string>UIInterfaceOrientationLandscapeLeft</string>
+			<string>UIInterfaceOrientationLandscapeRight</string>
+		</array>
+		<key>UIViewControllerBasedStatusBarAppearance</key>
+		<false/>
+		<key>io.flutter.embedded_views_preview</key>
+		<true/>
+		<key>UIStatusBarHidden</key>
+		<false/>
+	</dict>
 </plist>
