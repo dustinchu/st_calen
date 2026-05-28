@@ -121,11 +121,15 @@ class AppSettings with _$AppSettings {
 
 | Box 名稱 | Key | Value type | 用途 |
 |---------|-----|-----------|------|
-| `calendars` | `calendarId` (String) | `CalendarDoc` | 月曆預測資料 |
+| `calendars` | `"$symbol:$yyyy-MM"` | `CalendarDoc` | 月曆預測資料 |
 | `stocks` | `symbol` (String) | `Stock` | 用戶追蹤股票清單 |
 | `quotes` | `"$symbol#$yyyy-MM-dd"` | `Quote` | 股價快取（API 結果） |
 | `settings` | `'app'` | `AppSettings` | 應用設定 |
 | `meta` | 字串 keys | dynamic | 雜項（首次啟動、版本、上次同步時間） |
+
+> **CalendarDoc local key 設計（Step 7 決議）**：本地 Hive box 採 composite key `"$symbol:$yyyy-MM"`（例 `"2330.TW:2026-06"`），讓 `get(symbol, year, month)` 直接 `box.get(key)`、`watchByStock` 用 `key.startsWith("$symbol:")` 過濾，O(1) 命中主要查詢路徑。
+>
+> `CalendarDoc.id`（uuid）保留在 value 欄位內，作為 **Firestore document id**（路徑 `/users/{uid}/calendars/{calendarId}`）。Step 9 Repository 同步時：本地 → 遠端用 `doc.id`，遠端 → 本地用 composite key。兩個命名空間獨立、互不衝突。
 
 ### Hive TypeId 配置（避免衝突）
 

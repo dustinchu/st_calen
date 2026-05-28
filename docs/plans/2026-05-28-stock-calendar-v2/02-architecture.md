@@ -31,6 +31,15 @@
 3. **降級策略**：股價 API 失敗 → 回傳 `null`，ViewModel 處理「請手動輸入」UX
 4. **單向資料流**：View → ViewModel → Repository → Data Source（不反向呼叫）
 
+### Local Data Source 契約（Step 7 決議）
+
+所有 `*_local_ds.dart` 遵守以下薄層規則，Repository 在此基礎上組合：
+
+- **建構**：constructor 注入 `Box<dynamic>`（沿用 Step 4 `<dynamic> + as T` 模式，因 freezed 對外 expose public class，但 hive_generator 產 `_$XxxImpl` adapter）。各 DS 另提供 `static Future<Box<dynamic>> openBox()` factory 給 app 啟動端使用。
+- **回傳型別**：mutation / query method 一律 `Future<Result<T, AppError>>`。Hive 例外包成 `UnknownError(e.toString())`；找不到 key 回 `NotFoundError`。**不**在 DS 層落地預設值（如 SettingsLocalDs 第一次讀 → `NotFoundError`，由 Repository 決定預設值來源）。
+- **Watch stream**：回 raw `box.watch().map(...)`，型別 `Stream<T?>`（null = 已刪除）。**不**包 `Result`、**不**自動 emit 初始值。呼叫端（Repository）負責用 `get()` 補初始值後再接 watch stream，合成一條 hot stream 給 ViewModel。
+- **過濾策略**：跨 entity 過濾（如 `watchByStock`）在 DS 層用 key prefix 過濾；排序、聚合留給 Repository / ViewModel。
+
 ## 目錄結構
 
 ```
