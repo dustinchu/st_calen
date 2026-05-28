@@ -1,0 +1,9 @@
+targets:
+  $default:
+    builders:
+      json_serializable:
+        options:
+          # Nested freezed models (e.g. CalendarDoc.predictions: List<Prediction>)
+          # require explicit toJson() invocation, otherwise the generated code
+          # passes the raw object through and JSON encoding fails.
+          explicit_to_json: true
