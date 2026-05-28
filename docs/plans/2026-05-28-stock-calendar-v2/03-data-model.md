@@ -187,6 +187,8 @@ class AppSettings with _$AppSettings {
 ```
 
 > ⚠️ predictions 用 array 而非 sub-collection，因為一個月最多 31 筆，整批讀寫成本低。
+>
+> **DateTime 序列化（Step 8 決議）**：`createdAt` / `updatedAt` / `predictions[].date` 在 Firestore 端**均存為 native `Timestamp`**（非 ISO 字串），讓未來能直接做 server-side range query / 排序。App 端 `CalendarFirestoreDataSource` 寫入時 `Timestamp.fromDate(dt)`、讀出時 `(t as Timestamp).toDate().toUtc().toIso8601String()` 餵給 freezed `fromJson()`。本地 Hive 仍走 DateTime 原生序列化（Step 4 決議），兩個邊界各自獨立。
 
 ### `/users/{uid}/devices/{deviceId}`
 

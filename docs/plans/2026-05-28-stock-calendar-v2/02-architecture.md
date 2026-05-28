@@ -40,6 +40,21 @@
 - **Watch stream**：回 raw `box.watch().map(...)`，型別 `Stream<T?>`（null = 已刪除）。**不**包 `Result`、**不**自動 emit 初始值。呼叫端（Repository）負責用 `get()` 補初始值後再接 watch stream，合成一條 hot stream 給 ViewModel。
 - **過濾策略**：跨 entity 過濾（如 `watchByStock`）在 DS 層用 key prefix 過濾；排序、聚合留給 Repository / ViewModel。
 
+### Remote Data Source 契約（Step 8 決議）
+
+`data/sources/remote/*_firestore_ds.dart` 對齊 local DS 的薄層風格，差異點僅在序列化與錯誤映射：
+
+- **建構**：constructor 注入 `FirebaseFirestore` instance（測試傳 `FakeFirebaseFirestore`）。路徑由 DS 內部組（`users/{uid}/...`），呼叫端傳入 `uid`。
+- **回傳型別**：mutation / query 一律 `Future<Result<T, AppError>>`。`FirebaseException` 依 code 映射：
+  - `unavailable` / `deadline-exceeded` / `cancelled` → `NetworkError`
+  - `not-found` 或 `snapshot.exists == false` → `NotFoundError`
+  - 其他 → `UnknownError('${code}: ${message}')`
+- **Watch stream**：回 `snapshots().skip(1)`，跳過 Firestore snapshot listener 預設的初始 emit，**對齊 local DS「不補初始 emit」契約**。Repository 合成 hot stream：`get()` 拿初始 → `watch()` 接 delta，local / remote 行為對稱。
+- **DateTime 序列化（Step 8 決議）**：寫入時把 `DateTime` 轉成 Firestore native `Timestamp`（`createdAt` / `updatedAt` / `predictions[].date`），讀出時 `(t as Timestamp).toDate().toUtc().toIso8601String()` 餵給 freezed model 的 `fromJson()`（json_serializable 預設吃 ISO String）。
+  - **為何**：Timestamp 是 Firestore 排序 / range query 的 native 型別；長期不會被 string-compare 鎖死。
+  - **代價**：DS 不直接吃 `model.toJson()`，要手動 override 三個欄位。集中在 DS 層 `_toFirestore` / `_fromFirestore` helper，Repository（Step 9）不受影響。
+- **狀態 / cache**：DS 不持任何 in-memory state；retry / 佇列邏輯屬於 Repository。
+
 ## 目錄結構
 
 ```
