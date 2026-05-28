@@ -78,14 +78,14 @@ git push origin <branch>
   - **驗收**：啟動 App → splash → 空 home 不 crash；console 無 Firebase / Hive 錯誤
   - **完成紀錄**：commit `1def7e2`（2026-05-28）。`fvm flutter analyze` 0 issue、`fvm flutter build apk --debug` 通過。注意：(1) `Firebase.initializeApp()` 未傳 `options`，靠 Android `google-services.json` 與 iOS `GoogleService-Info.plist` 走 native 初始化（沿用 6 年前舊檔，欄位齊全，firebase_core 3.x 可讀）；(2) iOS `AppDelegate.swift` 補上 `FirebaseApp.configure()`；(3) `flutter_native_splash` 採純色（亮 #FFFFFF / 暗 #121212），無 logo，等 Step 26 上架素材再換正式版；(4) AdMob 用 `MobileAds.instance.initialize()` fire-and-forget（`unawaited`）避免 block 啟動；(5) timezone 鎖 `Asia/Taipei`；(6) 因本機磁碟僅剩 3.7GB，未跑 iOS pod build 與實機驗收，留待後續 step 在裝置上確認 splash → home 流程。
 
-- [ ] **Step 3：Core 層（network / storage / utils）**
+- [x] **Step 3：Core 層（network / storage / utils）**
   - `core/network/dio_client.dart`（base URL、timeouts、interceptors）
   - `core/network/api_exception.dart`
   - `core/storage/hive_init.dart`（註冊所有 adapter，目前先空）
   - `core/storage/hive_boxes.dart`（常數）
   - `core/utils/result.dart`、`date_utils.dart`、`price_utils.dart`
   - **驗收**：unit test：`price_utils` 漲跌幅計算正確；`Result` 基本用法測過
-  - **完成紀錄**：
+  - **完成紀錄**：commit `<pending>`（2026-05-28）。`fvm flutter analyze` 0 issue、`fvm flutter test` 19 tests passed。決策：(1) `Result<T, AppError>` 採 sealed AppError（目前 3 類：NetworkError / NotFoundError / UnknownError，視後續 step 再補）；(2) dio timeout 依 04-backend-spec.md：connect 3s / receive 5s；(3) 台股漲跌停採 TWSE tick size 嚴謹版（整數 cents 運算避免浮點誤差，價格區間 <10/<50/<100/<500/<1000/>=1000 → tick 0.01/0.05/0.1/0.5/1/5，漲停 floor、跌停 ceil）；(4) price_utils 的 `market` 暫用字串 'tw'/'us'（對齊 backend 與 Market.name），Step 4 引入 Market enum 後呼叫端傳 `market.name` 即可；(5) `kStockApiBaseUrl` 從 `--dart-define=STOCK_API_BASE` 注入，預設 `https://stock.wisplu.com.tw`；(6) `HiveInit.init()` 目前只 `Hive.initFlutter()`，adapter 註冊留給 Step 4。Test 覆蓋：Result 的 success/failure/when/fold/map/factory 共 5 例；price_utils 的 changePercent 4 例（含除零 / 負數保護）+ 漲跌停價 5 例（4 個整數區間 + tick 跨界 9.5→10.45 + 53.6→58.9）+ isUpLimit/isDownLimit 5 例（含美股 false / prev<=0 保護），共 19 tests。
 
 - [ ] **Step 4：Data Models（freezed + Hive adapter）**
   - 建立 `data/models/` 全部 model（依 `03-data-model.md`）
