@@ -20,6 +20,17 @@
 		<string>????</string>
 		<key>CFBundleVersion</key>
 		<string>$(FLUTTER_BUILD_NUMBER)</string>
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>com.googleusercontent.apps.874870813769-9pf1cg1826qv76b6pbfihf8jvg2skpsg</string>
+				</array>
+			</dict>
+		</array>
 		<key>GADApplicationIdentifier</key>
 		<string>ca-app-pub-3136608336853382~4599675706</string>
 		<key>LSApplicationCategoryType</key>
@@ -83,5 +94,9 @@
 		<true/>
 		<key>UIStatusBarHidden</key>
 		<false/>
-	</dict>
+		<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+</dict>
 </plist>
