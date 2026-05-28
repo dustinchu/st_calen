@@ -180,13 +180,13 @@ git push origin <branch>
     - 手動驗收（清空 app data → 啟動）留待真正裝置 / 模擬器執行；本 step CI 驗收僅靠單元測試與 analyze。
     - rules / auth 實機驗收續延後至 Step 13。
 
-- [ ] **Step 13：Calendar Screen（主畫面）骨架**
+- [ ] **Step 13：Calendar Screen（主畫面）骨架**（code done，實機驗收續延後）
   - `features/calendar/view/calendar_screen.dart`
   - 整合 `table_calendar` 套件
   - `CalendarViewModel` 從 Repository 訂閱當前股票/月份的資料
   - 暫不接 prediction editor，只顯示空月曆 + 假資料
   - **驗收**：可切換月份、selectedDay 變化、無顯著 jank
-  - **完成紀錄**：
+  - **完成紀錄**：commit `d5595ce` feat + `cf20457` test + `<docs>`（2026-05-28）。`fvm flutter analyze` 0 issue、`fvm flutter test` 126 passed（120 既有 + 6 新增 ViewModel test）。**Step 5 / 6 / 8 / 13 實機驗收續延後**（user 選擇本 step 不跑模擬器，留待後續 step 一併在裝置上驗證 onboarding → calendar → settings → auth bind 完整主流程）。三個開工決策最終選擇：(1) **state 放獨立 provider**——新建 `CurrentSymbol`（Notifier&lt;String?&gt;，初始 null）+ `FocusedMonth`（Notifier&lt;DateTime&gt;，初始當月月初 UTC）兩個 keepAlive notifier；CalendarViewModel `ref.watch` 兩者後呼叫 `repo.watch(...)`，Step 14 chips 切換時直接 `set(symbol)`。(2) **empty state**——`symbol == null` 時 CalendarViewModel 直接 emit `Stream.value(null)` 不訂閱 repo，CalendarScreen 顯示「請新增股票」placeholder；不 hardcode 假股票避免 Step 14 忘了清。(3) **markerBuilder**——在 `CalendarMonthView` 的 `CalendarBuilders` 預留 `markerBuilder` 參數，body 直接 `return null` + comment 指向 Step 15，icon mapping 留到 Step 15 一次做完。決策：(a) **calendar box 在 bootstrap 開啟**——對齊 meta box 模式（已被 onboarding repository sync 讀取的前例），讓 `calendarLocalDataSourceProvider` 可 `Hive.box<dynamic>(kCalendarsBox)` sync 取得，不需要 FutureProvider 包一層；trade-off 是冷啟動多一次 IO，但 calendar 資料屬 critical path，預先 open 合理。(b) **`calendarRepositoryProvider` 在 Step 13 開**——對齊 Step 9 完成紀錄「不開 provider，留到 ViewModel 階段一次接通」決議；wiring 與 ViewModel 同檔，未來 Step 14+ 共用同個 provider。(c) **predictionsByDay 是 pure function 不是 provider**——CalendarDoc → `Map<int, Prediction>` 是純衍生資料，每次 build 重算 O(n)，n &lt;= 31 不值得包 provider；widget 直接呼叫即可。(d) **CalendarMonthView `onPageChanged` 同步更新 widget local `_focusedDay` + `focusedMonthProvider`**——前者讓 table_calendar UI 馬上反映、後者讓 ViewModel 換月訂閱；單一事件雙寫但目的不同（local UI state vs cross-widget shared state），對齊 ViewModel pattern 原則。(e) **`selectedDay` 純 widget 內部 state**——不放 provider，因為 Step 15 prediction editor 是 modal sheet 由 widget 自身管理，不需跨 widget 共享。Test 覆蓋：6 cases（symbol null 不訂閱 + emit null / 有 symbol → emit repo data / 切月 → 重新訂閱新 month / 切 symbol → 重新訂閱新 symbol / symbol 切回 null → emit null / predictionsByDay 純函式 day-of-month 映射）。**踩雷**：(i) `CalendarBuilders.markerBuilder` 簽名是 `(BuildContext, DateTime, List&lt;T&gt;)` 而非 `(BuildContext, DateTime, List&lt;dynamic&gt;)`，TableCalendar 用泛型參數鎖定 event type，這裡用 `TableCalendar&lt;Prediction&gt;` + `eventLoader` 回 `[prediction]` 串好 markerBuilder 拿到的 events type。(ii) PredictionType enum 沒有 `targetUp/targetDown`，實際是 `upLimit / downLimit / customPrice / customPercent / bullish / bearish`，test 用 bullish / bearish 對齊現有 schema。
 
 - [ ] **Step 14：Stock Management（股票管理）**
   - `features/stock/` 全部
