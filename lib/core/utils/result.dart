@@ -95,3 +95,35 @@ final class NotFoundError extends AppError {
 final class UnknownError extends AppError {
   const UnknownError(super.message);
 }
+
+/// Auth 層錯誤。Step 5 先建好，Step 6 接 Google / Apple 時直接重用。
+sealed class AuthError extends AppError {
+  const AuthError(super.message);
+}
+
+/// 網路不通（FirebaseAuthException code `network-request-failed`）。
+final class AuthNetworkError extends AuthError {
+  const AuthNetworkError([super.message = 'network unavailable']);
+}
+
+/// Firebase console 未啟用對應 provider（code `operation-not-allowed`）。
+final class AuthOperationNotAllowedError extends AuthError {
+  const AuthOperationNotAllowedError([super.message = 'operation not allowed']);
+}
+
+/// 使用者在 Google / Apple sign-in dialog 取消（Step 6 才會用到）。
+final class AuthCancelledError extends AuthError {
+  const AuthCancelledError([super.message = 'cancelled by user']);
+}
+
+/// 同 email 已綁定其他 provider（code `account-exists-with-different-credential`，Step 6）。
+final class AuthAccountExistsError extends AuthError {
+  final String? email;
+  const AuthAccountExistsError({this.email, String message = 'account exists with different credential'})
+      : super(message);
+}
+
+/// 其他未分類 auth 例外。
+final class AuthUnknownError extends AuthError {
+  const AuthUnknownError(super.message);
+}

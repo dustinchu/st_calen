@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -20,6 +21,7 @@ Future<void> bootstrap() async {
 
   await Firebase.initializeApp();
   await HiveInit.init();
+  await _ensureSignedIn();
 
   tzdata.initializeTimeZones();
   tz.setLocalLocation(tz.getLocation('Asia/Taipei'));
@@ -27,4 +29,17 @@ Future<void> bootstrap() async {
   unawaited(MobileAds.instance.initialize());
 
   runApp(const ProviderScope(child: MyApp()));
+}
+
+/// 啟動時自動匿名登入。失敗（離線、provider 未啟用）只 swallow，
+/// 不 block 啟動 —— AuthViewModel 之後仍會反映 signed-out 狀態，
+/// UI 可繼續使用 Hive 本地資料。
+Future<void> _ensureSignedIn() async {
+  try {
+    if (FirebaseAuth.instance.currentUser == null) {
+      await FirebaseAuth.instance.signInAnonymously();
+    }
+  } catch (_) {
+    // 之後 Step 9 sync 流程若需要 uid 會自行檢查 currentUserId == null。
+  }
 }
