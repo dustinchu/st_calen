@@ -67,7 +67,7 @@ git push origin <branch>
   - 建立 `lib/` 新目錄骨架（空資料夾 + 各層 `.gitkeep`）
   - `fvm flutter pub get` 通過、`fvm flutter analyze` 無錯
   - **驗收**：`fvm flutter build apk --debug` 成功（Gradle 全鏈通過 = run 不會在原生端 crash；實機安裝因裝置端權限對話框跳過，留待 Step 2）
-  - **完成紀錄**：
+  - **完成紀錄**：commit `8edb465`（2026-05-28）。重構分支 refactor/v2 啟動。注意：(1) plan 原寫 minSdk 23/compileSdk 35，實際採 minSdk 24（Flutter 3.41 預設）/compileSdk 36（androidx.core 1.17.0 transitive 要求）；(2) share_plus 升 12.x、image_gallery_saver_plus 換成 gal 2.3，已同步 01-tech-stack.md。
 
 - [ ] **Step 2：Bootstrap & 基礎服務**
   - `main.dart`、`app/bootstrap.dart`、`app/app.dart`、`app/router.dart`
