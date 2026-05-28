@@ -1,0 +1,16 @@
+rules_version = '2';
+
+// 對齊 docs/plans/2026-05-28-stock-calendar-v2/03-data-model.md 的草案。
+// 規則：每個 user 只能讀寫自己 /users/{uid} 底下的全部資料（含 sub-collections）。
+// 未認證請求一律拒絕。
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+
+      match /{collection}/{docId} {
+        allow read, write: if request.auth != null && request.auth.uid == uid;
+      }
+    }
+  }
+}
