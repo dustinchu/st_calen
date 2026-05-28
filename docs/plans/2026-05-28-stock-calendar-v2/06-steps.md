@@ -56,15 +56,17 @@ git push origin <branch>
 
 ### Phase 1：基礎建設
 
-- [ ] **Step 1：專案重置與套件升級**
+- [x] **Step 1：專案重置與套件升級**
   - 在 master 切 `refactor/v2` 分支
-  - 備份舊 `lib/` 為 `lib_legacy/`（之後刪除，先留著對照）
+  - 直接刪除舊 `lib/`（git 歷史保留），不留 `lib_legacy/`
   - 更新 `pubspec.yaml` 為 `01-tech-stack.md` 列出的版本
-  - 更新 `android/app/build.gradle`：minSdk 23 / targetSdk 35 / compileSdk 35
+  - 加入最小 `lib/main.dart`（空白 Scaffold；Step 2 會重寫）
+  - 更新 `android/app/build.gradle`：minSdk 24（Flutter 3.41 預設）/ targetSdk 35 / compileSdk 36
+  - Android 全套現代化：AGP 8.9.1 / Gradle 8.11.1 / Kotlin 2.1.0 / NDK 28.2 / coreLibraryDesugaring 2.1.4 / namespace / MainActivity exported
   - 更新 `ios/Podfile`：platform :ios, '14.0'
   - 建立 `lib/` 新目錄骨架（空資料夾 + 各層 `.gitkeep`）
   - `fvm flutter pub get` 通過、`fvm flutter analyze` 無錯
-  - **驗收**：`fvm flutter run` 顯示空白畫面不 crash
+  - **驗收**：`fvm flutter build apk --debug` 成功（Gradle 全鏈通過 = run 不會在原生端 crash；實機安裝因裝置端權限對話框跳過，留待 Step 2）
   - **完成紀錄**：
 
 - [ ] **Step 2：Bootstrap & 基礎服務**

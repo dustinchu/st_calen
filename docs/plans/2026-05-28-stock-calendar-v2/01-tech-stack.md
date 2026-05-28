@@ -8,10 +8,14 @@
 | Dart | 3.x（null-safety） |
 | Android minSdk | 23（Android 6.0） |
 | Android targetSdk | **35（Android 15）** — Google Play 2025/8 起強制要求 |
-| Android compileSdk | 35 |
+| Android compileSdk | 36（androidx.core 1.17.0 transitive 強制要求） |
 | iOS deployment target | **14.0** |
 | Xcode | 最新穩定版 |
-| Gradle / AGP | 對齊 Flutter 3.41 預設 |
+| AGP | 8.9.1 |
+| Gradle | 8.11.1 |
+| Kotlin | 2.1.0 |
+| NDK | 28.2.13676358（jni transitive 要求） |
+| coreLibraryDesugaring | desugar_jdk_libs 2.1.4（flutter_local_notifications 要求） |
 
 ## 套件清單（pubspec.yaml）
 
@@ -74,8 +78,8 @@ fl_chart: ^0.68.0
 
 ### 圖片 / 分享
 ```yaml
-share_plus: ^9.0.0
-image_gallery_saver_plus: ^3.0.0  # 取代已停用的 image_gallery_saver
+share_plus: ^12.0.2  # 9.x 與 firebase_core_web 不相容，升 12
+gal: ^2.3.0  # 取代 image_gallery_saver_plus（後者用已廢棄 v1 Registrar，Kotlin 2.1 編不過）
 permission_handler: ^11.x
 ```
 
