@@ -22,7 +22,18 @@ final class AuthSignedOut extends AuthState {
 final class AuthSignedIn extends AuthState {
   final String uid;
   final bool isAnonymous;
-  const AuthSignedIn({required this.uid, required this.isAnonymous});
+
+  /// 已綁定的 provider id 清單（`google.com` / `apple.com` / `firebase` 等）。
+  /// 匿名 user 為空 list。Step 6 LoginSheet 用來顯示已綁定狀態。
+  final List<String> linkedProviders;
+  const AuthSignedIn({
+    required this.uid,
+    required this.isAnonymous,
+    this.linkedProviders = const [],
+  });
+
+  bool get hasGoogle => linkedProviders.contains('google.com');
+  bool get hasApple => linkedProviders.contains('apple.com');
 }
 
 @Riverpod(keepAlive: true)
@@ -35,8 +46,8 @@ AuthService authService(Ref ref) => AuthService(ref.watch(firebaseAuthProvider))
 AuthRepository authRepository(Ref ref) =>
     AuthRepository(ref.watch(authServiceProvider));
 
-/// StreamNotifier：訂閱 FirebaseAuth.authStateChanges()，映射成 [AuthState]。
-/// 暴露 `signInAnonymously` / `signOut` 供 UI 觸發。
+/// StreamNotifier：訂閱 FirebaseAuth.userChanges()，映射成 [AuthState]。
+/// 暴露 `signInAnonymously` / `linkWithGoogle` / `linkWithApple` / `unlink` / `signOut`。
 @Riverpod(keepAlive: true)
 class AuthViewModel extends _$AuthViewModel {
   @override
@@ -46,22 +57,53 @@ class AuthViewModel extends _$AuthViewModel {
 
   AuthState _toState(User? user) {
     if (user == null) return const AuthSignedOut();
-    return AuthSignedIn(uid: user.uid, isAnonymous: user.isAnonymous);
+    return AuthSignedIn(
+      uid: user.uid,
+      isAnonymous: user.isAnonymous,
+      linkedProviders:
+          user.providerData.map((p) => p.providerId).toList(growable: false),
+    );
   }
 
   Future<void> signInAnonymously() async {
     final result = await ref.read(authRepositoryProvider).signInAnonymously();
-    result.when(
-      success: (_) {
-        // authStateChanges 會自動推 AuthSignedIn，不需在這手動 setState。
-      },
+    _applyFailure(result);
+  }
+
+  Future<AuthError?> linkWithGoogle() async {
+    final result = await ref.read(authRepositoryProvider).linkWithGoogle();
+    return _applyFailure(result);
+  }
+
+  Future<AuthError?> linkWithApple() async {
+    final result = await ref.read(authRepositoryProvider).linkWithApple();
+    return _applyFailure(result);
+  }
+
+  Future<AuthError?> unlinkProvider(String providerId) async {
+    final result =
+        await ref.read(authRepositoryProvider).unlinkProvider(providerId);
+    return result.when(
+      success: (_) => null,
       failure: (error) {
         state = AsyncValue.data(AuthSignedOut(lastError: error));
+        return error;
       },
     );
   }
 
   Future<void> signOut() async {
     await ref.read(authRepositoryProvider).signOut();
+  }
+
+  /// 失敗時把 lastError 寫進 state；成功時不動 state（userChanges 會自動推新值）。
+  AuthError? _applyFailure(Result<User, AuthError> result) {
+    return result.when(
+      success: (_) => null,
+      failure: (error) {
+        state = AsyncValue.data(AuthSignedOut(lastError: error));
+        return error;
+      },
+    );
   }
 }

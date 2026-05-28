@@ -49,10 +49,10 @@ final authRepositoryProvider = Provider<AuthRepository>.internal(
 );
 
 typedef AuthRepositoryRef = ProviderRef<AuthRepository>;
-String _$authViewModelHash() => r'f3c7d122d6ba755e07696aa7bfb2a7a880ada475';
+String _$authViewModelHash() => r'e8b358d4e78a167fcea934a971ddb11ba343976b';
 
-/// StreamNotifier：訂閱 FirebaseAuth.authStateChanges()，映射成 [AuthState]。
-/// 暴露 `signInAnonymously` / `signOut` 供 UI 觸發。
+/// StreamNotifier：訂閱 FirebaseAuth.userChanges()，映射成 [AuthState]。
+/// 暴露 `signInAnonymously` / `linkWithGoogle` / `linkWithApple` / `unlink` / `signOut`。
 ///
 /// Copied from [AuthViewModel].
 @ProviderFor(AuthViewModel)
