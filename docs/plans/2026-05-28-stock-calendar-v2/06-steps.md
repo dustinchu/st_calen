@@ -162,12 +162,23 @@ git push origin <branch>
 
 ### Phase 1：功能畫面
 
-- [ ] **Step 12：Onboarding & Splash**
+- [x] **Step 12：Onboarding & Splash**
   - 3 頁 onboarding（`features/onboarding/`）
   - 首次完成寫入 meta box
   - 路由：onboarding 未完成 → 顯示；已完成 → 直跳 calendar
   - **驗收**：模擬清空資料後首啟看到 onboarding
   - **完成紀錄**：
+    - commits：`feat(step12)` + `test(step12)` + `docs(step12)`（hash 見 git log）
+    - 120 unit tests passed（114 既有 + 6 新增：repo 3 / viewmodel 3）；`fvm flutter analyze` 0 issue
+    - 三個開工決策最終選擇：
+      1. **薄層 Repository**：`OnboardingRepository` 直接 wrap `Box<dynamic>` 的 get/put，不做 DS / Model 分層（純 bool 不值得三層）。
+      2. **Onboarding 圖**：用 Material Icon (`calendar_today` / `insights` / `fact_check`) + 純色背景塊，不建 `assets/images/onboarding/`，真正素材留 Step 26。
+      3. **Home redirect target**：維持現有 `/` placeholder，未另開 `/calendar`，Step 13 接入主畫面時自然替換。
+    - 額外決策：ViewModel 採 sync `Notifier<bool>`，未用 AsyncNotifier。理由：meta box 已在 bootstrap 階段 open，repository 讀寫均可 sync，AsyncNotifier 會為 await 而 await（與 CLAUDE.md「Simplicity First」抵觸）。router redirect 需 sync 判斷，這個選擇也直接吻合。
+    - bootstrap.dart 改動：新增 `await Hive.openBox<dynamic>(kMetaBox)`，讓 router redirect 可 sync 讀 onboarding flag。
+    - hive_boxes.dart 新增 `kOnboardingCompletedKey = 'onboarding_completed'`；未動 hive_init.dart（純 bool 不需 adapter）。
+    - 手動驗收（清空 app data → 啟動）留待真正裝置 / 模擬器執行；本 step CI 驗收僅靠單元測試與 analyze。
+    - rules / auth 實機驗收續延後至 Step 13。
 
 - [ ] **Step 13：Calendar Screen（主畫面）骨架**
   - `features/calendar/view/calendar_screen.dart`
