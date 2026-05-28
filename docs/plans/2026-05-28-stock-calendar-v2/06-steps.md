@@ -87,13 +87,13 @@ git push origin <branch>
   - **驗收**：unit test：`price_utils` 漲跌幅計算正確；`Result` 基本用法測過
   - **完成紀錄**：commit `c9ecabd`（2026-05-28）。`fvm flutter analyze` 0 issue、`fvm flutter test` 19 tests passed。決策：(1) `Result<T, AppError>` 採 sealed AppError（目前 3 類：NetworkError / NotFoundError / UnknownError，視後續 step 再補）；(2) dio timeout 依 04-backend-spec.md：connect 3s / receive 5s；(3) 台股漲跌停採 TWSE tick size 嚴謹版（整數 cents 運算避免浮點誤差，價格區間 <10/<50/<100/<500/<1000/>=1000 → tick 0.01/0.05/0.1/0.5/1/5，漲停 floor、跌停 ceil）；(4) price_utils 的 `market` 暫用字串 'tw'/'us'（對齊 backend 與 Market.name），Step 4 引入 Market enum 後呼叫端傳 `market.name` 即可；(5) `kStockApiBaseUrl` 從 `--dart-define=STOCK_API_BASE` 注入，預設 `https://stock.wisplu.com.tw`；(6) `HiveInit.init()` 目前只 `Hive.initFlutter()`，adapter 註冊留給 Step 4。Test 覆蓋：Result 的 success/failure/when/fold/map/factory 共 5 例；price_utils 的 changePercent 4 例（含除零 / 負數保護）+ 漲跌停價 5 例（4 個整數區間 + tick 跨界 9.5→10.45 + 53.6→58.9）+ isUpLimit/isDownLimit 5 例（含美股 false / prev<=0 保護），共 19 tests。
 
-- [ ] **Step 4：Data Models（freezed + Hive adapter）**
+- [x] **Step 4：Data Models（freezed + Hive adapter）**
   - 建立 `data/models/` 全部 model（依 `03-data-model.md`）
   - 加 Hive `@HiveType` annotation
   - 跑 `build_runner` 產生 `.g.dart` / `.freezed.dart`
   - 在 `hive_init.dart` 註冊全部 adapter
   - **驗收**：所有 model `toJson / fromJson` 與 Hive 寫入讀出測試通過
-  - **完成紀錄**：
+  - **完成紀錄**：commit `5472039` feat + `bec84f4` test（2026-05-28）。`fvm flutter analyze` 0 issue、`fvm flutter test` 31 passed（19 既有 + 12 新增 model tests）。建立 7 個 model（PredictionType / Prediction / Market / Stock / CalendarDoc / Quote / AppSettings，typeId 0~6 對齊 03-data-model.md），build_runner 一次成功。決策：(1) freezed + hive_generator 共用 — 在 `const factory` 內每個欄位加 `@HiveField(n)` + class 上 `@HiveType(...)`；hive_generator 會產 `TypeAdapter<_$XxxImpl>`，因 `_$XxxImpl` IS-A `Xxx`，runtime 寫入/讀出 + cast to public type 行為一致；(2) 因 freezed 對外 expose 的是 public class，box 不要寫死 `<CalendarDoc>` 泛型，data source 階段（Step 7）採 `Hive.openBox<dynamic>(...) + as T` 模式；(3) DateTime 走 Hive 原生（內部 ms timestamp）+ JSON 走 ISO 8601 String（json_serializable 預設）；(4) Market / PredictionType enum 序列化用 `name`（產出 "tw"/"us"/"customPrice"...），對齊 04-backend-spec 與 Firestore schema；(5) **踩雷**：CalendarDoc 內 `List<Prediction>` 第一次 `toJson()` 報 `_$PredictionImpl is not a subtype of Map<String, dynamic>` — json_serializable 預設不會對 nested object 呼叫 `toJson()`，需在 `build.yaml` 全域加 `explicit_to_json: true`，重跑 build_runner 後通過；(6) `HiveInit.init()` 註冊 7 個 adapter 順序按 typeId，並加 `isAdapterRegistered` guard + 拆出 `registerAdaptersForTest()` 方便測試自行 `Hive.init(tempDir)` 後 reuse 註冊邏輯。
 
 ---
 
