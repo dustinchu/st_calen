@@ -256,13 +256,13 @@ git push origin <branch>
 
 ### Phase 1：通知與廣告
 
-- [ ] **Step 21：Local Notifications**
-  - `core/firebase/fcm_service.dart`（含本地通知）
-  - 每日 14:30 提醒（台股）
+- [ ] **Step 21：Local Notifications**（code done，實機驗收續延後）
+  - `core/notifications/notification_service.dart` + `notification_schedule.dart`（純函式）
+  - 每日 14:30 提醒（台股，週一~週五）
   - 結算完成通知
   - 設定頁通知開關
   - **驗收**：實機收到測試通知
-  - **完成紀錄**：
+  - **完成紀錄**：commit `6a67e4f` feat + `de2c7bd` test（2026-05-29）。`fvm flutter analyze` 0 issue、`fvm flutter test` 197 passed（191 既有 + 6 新增排程計算 cases）。**Step 5 / 6 / 8 / 13 / 14 / 15 / 16 / 16.5 / 17 / 18 / 19 / 20 / 21 實機驗收續延後**。開工決策最終選擇：(1) **檔名/分層** — 採 (A) **`core/notifications/notification_service.dart`** 專責本地通知（偏離 plan 的 `core/firebase/fcm_service.dart` 字面）；FCM 遠端推播留 Step 22 再加 `fcm_service.dart`，分層清楚。(2) **權限時機** — **App 啟動即請求一次**（bootstrap `requestPermissions()`，Darwin init 三權限設 false 改由 `requestPermissions` 顯式請求）。(3) **時區** — **固定 Asia/Taipei**；bootstrap 既有 `tz.setLocalLocation('Asia/Taipei')` 已滿足，service 用 `tz.local`。(4) **重複頻率** — **週一~週五 14:30**：排 5 筆（id 1001~1005）以 `DateTimeComponents.dayOfWeekAndTime` 週重複；國定假日仍會誤報，留待後續交易日曆。(5) **結算通知去重** — `_settleAll` 改回傳 `bool changed`，**實際寫回（changed==true）後彙總單則**「本月結算更新」，非每筆一則；最小侵入、不改結算判定。(6) **開關 gating** — `applyEnabled(false)→cancelAll()` 並不排程；`true→` 重排每日提醒；結算通知亦受 `notificationsEnabled` gating（OFF 全停）。(7) **可測性** — 排程計算抽 `nextInstanceOfTime` / `nextInstanceOfWeekdayTime` 純函式單測；平台 channel 不測。(8) **原生設定（可動）** — AndroidManifest 加 `POST_NOTIFICATIONS` + `RECEIVE_BOOT_COMPLETED` + 兩個 `flutterlocalnotifications` receiver；AppDelegate 設 `UNUserNotificationCenter.delegate`；iOS Info.plist 本地通知免新增 key。(9) **首次啟動排程** — **嚴守 brief 範圍：只 toggle 排程**，bootstrap 不讀持久設定排程（user 對齊確認）。**踩雷**：(i) **flutter_local_notifications 17.2.4 的 `zonedSchedule` 仍要求 `uiLocalNotificationDateInterpretation`**（v18+ 才移除）；context7 拉到的是新版範例，IDE diagnostics 抓出後補 `UILocalNotificationDateInterpretation.absoluteTime`——以實裝版本為準。(ii) `initialize` / `zonedSchedule` 17.x 為**位置參數**（非 v19 全 named），照實裝版簽章寫。(iii) **每日提醒非分秒精準** → 用 `inexactAllowWhileIdle` 而非 `exactAllowWhileIdle`，免 `SCHEDULE_EXACT_ALARM`/`USE_EXACT_ALARM` 權限與 Play 政策審查。(iv) **發現 latent bug（不在本 step 範圍、未動）**：`kSettingsBox` 全程無 `openBox` 呼叫點（bootstrap 只開 meta/calendar/stocks），`settingsLocalDataSourceProvider` 同步 `Hive.box(kSettingsBox)` 於真機啟動會 throw；因各 step 實機驗收皆延後屬 latent，遵 CLAUDE.md「不碰無關碼」僅記錄。(v) `notificationService` 採 App 全域單例（bootstrap 與 ViewModel 共用），settlement/settings ViewModel 直呼；現有單測只測純函式（`settleStatusOf` / 排程計算）不建構 ViewModel，故零破壞。
 
 - [ ] **Step 22：FCM Token Storage**
   - 取得 FCM token
