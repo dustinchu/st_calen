@@ -147,7 +147,16 @@ class _ThemePickerSheet extends StatelessWidget {
           ),
           for (final t in CalendarThemes.all)
             ListTile(
-              leading: CircleAvatar(backgroundColor: t.seed, radius: 12),
+              // 預覽：實際 monthBackground 底 + seed 環，5 套可辨（深淺/主色不同）。
+              leading: Container(
+                width: 28,
+                height: 28,
+                decoration: BoxDecoration(
+                  color: t.monthBackground,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: t.seed, width: 3),
+                ),
+              ),
               title: Text(t.displayName),
               trailing: t.id == currentId
                   ? const Icon(Icons.check, color: Colors.green)

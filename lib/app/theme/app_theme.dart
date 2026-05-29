@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'brutalist_decor.dart';
+import 'calendar_themes.dart';
 import 'design_tokens.dart';
 import 'semantic_colors.dart';
 
@@ -19,6 +21,22 @@ class AppTheme {
   static ThemeData fromSeed(Color seed, Brightness brightness) => _build(
         ColorScheme.fromSeed(seedColor: seed, brightness: brightness),
       );
+
+  /// U3：把 [CalendarTheme] 組成 [ThemeData]——dark 用手填 OLED scheme，
+  /// 其餘走 fromSeed；各主題的 [SemanticColors] / [BrutalistDecor] 一併掛上。
+  static ThemeData fromCalendarTheme(CalendarTheme theme) {
+    final scheme = theme.useOledScheme
+        ? _darkColorScheme()
+        : ColorScheme.fromSeed(
+            seedColor: theme.seed,
+            brightness: theme.brightness,
+          );
+    return _build(
+      scheme,
+      semantic: theme.semantic,
+      brutalist: theme.brutalist,
+    );
+  }
 
   static ColorScheme _darkColorScheme() => const ColorScheme(
         brightness: Brightness.dark,
@@ -60,6 +78,7 @@ class AppTheme {
   static ThemeData _build(
     ColorScheme scheme, {
     SemanticColors semantic = SemanticColors.dark,
+    BrutalistDecor brutalist = BrutalistDecor.none,
   }) =>
       ThemeData(
         useMaterial3: true,
@@ -68,7 +87,7 @@ class AppTheme {
         scaffoldBackgroundColor: scheme.surface,
         fontFamily: AppFontFamily.notoSans,
         textTheme: _textTheme(scheme.onSurface),
-        extensions: [semantic],
+        extensions: [semantic, brutalist],
       );
 
   /// 套 DESIGN.md typography（NotoSansTC 主、Inter 走數字）。

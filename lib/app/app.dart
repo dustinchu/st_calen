@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../features/settings/viewmodel/settings_view_model.dart';
 import 'router.dart';
 import 'theme/app_theme.dart';
+import 'theme/calendar_themes.dart';
 
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
@@ -10,15 +12,19 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
-    // U1：暫時固定深色 OLED 基底，先讓新風貌可截圖驗收。
-    // 既有 5 套主題 byId 接線（含淺色）留 U3 接回。
-    final darkTheme = AppTheme.dark();
+    // U3：App 主題依 AppSettings.themeId 決定（byId 吸收 legacy id；
+    // 預設 'def' → dark）。每套主題自帶 brightness / 語意色 / brutalist。
+    final themeId = ref.watch(settingsViewModelProvider).valueOrNull?.themeId;
+    final calendarTheme = CalendarThemes.byId(themeId ?? 'def');
+    final themeData = AppTheme.fromCalendarTheme(calendarTheme);
     return MaterialApp.router(
       title: '股市行事曆',
       debugShowCheckedModeBanner: false,
-      theme: darkTheme,
-      darkTheme: darkTheme,
-      themeMode: ThemeMode.dark,
+      theme: themeData,
+      darkTheme: themeData,
+      themeMode: calendarTheme.brightness == Brightness.dark
+          ? ThemeMode.dark
+          : ThemeMode.light,
       routerConfig: router,
     );
   }
