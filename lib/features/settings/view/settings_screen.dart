@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../auth/view/login_sheet.dart';
 import '../../auth/viewmodel/auth_view_model.dart';
+import '../viewmodel/settings_view_model.dart';
 
 /// Step 6 最小骨架：只放「登入 / 綁定帳號」入口。
 /// 其他設定項目由 Step 25 補完。
@@ -31,6 +32,8 @@ class SettingsScreen extends ConsumerWidget {
             trailing: const Icon(Icons.chevron_right),
             onTap: () => _openLoginSheet(context),
           ),
+          const Divider(),
+          _AutoSettleTile(),
         ],
       ),
     );
@@ -42,6 +45,22 @@ class SettingsScreen extends ConsumerWidget {
       isScrollControlled: true,
       showDragHandle: false,
       builder: (_) => const LoginSheet(),
+    );
+  }
+}
+
+class _AutoSettleTile extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final settings = ref.watch(settingsViewModelProvider).valueOrNull;
+    final enabled = settings?.autoSettleEnabled ?? true;
+    return SwitchListTile(
+      secondary: const Icon(Icons.auto_mode),
+      title: const Text('自動結算'),
+      subtitle: const Text('每月開啟時，自動拉收盤價填回預測結果'),
+      value: enabled,
+      onChanged: (v) =>
+          ref.read(settingsControllerProvider.notifier).setAutoSettleEnabled(v),
     );
   }
 }

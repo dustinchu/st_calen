@@ -76,3 +76,92 @@ int _twTickCents(int priceCents) {
   if (priceCents < 100000) return 100;
   return 500;
 }
+
+// ---------------------------------------------------------------------------
+// settle helpers (Step 16)
+// ---------------------------------------------------------------------------
+
+/// Settle 結果（pure value type）。
+class SettleResult {
+  /// 命中與否。
+  final bool hit;
+
+  /// 「偏離百分比」：actual 相對預測值的差距。
+  ///
+  /// 各 type 定義：
+  /// - customPrice：(actualClose - predictedPrice) / predictedPrice × 100
+  /// - customPercent：actualPercent - predictedPercent（單位 pp，已是百分點）
+  /// - bullish / bearish / upLimit / downLimit：actualChangePercent（漲跌幅）
+  final double hitPercent;
+
+  const SettleResult({required this.hit, required this.hitPercent});
+}
+
+/// 結算自訂價：actualClose 必須**嚴格等於** predictedPrice（台股 tick aligned）。
+SettleResult settleCustomPrice({
+  required double predictedPrice,
+  required double actualClose,
+}) {
+  final diffPercent = predictedPrice <= 0
+      ? 0.0
+      : (actualClose - predictedPrice) / predictedPrice * 100;
+  // 嚴格等於：用 cents 比對避免 double 浮點誤差
+  final hit = (predictedPrice * 100).round() == (actualClose * 100).round();
+  return SettleResult(hit: hit, hitPercent: diffPercent);
+}
+
+/// 結算自訂漲跌幅：比對到小數第一位（±0.05pp 容許）。
+SettleResult settleCustomPercent({
+  required double predictedPercent,
+  required double prevClose,
+  required double actualClose,
+}) {
+  final actualPercent = changePercent(prevClose, actualClose) ?? 0.0;
+  final diff = actualPercent - predictedPercent;
+  // 小數第一位相等 = 差距 < 0.05pp
+  final hit = diff.abs() < 0.05;
+  return SettleResult(hit: hit, hitPercent: diff);
+}
+
+/// 結算看多：actualClose **嚴格大於** prevClose（平盤算沒命中）。
+SettleResult settleBullish({
+  required double prevClose,
+  required double actualClose,
+}) {
+  final pct = changePercent(prevClose, actualClose) ?? 0.0;
+  return SettleResult(hit: actualClose > prevClose, hitPercent: pct);
+}
+
+/// 結算看空：actualClose **嚴格小於** prevClose（平盤算沒命中）。
+SettleResult settleBearish({
+  required double prevClose,
+  required double actualClose,
+}) {
+  final pct = changePercent(prevClose, actualClose) ?? 0.0;
+  return SettleResult(hit: actualClose < prevClose, hitPercent: pct);
+}
+
+/// 結算漲停預測：actual 漲幅 ≥ +10%（用 cents 嚴格比對避免浮點誤差）。
+SettleResult settleUpLimit({
+  required double prevClose,
+  required double actualClose,
+}) {
+  final pct = changePercent(prevClose, actualClose) ?? 0.0;
+  // ≥ +10%：actualCents × 10 ≥ prevCents × 11
+  final prevCents = (prevClose * 100).round();
+  final actualCents = (actualClose * 100).round();
+  final hit = prevCents > 0 && actualCents * 10 >= prevCents * 11;
+  return SettleResult(hit: hit, hitPercent: pct);
+}
+
+/// 結算跌停預測：actual 跌幅 ≤ -10%。
+SettleResult settleDownLimit({
+  required double prevClose,
+  required double actualClose,
+}) {
+  final pct = changePercent(prevClose, actualClose) ?? 0.0;
+  final prevCents = (prevClose * 100).round();
+  final actualCents = (actualClose * 100).round();
+  final hit = prevCents > 0 && actualCents * 10 <= prevCents * 9;
+  return SettleResult(hit: hit, hitPercent: pct);
+}

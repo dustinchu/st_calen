@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../data/models/prediction.dart';
 import '../../../data/models/prediction_type.dart';
+import '../../calendar/viewmodel/calendar_view_model.dart';
+import '../../calendar/viewmodel/settlement_view_model.dart';
 import '../viewmodel/prediction_editor_view_model.dart';
 import 'prediction_visual.dart';
 
@@ -55,6 +58,19 @@ class PredictionEditorSheet extends ConsumerWidget {
     final draft = ref.watch(provider);
     final vm = ref.read(provider.notifier);
 
+    // 找出 doc 中該日已存在的 prediction（為了顯示 settle 結果 / 手動補價入口）
+    final doc = ref.watch(calendarViewModelProvider).valueOrNull;
+    Prediction? existing;
+    if (doc != null) {
+      for (final p in doc.predictions) {
+        final local = p.date.toLocal();
+        if (local.year == year && local.month == month && local.day == day) {
+          existing = p;
+          break;
+        }
+      }
+    }
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
@@ -83,6 +99,13 @@ class PredictionEditorSheet extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             ..._fieldsFor(draft.type, draft, vm),
+            if (existing != null) ...[
+              const SizedBox(height: 12),
+              _SettleSection(
+                symbol: symbol,
+                prediction: existing,
+              ),
+            ],
             const SizedBox(height: 8),
             TextField(
               decoration: const InputDecoration(
@@ -178,5 +201,115 @@ class PredictionEditorSheet extends ConsumerWidget {
       case PredictionType.bearish:
         return const [];
     }
+  }
+}
+
+/// 已存在 prediction 的結算結果區塊。
+/// settled = true → 顯示實際收盤 + 命中狀態 chip。
+/// settled = false 且為過去日 → 顯示「手動補實際收盤」欄位 + 補價按鈕。
+class _SettleSection extends ConsumerStatefulWidget {
+  const _SettleSection({required this.symbol, required this.prediction});
+
+  final String symbol;
+  final Prediction prediction;
+
+  @override
+  ConsumerState<_SettleSection> createState() => _SettleSectionState();
+}
+
+class _SettleSectionState extends ConsumerState<_SettleSection> {
+  final _ctrl = TextEditingController();
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final p = widget.prediction;
+    if (p.settled) {
+      final status = settleStatusOf(p);
+      return Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade100,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '實際收盤：${p.actualClose?.toStringAsFixed(2) ?? '—'}',
+              style: const TextStyle(fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                Chip(
+                  label: Text(status == SettleStatus.hit ? '命中' : '未命中'),
+                  backgroundColor: status == SettleStatus.hit
+                      ? const Color(0xFFC8E6C9)
+                      : const Color(0xFFFFCDD2),
+                ),
+                const SizedBox(width: 8),
+                if (p.hitPercent != null)
+                  Text('${p.hitPercent!.toStringAsFixed(2)}%'),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+    // 未結算：過去日才顯示手動補價
+    final dateLocal = p.date.toLocal();
+    final today = DateTime.now();
+    final pastDay = DateTime(dateLocal.year, dateLocal.month, dateLocal.day)
+        .isBefore(DateTime(today.year, today.month, today.day));
+    if (!pastDay) return const SizedBox.shrink();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          '尚未結算（API 無資料 / 失敗）',
+          style: TextStyle(fontWeight: FontWeight.w600),
+        ),
+        const SizedBox(height: 6),
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _ctrl,
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
+                decoration: const InputDecoration(
+                  labelText: '手動補實際收盤',
+                  border: OutlineInputBorder(),
+                  isDense: true,
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            FilledButton(
+              onPressed: () async {
+                final v = double.tryParse(_ctrl.text.trim());
+                if (v == null || v <= 0) return;
+                final ok = await ref
+                    .read(settlementViewModelProvider.notifier)
+                    .manualSettle(date: p.date, actualClose: v);
+                if (context.mounted && ok) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('已補價')),
+                  );
+                }
+              },
+              child: const Text('補價'),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 }
