@@ -2,6 +2,7 @@ import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/notifications/notification_service.dart';
 import '../../../core/storage/hive_boxes.dart';
 import '../../../data/models/app_settings.dart';
 import '../../../data/repositories/settings_repository.dart';
@@ -32,6 +33,13 @@ class SettingsController extends _$SettingsController {
     final repo = ref.read(settingsRepositoryProvider);
     final cur = (await repo.get()).fold((s) => s, (_) => const AppSettings());
     await repo.update(cur.copyWith(autoSettleEnabled: v));
+  }
+
+  Future<void> setNotificationsEnabled(bool v) async {
+    final repo = ref.read(settingsRepositoryProvider);
+    final cur = (await repo.get()).fold((s) => s, (_) => const AppSettings());
+    await repo.update(cur.copyWith(notificationsEnabled: v));
+    await notificationService.applyEnabled(v);
   }
 
   Future<void> setThemeId(String id) async {

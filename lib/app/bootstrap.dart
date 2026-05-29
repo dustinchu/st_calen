@@ -10,6 +10,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:timezone/data/latest_all.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
+import '../core/notifications/notification_service.dart';
 import '../core/storage/hive_boxes.dart';
 import '../core/storage/hive_init.dart';
 import 'app.dart';
@@ -33,6 +34,9 @@ Future<void> bootstrap() async {
 
   tzdata.initializeTimeZones();
   tz.setLocalLocation(tz.getLocation('Asia/Taipei'));
+
+  await notificationService.init();
+  unawaited(notificationService.requestPermissions());
 
   unawaited(MobileAds.instance.initialize());
 

@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/notifications/notification_service.dart';
 import '../../../core/utils/price_utils.dart';
 import '../../../core/utils/result.dart';
 import '../../../data/models/calendar_doc.dart';
@@ -41,7 +42,11 @@ class SettlementViewModel extends _$SettlementViewModel {
     if (_running) return;
     _running = true;
     try {
-      await _settleAll(doc, candidates);
+      final changed = await _settleAll(doc, candidates);
+      // 結算有實際寫回 → 彙總一則通知（受通知開關 gating）。
+      if (changed && settings.notificationsEnabled) {
+        await notificationService.showSettlementUpdate();
+      }
     } finally {
       _running = false;
     }
@@ -82,7 +87,8 @@ class SettlementViewModel extends _$SettlementViewModel {
     }).toList(growable: false);
   }
 
-  Future<void> _settleAll(
+  /// 回傳是否有實際寫回（true → 已 put 更新）。
+  Future<bool> _settleAll(
     CalendarDoc doc,
     List<Prediction> candidates,
   ) async {
@@ -97,9 +103,9 @@ class SettlementViewModel extends _$SettlementViewModel {
     final to = dates.last;
 
     final r = await client.quotes(symbol: doc.symbol, from: from, to: to);
-    if (r is! Success<Map<DateTime, double>, AppError>) return;
+    if (r is! Success<Map<DateTime, double>, AppError>) return false;
     final quotes = r.value;
-    if (quotes.isEmpty) return;
+    if (quotes.isEmpty) return false;
 
     var current = doc;
     var changed = false;
@@ -114,8 +120,9 @@ class SettlementViewModel extends _$SettlementViewModel {
       current = _writeBack(current, p, actual, res);
       changed = true;
     }
-    if (!changed) return;
+    if (!changed) return false;
     await ref.read(calendarRepositoryProvider).put(current);
+    return true;
   }
 
   /// 找 [dayUtc] 之前最近一筆 quote 當作前一交易日收盤。

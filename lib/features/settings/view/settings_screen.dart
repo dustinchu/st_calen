@@ -32,6 +32,8 @@ class SettingsScreen extends ConsumerWidget {
             onTap: () => _openLoginSheet(context),
           ),
           const Divider(),
+          _NotificationsTile(),
+          const Divider(),
           _AutoSettleTile(),
           const Divider(),
           _AppThemeTile(),
@@ -46,6 +48,23 @@ class SettingsScreen extends ConsumerWidget {
       isScrollControlled: true,
       showDragHandle: false,
       builder: (_) => const LoginSheet(),
+    );
+  }
+}
+
+class _NotificationsTile extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final settings = ref.watch(settingsViewModelProvider).valueOrNull;
+    final enabled = settings?.notificationsEnabled ?? true;
+    return SwitchListTile(
+      secondary: const Icon(Icons.notifications_outlined),
+      title: const Text('通知'),
+      subtitle: const Text('每日 14:30 台股提醒與結算完成通知'),
+      value: enabled,
+      onChanged: (v) => ref
+          .read(settingsControllerProvider.notifier)
+          .setNotificationsEnabled(v),
     );
   }
 }
