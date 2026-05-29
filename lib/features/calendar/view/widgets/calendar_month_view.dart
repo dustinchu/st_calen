@@ -4,6 +4,8 @@ import 'package:table_calendar/table_calendar.dart';
 
 import '../../../../data/models/calendar_doc.dart';
 import '../../../../data/models/prediction.dart';
+import '../../../prediction/view/prediction_editor_sheet.dart';
+import '../../../prediction/view/prediction_visual.dart';
 import '../../viewmodel/calendar_view_model.dart';
 
 /// table_calendar 的薄包裝。focusedDay / selectedDay 是 widget 自己管的；
@@ -51,6 +53,14 @@ class _CalendarMonthViewState extends ConsumerState<CalendarMonthView> {
           _selectedDay = selected;
           _focusedDay = focused;
         });
+        final symbol = ref.read(currentSymbolProvider);
+        if (symbol != null) {
+          PredictionEditorSheet.show(
+            context,
+            symbol: symbol,
+            date: selected,
+          );
+        }
       },
       onPageChanged: (focused) {
         setState(() => _focusedDay = focused);
@@ -58,8 +68,13 @@ class _CalendarMonthViewState extends ConsumerState<CalendarMonthView> {
       },
       calendarBuilders: CalendarBuilders(
         markerBuilder: (context, day, events) {
-          // Step 15 接 PredictionType → icon mapping。
-          return null;
+          if (events.isEmpty) return null;
+          final v = PredictionVisual.of(events.first.type);
+          return Positioned(
+            bottom: 4,
+            right: 4,
+            child: Icon(v.icon, size: 14, color: v.color),
+          );
         },
       ),
     );
