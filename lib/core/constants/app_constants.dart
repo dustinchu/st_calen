@@ -6,3 +6,7 @@ const String kStockApiBaseUrl = String.fromEnvironment(
   'STOCK_API_BASE',
   defaultValue: 'https://stock.wisplu.com.tw',
 );
+
+// TODO(step26): 替換為正式上架的隱私權政策 / 服務條款網址（目前為 placeholder）。
+const String kPrivacyPolicyUrl = 'https://stock.wisplu.com.tw/privacy';
+const String kTermsOfServiceUrl = 'https://stock.wisplu.com.tw/terms';
