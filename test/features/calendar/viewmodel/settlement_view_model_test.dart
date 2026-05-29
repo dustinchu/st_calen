@@ -134,5 +134,29 @@ void main() {
         SettleStatus.hit,
       );
     });
+
+    test('flat hitPercent 0 → hit', () {
+      expect(
+        settleStatusOf(_p(
+          type: PredictionType.flat,
+          settled: true,
+          actualClose: 100,
+          hitPercent: 0.0,
+        )),
+        SettleStatus.hit,
+      );
+    });
+
+    test('flat hitPercent 非 0 → miss', () {
+      expect(
+        settleStatusOf(_p(
+          type: PredictionType.flat,
+          settled: true,
+          actualClose: 100.5,
+          hitPercent: 0.5,
+        )),
+        SettleStatus.miss,
+      );
+    });
   });
 }

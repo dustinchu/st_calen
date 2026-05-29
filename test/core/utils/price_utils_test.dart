@@ -130,5 +130,16 @@ void main() {
       expect(settleDownLimit(prevClose: 100, actualClose: 90).hit, isTrue);
       expect(settleDownLimit(prevClose: 100, actualClose: 90.01).hit, isFalse);
     });
+
+    test('flat 嚴格等於命中', () {
+      final r = settleFlat(prevClose: 100, actualClose: 100);
+      expect(r.hit, isTrue);
+      expect(r.hitPercent, closeTo(0, 1e-9));
+    });
+
+    test('flat 差 1 cent 未命中', () {
+      final r = settleFlat(prevClose: 100, actualClose: 100.01);
+      expect(r.hit, isFalse);
+    });
   });
 }
