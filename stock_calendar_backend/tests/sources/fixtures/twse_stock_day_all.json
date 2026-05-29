@@ -1,0 +1,6 @@
+[
+{"Date":"1150528","Code":"0050","Name":"元大台灣50","TradeVolume":"152915695","TradeValue":"15600509184","OpeningPrice":"104.00","HighestPrice":"104.25","LowestPrice":"100.10","ClosingPrice":"100.50","Change":"-2.0500","Transaction":"207536"},
+{"Date":"1150528","Code":"2330","Name":"台積電","TradeVolume":"42313277","TradeValue":"98017950283","OpeningPrice":"2350.00","HighestPrice":"2360.00","LowestPrice":"2270.00","ClosingPrice":"2295.00","Change":"-5.0000","Transaction":"208403"},
+{"Date":"1150528","Code":"00632R","Name":"元大台灣50反1","TradeVolume":"193495030","TradeValue":"2049638387","OpeningPrice":"10.42","HighestPrice":"10.81","LowestPrice":"10.38","ClosingPrice":"10.73","Change":"0.2300","Transaction":"18796"},
+{"Date":"1150528","Code":"00625K","Name":"富邦上証+R","TradeVolume":"","TradeValue":"","OpeningPrice":"","HighestPrice":"","LowestPrice":"","ClosingPrice":"","Change":"0.0000","Transaction":""}
+]

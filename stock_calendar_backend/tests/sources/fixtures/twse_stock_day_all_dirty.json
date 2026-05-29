@@ -1,0 +1,4 @@
+[
+{"Date":"1150528","Code":"9999","Name":"合成千分位逗號","TradeVolume":"1,234,567","TradeValue":"1,302,345,000","OpeningPrice":"1,050.00","HighestPrice":"1,060.00","LowestPrice":"1,040.00","ClosingPrice":"1,055.00","Change":"5.0000","Transaction":"10"},
+{"Date":"1150528","Code":"8888","Name":"合成無交易破折號","TradeVolume":"--","TradeValue":"--","OpeningPrice":"--","HighestPrice":"--","LowestPrice":"--","ClosingPrice":"--","Change":"0.0000","Transaction":"--"}
+]
