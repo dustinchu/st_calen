@@ -12,8 +12,18 @@ enum PredictionType {
   customPercent,  // 自訂漲跌幅 %
   bullish,        // 看多（無數字）
   bearish,        // 看空（無數字）
+  flat,           // 平盤（無數字，Step 16.5）
 }
 ```
+
+#### flat（平盤）規格（Step 16.5）
+
+- **命中定義**：`actualClose` 與 `prevClose` 在 cents 精度下嚴格相等
+  （`(prevClose * 100).round() == (actualClose * 100).round()`），避免浮點誤差。
+- **hitPercent**：仍寫入 `(actualClose - prevClose) / prevClose × 100`；
+  命中時必為 `0.0`，因此 `settleStatusOf` 的 flat 分支以 `hitPercent == 0.0` 判定。
+- **UI**：icon `Icons.horizontal_rule`、color `Color(0xFF757575)`（灰）、label「平盤」。
+- **Hive**：append 為 `HiveField(6)`，不破壞既有 6 個 enum 值的序列化順序。
 
 ### Prediction
 
