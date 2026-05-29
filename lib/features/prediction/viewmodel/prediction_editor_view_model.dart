@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../core/analytics/analytics_service.dart';
 import '../../../data/models/calendar_doc.dart';
 import '../../../data/models/prediction.dart';
 import '../../../data/models/prediction_type.dart';
@@ -156,6 +159,12 @@ class PredictionEditorViewModel extends _$PredictionEditorViewModel {
       );
     }
     final r = await repo.put(updated);
+    if (r.isSuccess) {
+      unawaited(analyticsService.logCreatePrediction(
+        symbol: symbol,
+        direction: newPred.type.name,
+      ));
+    }
     return r.isSuccess;
   }
 

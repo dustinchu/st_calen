@@ -12,6 +12,7 @@ import 'package:timezone/data/latest_all.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
 import '../core/ads/ads_service.dart';
+import '../core/crash/crash_service.dart';
 import '../core/firebase/fcm_service.dart';
 import '../core/notifications/notification_service.dart';
 import '../core/storage/hive_boxes.dart';
@@ -27,6 +28,10 @@ Future<void> bootstrap() async {
   ]);
 
   await Firebase.initializeApp();
+  // 全域錯誤接線（onError 雙鉤）緊接 Firebase init 後、其餘啟動流程之前，
+  // 以盡早捕捉後續初始化的未捕捉錯誤。不讀任何 settings（避開 KI-1）。
+  await crashService.init();
+
   await HiveInit.init();
   // meta box 在 bootstrap 開啟，讓 router redirect 可同步讀 onboarding flag。
   await Hive.openBox<dynamic>(kMetaBox);

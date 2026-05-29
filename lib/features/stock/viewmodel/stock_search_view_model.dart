@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/analytics/analytics_service.dart';
 import '../../../data/models/market.dart';
 import '../../../data/models/stock.dart';
 import '../../calendar/viewmodel/calendar_view_model.dart';
@@ -58,6 +59,10 @@ class StockSearchViewModel extends _$StockSearchViewModel {
     final res = await repo.add(stock);
     return res.when(
       success: (_) {
+        unawaited(analyticsService.logAddStock(
+          symbol: stock.symbol,
+          market: stock.market.name,
+        ));
         final current = ref.read(currentSymbolProvider);
         if (current == null) {
           ref.read(currentSymbolProvider.notifier).set(stock.symbol);

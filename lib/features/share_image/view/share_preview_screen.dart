@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../../app/theme/calendar_themes.dart';
 import '../../../core/ads/ads_service.dart';
+import '../../../core/analytics/analytics_service.dart';
 import '../../../data/models/calendar_doc.dart';
 import '../../../data/models/prediction.dart';
 import '../../calendar/viewmodel/calendar_view_model.dart';
@@ -242,6 +244,10 @@ class _SharePreviewScreenState extends ConsumerState<SharePreviewScreen> {
       }
       await Gal.putImageBytes(bytes, name: _fileName());
       _toast('已儲存到相簿');
+      unawaited(analyticsService.logShareImage(
+        template: _template.name,
+        method: 'save',
+      ));
       adsService.onImageExported();
     } catch (e) {
       _toast('儲存失敗：$e');
@@ -262,6 +268,10 @@ class _SharePreviewScreenState extends ConsumerState<SharePreviewScreen> {
         files: [
           XFile.fromData(bytes, mimeType: 'image/png', name: '${_fileName()}.png'),
         ],
+      ));
+      unawaited(analyticsService.logShareImage(
+        template: _template.name,
+        method: 'share',
       ));
       adsService.onImageExported();
     } catch (e) {
