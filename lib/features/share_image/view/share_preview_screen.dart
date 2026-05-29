@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../app/theme/calendar_themes.dart';
+import '../../../core/ads/ads_service.dart';
 import '../../../data/models/calendar_doc.dart';
 import '../../../data/models/prediction.dart';
 import '../../calendar/viewmodel/calendar_view_model.dart';
@@ -241,6 +242,7 @@ class _SharePreviewScreenState extends ConsumerState<SharePreviewScreen> {
       }
       await Gal.putImageBytes(bytes, name: _fileName());
       _toast('已儲存到相簿');
+      adsService.onImageExported();
     } catch (e) {
       _toast('儲存失敗：$e');
     } finally {
@@ -261,6 +263,7 @@ class _SharePreviewScreenState extends ConsumerState<SharePreviewScreen> {
           XFile.fromData(bytes, mimeType: 'image/png', name: '${_fileName()}.png'),
         ],
       ));
+      adsService.onImageExported();
     } catch (e) {
       _toast('分享失敗：$e');
     } finally {

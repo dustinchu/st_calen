@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../app/theme/calendar_themes.dart';
+import '../../../core/ads/ads_banner.dart';
 import '../../../data/models/calendar_doc.dart';
 import '../../settings/viewmodel/settings_view_model.dart';
 import '../../share_image/view/share_preview_screen.dart';
@@ -61,6 +62,7 @@ class CalendarScreen extends ConsumerWidget {
                   const Center(child: CircularProgressIndicator()),
               error: (e, _) => Center(child: Text('讀取失敗：$e')),
             ),
+      bottomNavigationBar: const AdsBanner(),
     );
   }
 

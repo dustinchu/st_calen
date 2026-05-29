@@ -11,6 +11,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:timezone/data/latest_all.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
+import '../core/ads/ads_service.dart';
 import '../core/firebase/fcm_service.dart';
 import '../core/notifications/notification_service.dart';
 import '../core/storage/hive_boxes.dart';
@@ -43,6 +44,8 @@ Future<void> bootstrap() async {
 
   _startFcm();
 
+  // iOS ATT 授權應在 MobileAds.initialize 前請求（取 IDFA）；Android no-op。
+  await adsService.requestTrackingAuthorization();
   unawaited(MobileAds.instance.initialize());
 
   runApp(const ProviderScope(child: MyApp()));
