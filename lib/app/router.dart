@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../features/accuracy_report/view/accuracy_report_screen.dart';
 import '../features/calendar/view/calendar_screen.dart';
 import '../features/onboarding/view/onboarding_screen.dart';
 import '../features/onboarding/viewmodel/onboarding_view_model.dart';
@@ -28,6 +29,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/settings',
         builder: (context, state) => const SettingsScreen(),
+      ),
+      GoRoute(
+        path: '/report',
+        builder: (context, state) => const AccuracyReportScreen(),
       ),
     ],
   );

@@ -19,9 +19,29 @@ import 'templates/report_card_template.dart';
 import 'templates/single_day_template.dart';
 
 class SharePreviewScreen extends ConsumerStatefulWidget {
-  const SharePreviewScreen({required this.symbol, super.key});
+  const SharePreviewScreen({
+    required this.symbol,
+    this.initialTemplate,
+    this.reportDocs,
+    this.reportPeriodLabel,
+    this.reportSymbolLabel,
+    super.key,
+  });
 
   final String symbol;
+
+  /// 進場預設版型；null → fullCalendar（維持既有行為）。
+  final ShareTemplate? initialTemplate;
+
+  /// reportCard 版型的 docs override（Accuracy Report CTA 帶入當前 Tab 跨股票
+  /// docs）；null → 沿用「當前 symbol 本月 doc」。
+  final List<CalendarDoc>? reportDocs;
+
+  /// reportCard 期間標籤 override（如「近 3 月」）；null → 「YYYY 年 MM 月」。
+  final String? reportPeriodLabel;
+
+  /// reportCard 標題 symbol override（跨股票報告顯示「全部」）；null → [symbol]。
+  final String? reportSymbolLabel;
 
   @override
   ConsumerState<SharePreviewScreen> createState() => _SharePreviewScreenState();
@@ -30,7 +50,8 @@ class SharePreviewScreen extends ConsumerStatefulWidget {
 class _SharePreviewScreenState extends ConsumerState<SharePreviewScreen> {
   final _boundaryKey = GlobalKey();
   final _exporter = const ImageExportService();
-  ShareTemplate _template = ShareTemplate.fullCalendar;
+  late ShareTemplate _template =
+      widget.initialTemplate ?? ShareTemplate.fullCalendar;
   ShareAspectRatio _ratio = ShareAspectRatio.story916;
   ShareBackground _bg = ShareBackground.none;
 
@@ -164,11 +185,12 @@ class _SharePreviewScreenState extends ConsumerState<SharePreviewScreen> {
         );
       case ShareTemplate.reportCard:
         return ReportCardTemplate(
-          docs: [if (doc != null) doc],
+          docs: widget.reportDocs ?? [if (doc != null) doc],
           ratio: _ratio,
           theme: theme,
-          symbol: widget.symbol,
-          periodLabel: '${month.year} 年 ${_two(month.month)} 月',
+          symbol: widget.reportSymbolLabel ?? widget.symbol,
+          periodLabel: widget.reportPeriodLabel ??
+              '${month.year} 年 ${_two(month.month)} 月',
         );
     }
   }

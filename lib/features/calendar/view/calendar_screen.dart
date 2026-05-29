@@ -23,6 +23,11 @@ class CalendarScreen extends ConsumerWidget {
         title: Text(symbol ?? '股市行事曆'),
         actions: [
           IconButton(
+            icon: const Icon(Icons.insights),
+            tooltip: '準度報告',
+            onPressed: () => context.push('/report'),
+          ),
+          IconButton(
             icon: const Icon(Icons.ios_share),
             tooltip: '分享月曆',
             onPressed: symbol == null

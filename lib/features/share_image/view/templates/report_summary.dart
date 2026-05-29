@@ -18,9 +18,10 @@ class TypeStat {
 /// 月度報告聚合：吃 [CalendarDoc] 清單，算總數 / 已結算 / 命中 / 命中率 + 分項。
 ///
 /// 命中率口徑：分母只算 settled（unsettled 排除分母）。settled == 0 → 0。
-/// TODO(step20): 與完整報告頁統一命中率口徑（目前採 settled-only）。
+/// 口徑已統一（Step 20 決策1）：Accuracy Report 全程透過本類聚合，settled-only
+/// 為唯一命中率口徑。
 ///
-/// 純函式、無 side effect、可單測；Step 20 完整報告頁可直接重用。
+/// 純函式、無 side effect、可單測；Step 20 完整報告頁（AccuracyReport）直接重用。
 class ReportSummary {
   const ReportSummary({
     required this.total,

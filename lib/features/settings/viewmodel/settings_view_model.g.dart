@@ -58,7 +58,7 @@ final settingsViewModelProvider =
 
 typedef SettingsViewModelRef = AutoDisposeStreamProviderRef<AppSettings>;
 String _$settingsControllerHash() =>
-    r'57eae2e25257f9eda0cdecdd6ecc384c5792fd2e';
+    r'99e9e6c32db8d61223bbb429b3d1d2d44c3fc9fc';
 
 /// 更新單一欄位（read-modify-put）。
 ///
