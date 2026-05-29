@@ -188,7 +188,7 @@
     - **相依提醒（給後續 step）**：三軸語意色（漲跌/命中金色）刻意**不在 U1**，留 U2 的 `SemanticColors` ThemeExtension；本 step 純基礎層。
     - **驗收缺口**：模擬器截圖本 session 卡住未取，依 user 指示延後自行確認（深色基底 + 字體已由 analyze/test + token 對照 DESIGN.md 確認落地，非阻斷）。
 
-- [ ] **Step U2：色彩語意系統（三軸分離）+ 預測視覺改造**
+- [x] **Step U2：色彩語意系統（三軸分離）+ 預測視覺改造**
   - 新增 `SemanticColors` ThemeExtension（軸一方向色 + 軸二命中色）。
   - `prediction_visual.dart`：依 §2 軸一重定 icon 顏色（確認 upLimit 紅 / downLimit 綠 / bullish 紅 / bearish 綠 / flat 灰 / customPrice 藍 / customPercent 依正負）。
   - `calendar_month_view.dart`：**cell 改為「中性底 + 右上角命中徽章（金✓/灰✗/空圈）」**，不再用整格綠/紅底。
@@ -197,6 +197,23 @@
   - **注意**：分享版型 `full_calendar_template.dart` 也用 `hitCellBg/missCellBg`——U2 改語意後，U8 要同步；本步先不動 template（避免 scope 外），但在完成紀錄記下相依。
   - **驗收**：可抽 `predictionDirectionColor()` / 命中徽章決策純函式做單測；截圖確認紅綠不撞命中色。
   - **完成紀錄**：
+    - commit：feat `56d688c` / test `fc4f43a` / docs（本次）
+    - analyze：`fvm flutter analyze` → No issues found（0）
+    - test：`fvm flutter test` → 全 254 passed（229 既有 + 25 新：semantic_colors 9 / prediction_visual 12 / hit_badge 4）
+    - **3 決策最終選擇（user 拍板，照做）**：
+      1. customPercent 0 值 → **平盤灰**（`marketDirectionOf(customPercent, percent:0)` 回 `MarketDirection.flat`；>0 紅、<0 綠、null（未表態）→ 中性藍）。與台股慣例一致。
+      2. cell 形狀/底 → **維持圓形 + 透明底**（保留既有 `BoxShape.circle`，命中狀態移到右上角徽章；today 仍用 primary 描邊環）。8px 圓角方格留 U5 calendar 主畫面改造，避免與 U5 重工。
+      3. icon 色範圍 → **更新 `PredictionVisual.color` 為軸一標準色**（不只動 calendar）。upLimit/bullish→#FF3B30 紅、downLimit/bearish→#34C759 綠、flat→#757575 灰、customPrice/customPercent(靜態無值)→#4D8EFF 中性藍。share templates / editor tab 的 icon 色一併對齊軸一（僅色號微調，不動結構）；calendar marker 另走 `marketDirectionOf+directionColor` 取得 customPercent 依正負方向色。
+    - **架構落地**：
+      - `SemanticColors extends ThemeExtension`（軸一 up/down/flat/neutral + 軸二 hit/miss/unsettled），`SemanticColors.dark` 一套，掛進 `ThemeData.extensions`；畫面讀 extension 不寫死。
+      - 純函式：`marketDirectionOf(type,{percent})`（軸一）+ `hitBadgeOf(status,{isPast})`（軸二 hit/miss/unsettled/none）+ `SemanticColors.directionColor(MarketDirection)`，皆 TDD（RED→GREEN）。
+      - `HitBadgeMarker`：16dp 圓形，金底白✓ / 灰底白✗ / 淡灰空心圈 / none 不繪；cell `Stack` 右上角疊放（`clipBehavior: Clip.none`）。當日未結算視為「非過去日」→ 不上徽章（§2 未來日不上色）。
+    - **踩雷**：
+      1. **軸一/軸二色必須物理分離**：命中用金 #FFB300、miss/unsettled 用灰 #8C909F，刻意避開紅綠——綠已給「跌」、紅已給「漲」，命中若用綠會與「跌停命中」語意打架（§2 核心）。
+      2. **`SemanticColors` 不可放在 theme 層卻反向 import feature**：`MarketDirection` enum 定義在 theme/`semantic_colors.dart`，`marketDirectionOf` 放 feature/`prediction_visual.dart`（feature→theme 正向）；`hitBadgeOf` 因依賴 `SettleStatus`（calendar viewmodel）放在 calendar/`hit_badge.dart`，避免 theme→feature 逆向依賴。
+      3. **`PredictionVisual.color` 是共用色源**：被 calendar / editor tab / 3 個 share template 同讀，改它會連動三處；本步刻意統一成軸一色（一致性優先），結算/出圖邏輯與 template 結構未動，既有測試全綠。
+    - **U8 template 相依提醒**：`full_calendar_template.dart` / `single_day_template.dart` / `report_card_template.dart` 的**命中 cell 底色**仍走舊 `CalendarTheme.hitCellBg/missCellBg/unsettledCellBg`（本步未動，避免 scope 外）。U8 須改讀 `SemanticColors`（命中金、miss/unsettled 灰）與本步同步；template 的 type icon 色因共用 `PredictionVisual.color` 已自動對齊軸一。
+    - **驗收缺口**：模擬器截圖本 session 依 user 指示延後自行確認（analyze 0 / test 254 綠 + 純函式單測鎖住三軸色號，紅綠與命中金不撞色已由 token 值確認，非阻斷）。
 
 - [ ] **Step U3：主題系統重構（5 套：dark/light/redgreen/minimal/meme）**
   - 依 §3 重定 `calendar_themes.dart` 五套，每套提供 `SemanticColors` + surface 階層 + monthBackground + cell 樣式。
@@ -312,7 +329,7 @@ Step U<N> 開工
 ## 11. 全局 checklist（UI 改版）
 
 - [x] Step U1：Design tokens + ThemeData
-- [ ] Step U2：三軸色彩語意 + 預測視覺
+- [x] Step U2：三軸色彩語意 + 預測視覺
 - [ ] Step U3：5 套主題重構
 - [ ] Step U4：底部導航 shell + FAB
 - [ ] Step U5：Calendar 主畫面
