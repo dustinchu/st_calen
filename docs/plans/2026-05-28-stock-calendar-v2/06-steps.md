@@ -222,13 +222,13 @@ git push origin <branch>
   - [ ] **驗收**：建立 flat prediction → settled 後嚴格相等命中、否則 miss（**實機驗收續延後**）
   - **完成紀錄**：commit `f1c2af0` feat + `0b3c4a7` test（2026-05-29）。`fvm flutter analyze` 0 issue、`fvm flutter test` 167 passed（163 既有 + 4 新增：2 settleFlat + 2 settleStatusOf flat）。**Step 5 / 6 / 8 / 13 / 14 / 15 / 16 / 16.5 實機驗收續延後**——預計 Step 17 前或 Step 17 結束打包跑完整實機驗收。四個開工決策最終選擇：(1) **flat 命中定義** — `actualClose` 嚴格等於 `prevClose`，用 cents 整數比 `(prev*100).round() == (actual*100).round()` 避免浮點誤差，延續 Step 16 customPrice 嚴格等於慣例。(2) **flat icon** — `Icons.horizontal_rule` 灰色 `Color(0xFF757575)`，語意最清楚。(3) **enum 順序** — append 在最後 `HiveField(6)`，**不破壞既有 6 個值的 Hive 序列化**；chips bar 順序由 `PredictionType.values` 自動帶出，flat 排在 bearish 之後（看多/看空/平盤三連）。(4) **`_judgeHit` 對 flat** — 由於 `Prediction` model 沒存 `prevClose`，用 `hitPercent == 0.0` 判定（settle 寫入時已用 cents 嚴格等於 → `hitPercent` 必為 0.0，邏輯等價）。**踩雷**：(i) `build_runner` 順帶 regen 了 `prediction.g.dart`（json enum map 多 `flat: 'flat'`）+ `settlement_view_model.g.dart`（hash 變動），兩個 .g.dart 與 feat 一起 commit（衍生產物）。(ii) `PredictionEditorSheet._fieldsFor` 與 VM `canSave` 的 fall-through case 直接 append flat 到 bullish/bearish 後面，flat 無數字欄位、`canSave` 一律 true，不必新增 switch 分支。(iii) Hive `HiveField(6)` 一旦寫入裝置就不能改順序，因此確認 append-only 才 commit。
 
-- [ ] **Step 17：行事曆主題系統**
+- [ ] **Step 17：行事曆主題系統**（code done，實機驗收續延後）
   - `app/theme/calendar_themes.dart` 5 套主題
   - 設定頁切換 App 主題
   - 月曆內主題切換按鈕
   - 主題 ID 存 CalendarDoc 與 AppSettings
-  - **驗收**：5 套主題視覺差異明顯；切換立即套用
-  - **完成紀錄**：
+  - **驗收**：5 套主題視覺差異明顯；切換立即套用（實機驗收續延後）
+  - **完成紀錄**：commit `c6c02aa` feat + `7bbcecc` test（2026-05-29）。`fvm flutter analyze` 0 issue、`fvm flutter test` 170 passed（167 既有 + 3 新增 byId cases）。**Step 5 / 6 / 8 / 13 / 14 / 15 / 16 / 16.5 / 17 實機驗收續延後**。五個開工決策最終選擇：(1) **5 套配色** — default(#1E88E5 藍) / warm(#FB8C00 暖橘) / cool(#0288D1 海藍) / mono(#424242 簡約灰) / nature(#388E3C 森林綠)；每套定義 seed + monthBackground + hit/miss/unsettled cellBg。(2) **App vs 月曆主題關係** — (B) App 主題是 fallback；月曆 `themeId == 'default'` 時跟隨 App seed，否則覆蓋。(3) **月曆切換按鈕位置** — (A) AppBar 右側 `Icons.palette_outlined` + modal bottom sheet 列 5 套；省版位且不擠 cell。(4) **未知 themeId** — `CalendarThemes.byId` fallback to `defaultTheme`，不報錯，test 覆蓋。(5) **Hive migration** — 不需要；`CalendarDoc.themeId` 在 Step 9 已加為 required，`AppSettings.themeId` default `'def'`（legacy 字串）由 byId 當 unknown fallback 處理，不動 schema。**踩雷**：(i) `AppSettings.themeId` 既有 default 值 `'def'` 與 5 套 id 的 `'default'` 不一致，沒改 `@Default` 避免 freezed/hive regen 風險，改用 byId fallback 統一吸收（'def' 走 unknown → defaultTheme）。(ii) AppBar palette IconButton 放在 `calendar_screen.dart`（不是 `calendar_month_view.dart`，因為 AppBar 屬於 Screen 層），切換時 `ref.read(calendarRepositoryProvider).put(doc.copyWith(themeId, updatedAt))` 直接走既有 update 路徑，不動 repo 邏輯。(iii) 月曆背景用 `Container(color: theme.monthBackground)` 包 `TableCalendar`，沒改 table_calendar 內部 builder；cell bg 透過既有 `defaultBuilder/todayBuilder` 帶 theme 參數注入。
 
 - [ ] **Step 18：Share Image — 整月行事曆版型**
   - `share_image/templates/full_calendar_template.dart`
