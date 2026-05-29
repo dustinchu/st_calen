@@ -284,11 +284,11 @@ git push origin <branch>
 
 ### Phase 1：上架前
 
-- [ ] **Step 24：Crashlytics、Analytics、Error Handling**
+- [ ] **Step 24：Crashlytics、Analytics、Error Handling**（code done，實機驗收續延後）
   - 全域 `FlutterError.onError` 與 `PlatformDispatcher.onError` 接 Crashlytics
   - 關鍵事件埋 Analytics（add_stock、create_prediction、share_image 等）
   - **驗收**：debug 故意 crash 後 Crashlytics console 收到
-  - **完成紀錄**：
+  - **完成紀錄**：commit `784ed81` feat + `42b4997` test（2026-05-29）。`fvm flutter analyze` 0 issue、`fvm flutter test` 220 passed（214 既有 + 6 新增：buildAnalyticsParams 純函式）。**Step 5 / 6 / 8 / 13 / 14 / 15 / 16 / 16.5 / 17 / 18 / 19 / 20 / 21 / 22 / 23 / 24 實機驗收（debug 故意 crash → Crashlytics console 收到）續延後**。開工決策最終選擇：(1) **錯誤接線** — `FlutterError.onError = recordFlutterFatalError` + `PlatformDispatcher.instance.onError = recordError(fatal:true)` 雙鉤（Flutter 3.x 官方推薦），**不**用 runZonedGuarded 包 runApp。(2) **分層** — 分兩檔 `core/crash/crash_service.dart` + `core/analytics/analytics_service.dart`，各自 top-level 單例，對齊既有 `adsService` / `fcmService`。(3) **debug 上報口徑** — `setCrashlyticsCollectionEnabled(true)` **不分 build mode**，debug crash 也上報，驗收可直接在 debug 跑。(4) **事件清單**（05-features 無指定，本 step 自訂）— `add_stock`(symbol, market)、`create_prediction`(symbol, direction=PredictionType.name)、`share_image`(template=ShareTemplate.name, method=save/share)。(5) **可測性** — `buildAnalyticsParams`（去 null、組 `Map<String,Object>`）抽純函式單測（6 cases）；Crashlytics/Analytics plugin 互動靠實機驗收（對齊 fcm/ads 邊界）。(6) **動 bootstrap** — 只在 `Firebase.initializeApp()` 後加 `await crashService.init()` 接線，**不讀任何 settings**（避開 KI-1）。**踩雷**：(a) **analyticsService 單例建構即 throw**——top-level `AnalyticsService()` 原在建構子預設參數解析 `FirebaseAnalytics.instance`，Dart top-level final 首次存取（VM 埋點呼叫）才 init → 單測無 Firebase App 時於非 async gap 同步 throw，5 個既有 VM 測試（stock / prediction）連帶紅。改為 **instance 延後解析**（`_analytics` 建構時不解析）。(b) **`unawaited` 不吞錯**——僅延後解析仍不夠：`unawaited` 只壓 lint，未處理的 async error 仍會讓 flutter_test 失敗。於 `_log` 內 `try/catch` swallow，明確定調「埋點失敗（含 Firebase 未 init / plugin 錯誤）不可中斷使用者流程」——這也是正式環境正確行為（logging 失敗不該讓 add_stock 失敗）。(c) **prediction_editor / share_preview 原無 `dart:async` import**——加 `unawaited` 後需補 `import 'dart:async';`（stock_search_view_model 已有）。
 
 - [ ] **Step 25：Settings 頁完成**
   - 全部設定項目（依 `05-features.md` F11）
