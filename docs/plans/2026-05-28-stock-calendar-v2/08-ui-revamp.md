@@ -215,7 +215,7 @@
     - **U8 template 相依提醒**：`full_calendar_template.dart` / `single_day_template.dart` / `report_card_template.dart` 的**命中 cell 底色**仍走舊 `CalendarTheme.hitCellBg/missCellBg/unsettledCellBg`（本步未動，避免 scope 外）。U8 須改讀 `SemanticColors`（命中金、miss/unsettled 灰）與本步同步；template 的 type icon 色因共用 `PredictionVisual.color` 已自動對齊軸一。
     - **驗收缺口**：模擬器截圖本 session 依 user 指示延後自行確認（analyze 0 / test 254 綠 + 純函式單測鎖住三軸色號，紅綠與命中金不撞色已由 token 值確認，非阻斷）。
 
-- [ ] **Step U3：主題系統重構（5 套：dark/light/redgreen/minimal/meme）**
+- [x] **Step U3：主題系統重構（5 套：dark/light/redgreen/minimal/meme）**
   - 依 §3 重定 `calendar_themes.dart` 五套，每套提供 `SemanticColors` + surface 階層 + monthBackground + cell 樣式。
   - `byId` 加舊 id（`def`/`default`/`warm`/`cool`/`mono`/`nature`）→ 新 id fallback 映射。
   - 設定頁主題選擇器（`settings_screen.dart` 的 `_ThemePickerSheet`）更新名稱/預覽。
@@ -223,6 +223,27 @@
   - **開工對齊**：見 §3 四個決策（id 命名 / 預設 / token 集 / meme 樣式表達）。
   - **驗收**：5 套切換立即套用、視覺差異明顯；舊 id 不崩；`byId` fallback 純函式單測。
   - **完成紀錄**：
+    - commit：feat `f37eff3` / test `7ee5358` / docs（本次）
+    - analyze：`fvm flutter analyze` → No issues found（0）
+    - test：`fvm flutter test` → 全 259 passed（254 既有 −舊 3 calendar_themes +新 8：resolveId 4 / byId 2 / 三軸健全性 1 / brutalist 1）
+    - **4 決策最終選擇（user 拍板，照做）**：
+      1. 舊 id → 新 id fallback 映射 → **全部 legacy 淺色（def/default/warm/cool/nature）→ `dark`（新預設）；`mono` → `minimal`（風格最近）**。映射為純函式 `CalendarThemes.resolveId`，byId 走它；不破壞 Hive 既有 `themeId`。
+      2. 每主題 ColorScheme → **`dark` 用既有手填 OLED `_darkColorScheme()`（`useOledScheme:true`）；`light`/`redgreen`/`minimal`/`meme` 走 `ColorScheme.fromSeed(seed,brightness)`**。DESIGN.md 只給 dark 一套完整 token，其餘不手刻全 token（簡單優先）。`AppTheme.dark()/light()/fromSeed()` 簽名保留。
+      3. 每主題 SemanticColors → **5 套共用 §2 canonical（`SemanticColors.dark`）**。語意恆定是「能不能被讀懂」的核心；主題只變 surface/seed，三軸（紅漲/綠跌/金命中/灰 miss…）不變。redgreen/meme 的「強對比」靠 surface/seed 表現。
+      4. meme neo-brutalist → **U3 就加 `BrutalistDecor` ThemeExtension**（borderWidth/shadowOffset/hardShadow）；meme = 2px 實邊 + 4px offset 0 blur 硬陰影，其餘 4 套 `BrutalistDecor.none`。掛進 `ThemeData.extensions`；**畫面消費（cell/卡片實際畫邊+陰影）留 U5/U8**——U3 只定義契約 + 各主題帶值。
+    - **架構落地**：
+      - `CalendarTheme` 擴充：`brightness` + `semantic`(SemanticColors) + `brutalist`(BrutalistDecor) + `useOledScheme`(bool)；保留 `seed/monthBackground/hitCellBg/missCellBg/unsettledCellBg`（分享版型仍讀，見下 U8 相依）。
+      - `CalendarThemes`：5 套重定義（dark/light/redgreen/minimal/meme）+ `_legacyIds` 映射表 + `resolveId`（純函式）+ `byId`（永不報錯，未知→dark）。
+      - `AppTheme.fromCalendarTheme(theme)`：dark 走 OLED override、其餘 fromSeed；掛上該主題的 SemanticColors + BrutalistDecor。`_build` 新增 `brutalist` 參數，`extensions:[semantic, brutalist]`。
+      - `app.dart`：`MaterialApp` 改 `watch(settingsViewModelProvider)` → `byId(themeId ?? 'def')` → `fromCalendarTheme`，`themeMode` 依主題 brightness。U1 寫死 `ThemeMode.dark` 解除。
+      - 設定頁 `_ThemePickerSheet` 預覽改「monthBackground 底 + seed 環」28dp 圓——dark/light seed 同為藍，僅靠底色（navy vs white）才辨得出，故不再用單純 seed 點。
+    - **踩雷**：
+      1. **`'default'` 是雙重身分**：既是「舊預設主題 id」也是 `CalendarDoc.themeId` 的「跟隨 App 主題」哨兵（`calendar_month_view`/`calendar_screen` 的 `docThemeId == 'default'` 比對、`prediction_editor_view_model` 新建 doc 寫 `'default'`）。哨兵比對在 `byId` **之前**攔截，故 `resolveId('default')→'dark'` 不影響哨兵語意；新建 doc 仍寫 'default'（＝跟隨 App），不需資料遷移。
+      2. **跨檔 const ColorScheme 會循環 import**：若讓 `CalendarTheme` 直接帶 OLED `ColorScheme`，calendar_themes 需 import app_theme、app_theme 又需 import calendar_themes（型別參數）→ 循環。改用 `useOledScheme` bool 旗標，OLED scheme 留 app_theme 私有，`fromCalendarTheme` 內分支，單向依賴（app_theme→calendar_themes）。
+      3. **dark/light seed 撞色**：兩套 seed 都是藍（#4D8EFF / #1E88E5），picker 單純 seed 點無法辨；預覽改吃 monthBackground 才區分得出深淺。
+    - **U8 template 命中色相依（重申）**：`full_calendar_template.dart` 仍讀 `theme.hitCellBg/missCellBg/unsettledCellBg`（U3 保留欄位、給各主題具體值，未破壞引用）。U8 須把三版型改讀 `SemanticColors`（命中金、miss/unsettled 灰）與 §2 對齊；屆時這些 legacy cellBg 欄位可評估移除。
+    - **scope 外未動（note）**：`calendar_screen.dart` 的 per-doc `_CalendarThemePickerSheet`（含「預設＝跟隨 App」項）仍用 `CircleAvatar(seed)` 預覽——本步只動 settings 的 App 主題 picker；per-doc picker 會自動顯示新 displayName，視覺微調留後續。
+    - **驗收缺口**：模擬器截圖本 session 依 user 指示延後自行確認（analyze 0 / test 259 綠 + resolveId 映射與三軸健全性已由純函式單測鎖住；5 套切換接線經 app.dart→settings provider 串起，非阻斷）。
 
 - [ ] **Step U4：底部導航架構（4 tab shell）+ FAB**
   - `router.dart` 改 `StatefulShellRoute`，4 branch：日曆 / 勝率 / 自選 / 設定。
@@ -330,7 +351,7 @@ Step U<N> 開工
 
 - [x] Step U1：Design tokens + ThemeData
 - [x] Step U2：三軸色彩語意 + 預測視覺
-- [ ] Step U3：5 套主題重構
+- [x] Step U3：5 套主題重構
 - [ ] Step U4：底部導航 shell + FAB
 - [ ] Step U5：Calendar 主畫面
 - [ ] Step U6：Prediction Editor
