@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../../app/theme/calendar_themes.dart';
+import '../../../../app/theme/semantic_colors.dart';
 import '../../../../data/models/calendar_doc.dart';
 import '../../../../data/models/prediction.dart';
 import '../../../prediction/view/prediction_editor_sheet.dart';
@@ -10,6 +11,7 @@ import '../../../prediction/view/prediction_visual.dart';
 import '../../../settings/viewmodel/settings_view_model.dart';
 import '../../viewmodel/calendar_view_model.dart';
 import '../../viewmodel/settlement_view_model.dart';
+import 'hit_badge.dart';
 
 /// table_calendar 的薄包裝。focusedDay / selectedDay 是 widget 自己管的；
 /// 月份切換時推回 [focusedMonthProvider] 觸發 ViewModel 重新訂閱。
@@ -46,6 +48,8 @@ class _CalendarMonthViewState extends ConsumerState<CalendarMonthView> {
     final docThemeId = widget.doc?.themeId ?? 'default';
     final theme = CalendarThemes.byId(
         docThemeId == 'default' ? appThemeId : docThemeId);
+    final sem =
+        Theme.of(context).extension<SemanticColors>() ?? SemanticColors.dark;
     return Container(
       color: theme.monthBackground,
       child: TableCalendar<Prediction>(
@@ -81,16 +85,19 @@ class _CalendarMonthViewState extends ConsumerState<CalendarMonthView> {
       },
       calendarBuilders: CalendarBuilders(
         defaultBuilder: (context, day, focusedDay) =>
-            _cellBackground(context, day, byDay[day.day], false, theme),
+            _cell(context, day, byDay[day.day], false, sem),
         todayBuilder: (context, day, focusedDay) =>
-            _cellBackground(context, day, byDay[day.day], true, theme),
+            _cell(context, day, byDay[day.day], true, sem),
         markerBuilder: (context, day, events) {
           if (events.isEmpty) return null;
-          final v = PredictionVisual.of(events.first.type);
+          final p = events.first;
+          // 軸一：icon 依市場方向上色（customPercent 依正負）。
+          final color =
+              sem.directionColor(marketDirectionOf(p.type, percent: p.percent));
           return Positioned(
             bottom: 4,
             right: 4,
-            child: Icon(v.icon, size: 14, color: v.color),
+            child: Icon(PredictionVisual.of(p.type).icon, size: 14, color: color),
           );
         },
       ),
@@ -98,43 +105,37 @@ class _CalendarMonthViewState extends ConsumerState<CalendarMonthView> {
     );
   }
 
-  /// 依結算狀態回傳 cell 底色 widget。
-  /// 命中：淡綠；偏離：淡紅；未結算（過去日已 settled=false 也算）：淡灰；
-  /// 無預測 / 未來日：透明（不染色，回 fallback container）。
-  Widget _cellBackground(BuildContext context, DateTime day, Prediction? p,
-      bool isToday, CalendarTheme theme) {
-    Color? bg;
-    if (p != null) {
-      switch (settleStatusOf(p)) {
-        case SettleStatus.hit:
-          bg = theme.hitCellBg;
-          break;
-        case SettleStatus.miss:
-          bg = theme.missCellBg;
-          break;
-        case SettleStatus.unsettled:
-          // 過去日未結算 → unsettled 染色；未來日不染色
-          final todayLocal = DateTime.now();
-          final dToday =
-              DateTime(todayLocal.year, todayLocal.month, todayLocal.day);
-          if (DateTime(day.year, day.month, day.day).isBefore(dToday)) {
-            bg = theme.unsettledCellBg;
-          }
-          break;
-      }
-    }
-    final borderColor = isToday
-        ? Theme.of(context).colorScheme.primary
-        : Colors.transparent;
-    return Container(
+  /// §2 落地：cell 用中性底（透明），命中狀態改右上角徽章——不再用整格綠/紅底
+  /// （整格紅綠會與軸一市場方向撞色）。徽章決策走 [hitBadgeOf]。
+  Widget _cell(BuildContext context, DateTime day, Prediction? p, bool isToday,
+      SemanticColors sem) {
+    final borderColor =
+        isToday ? Theme.of(context).colorScheme.primary : Colors.transparent;
+    final cell = Container(
       margin: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: bg,
         shape: BoxShape.circle,
         border: Border.all(color: borderColor, width: 1.5),
       ),
       alignment: Alignment.center,
       child: Text('${day.day}'),
     );
+    if (p == null) return cell;
+    final badge = hitBadgeOf(settleStatusOf(p), isPast: _isPast(day));
+    if (badge == HitBadge.none) return cell;
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        cell,
+        Positioned(top: 2, right: 2, child: HitBadgeMarker(badge: badge)),
+      ],
+    );
+  }
+
+  /// 該日是否早於今日（當日不算過去日 → 未結算當日不上徽章，§2）。
+  bool _isPast(DateTime day) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    return DateTime(day.year, day.month, day.day).isBefore(today);
   }
 }

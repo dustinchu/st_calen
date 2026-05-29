@@ -1,9 +1,38 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/theme/semantic_colors.dart';
 import '../../../data/models/prediction_type.dart';
 
+/// PredictionType → 軸一市場方向（§2）。
+///
+/// 純函式（無 context）。[customPercent] 依正負決定方向，0 視為平盤（user 拍板）；
+/// 無值（編輯前）視為中性。畫面用 [SemanticColors.directionColor] 把方向換成主題色。
+MarketDirection marketDirectionOf(PredictionType type, {double? percent}) {
+  switch (type) {
+    case PredictionType.upLimit:
+    case PredictionType.bullish:
+      return MarketDirection.up;
+    case PredictionType.downLimit:
+    case PredictionType.bearish:
+      return MarketDirection.down;
+    case PredictionType.flat:
+      return MarketDirection.flat;
+    case PredictionType.customPrice:
+      return MarketDirection.neutral;
+    case PredictionType.customPercent:
+      if (percent == null) return MarketDirection.neutral;
+      if (percent > 0) return MarketDirection.up;
+      if (percent < 0) return MarketDirection.down;
+      return MarketDirection.flat;
+  }
+}
+
 /// PredictionType → icon / color / 中文標籤 的純對應表。
-/// `switch` 寫死 6 個 enum 值，新增 type 時編譯期會報。
+/// `switch` 寫死 7 個 enum 值，新增 type 時編譯期會報。
+///
+/// [color] 為軸一靜態色（§2）；customPercent 無值時取中性藍，
+/// 月曆 marker 另走 [marketDirectionOf] + [SemanticColors.directionColor]
+/// 取得依正負的方向色。
 class PredictionVisual {
   final IconData icon;
   final Color color;
@@ -16,47 +45,48 @@ class PredictionVisual {
   });
 
   static PredictionVisual of(PredictionType type) {
+    final color = SemanticColors.dark.directionColor(marketDirectionOf(type));
     switch (type) {
       case PredictionType.upLimit:
-        return const PredictionVisual(
+        return PredictionVisual(
           icon: Icons.arrow_upward,
-          color: Color(0xFFD32F2F),
+          color: color,
           label: '漲停',
         );
       case PredictionType.downLimit:
-        return const PredictionVisual(
+        return PredictionVisual(
           icon: Icons.arrow_downward,
-          color: Color(0xFF2E7D32),
+          color: color,
           label: '跌停',
         );
       case PredictionType.customPrice:
-        return const PredictionVisual(
+        return PredictionVisual(
           icon: Icons.price_change,
-          color: Color(0xFF1976D2),
+          color: color,
           label: '自訂價',
         );
       case PredictionType.customPercent:
-        return const PredictionVisual(
+        return PredictionVisual(
           icon: Icons.percent,
-          color: Color(0xFF6A1B9A),
+          color: color,
           label: '自訂漲跌幅',
         );
       case PredictionType.bullish:
-        return const PredictionVisual(
+        return PredictionVisual(
           icon: Icons.trending_up,
-          color: Color(0xFFE53935),
+          color: color,
           label: '看多',
         );
       case PredictionType.bearish:
-        return const PredictionVisual(
+        return PredictionVisual(
           icon: Icons.trending_down,
-          color: Color(0xFF43A047),
+          color: color,
           label: '看空',
         );
       case PredictionType.flat:
-        return const PredictionVisual(
+        return PredictionVisual(
           icon: Icons.horizontal_rule,
-          color: Color(0xFF757575),
+          color: color,
           label: '平盤',
         );
     }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'design_tokens.dart';
+import 'semantic_colors.dart';
 
 class AppTheme {
   const AppTheme._();
@@ -55,13 +56,19 @@ class AppTheme {
         surfaceTint: AppColors.surfaceTint,
       );
 
-  static ThemeData _build(ColorScheme scheme) => ThemeData(
+  /// [semantic] 為三軸語意色（§2）；U2 僅 [SemanticColors.dark]，U3 各主題各帶一套。
+  static ThemeData _build(
+    ColorScheme scheme, {
+    SemanticColors semantic = SemanticColors.dark,
+  }) =>
+      ThemeData(
         useMaterial3: true,
         brightness: scheme.brightness,
         colorScheme: scheme,
         scaffoldBackgroundColor: scheme.surface,
         fontFamily: AppFontFamily.notoSans,
         textTheme: _textTheme(scheme.onSurface),
+        extensions: [semantic],
       );
 
   /// 套 DESIGN.md typography（NotoSansTC 主、Inter 走數字）。
