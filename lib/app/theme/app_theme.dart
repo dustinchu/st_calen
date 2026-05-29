@@ -3,20 +3,18 @@ import 'package:flutter/material.dart';
 class AppTheme {
   const AppTheme._();
 
-  static const Color _seed = Color(0xFF1E88E5);
+  static const Color _defaultSeed = Color(0xFF1E88E5);
 
-  static ThemeData light() => ThemeData(
-        useMaterial3: true,
-        brightness: Brightness.light,
-        colorScheme: ColorScheme.fromSeed(seedColor: _seed),
-      );
+  static ThemeData light() => fromSeed(_defaultSeed, Brightness.light);
 
-  static ThemeData dark() => ThemeData(
+  static ThemeData dark() => fromSeed(_defaultSeed, Brightness.dark);
+
+  static ThemeData fromSeed(Color seed, Brightness brightness) => ThemeData(
         useMaterial3: true,
-        brightness: Brightness.dark,
+        brightness: brightness,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: _seed,
-          brightness: Brightness.dark,
+          seedColor: seed,
+          brightness: brightness,
         ),
       );
 }

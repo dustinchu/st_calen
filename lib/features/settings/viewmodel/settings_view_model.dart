@@ -33,4 +33,10 @@ class SettingsController extends _$SettingsController {
     final cur = (await repo.get()).fold((s) => s, (_) => const AppSettings());
     await repo.update(cur.copyWith(autoSettleEnabled: v));
   }
+
+  Future<void> setThemeId(String id) async {
+    final repo = ref.read(settingsRepositoryProvider);
+    final cur = (await repo.get()).fold((s) => s, (_) => const AppSettings());
+    await repo.update(cur.copyWith(themeId: id));
+  }
 }

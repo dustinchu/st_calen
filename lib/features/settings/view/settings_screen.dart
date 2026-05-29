@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../app/theme/calendar_themes.dart';
 import '../../auth/view/login_sheet.dart';
 import '../../auth/viewmodel/auth_view_model.dart';
 import '../viewmodel/settings_view_model.dart';
 
-/// Step 6 最小骨架：只放「登入 / 綁定帳號」入口。
-/// 其他設定項目由 Step 25 補完。
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
@@ -34,6 +33,8 @@ class SettingsScreen extends ConsumerWidget {
           ),
           const Divider(),
           _AutoSettleTile(),
+          const Divider(),
+          _AppThemeTile(),
         ],
       ),
     );
@@ -61,6 +62,64 @@ class _AutoSettleTile extends ConsumerWidget {
       value: enabled,
       onChanged: (v) =>
           ref.read(settingsControllerProvider.notifier).setAutoSettleEnabled(v),
+    );
+  }
+}
+
+class _AppThemeTile extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final settings = ref.watch(settingsViewModelProvider).valueOrNull;
+    final current = CalendarThemes.byId(settings?.themeId ?? 'default');
+    return ListTile(
+      leading: const Icon(Icons.palette_outlined),
+      title: const Text('App 主題'),
+      subtitle: Text(current.displayName),
+      trailing: const Icon(Icons.chevron_right),
+      onTap: () => _pick(context, ref, current.id),
+    );
+  }
+
+  Future<void> _pick(
+      BuildContext context, WidgetRef ref, String currentId) async {
+    final picked = await showModalBottomSheet<String>(
+      context: context,
+      builder: (_) => _ThemePickerSheet(currentId: currentId),
+    );
+    if (picked != null) {
+      await ref
+          .read(settingsControllerProvider.notifier)
+          .setThemeId(picked);
+    }
+  }
+}
+
+class _ThemePickerSheet extends StatelessWidget {
+  const _ThemePickerSheet({required this.currentId});
+
+  final String currentId;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(16),
+            child: Text('選擇主題', style: TextStyle(fontWeight: FontWeight.w600)),
+          ),
+          for (final t in CalendarThemes.all)
+            ListTile(
+              leading: CircleAvatar(backgroundColor: t.seed, radius: 12),
+              title: Text(t.displayName),
+              trailing: t.id == currentId
+                  ? const Icon(Icons.check, color: Colors.green)
+                  : null,
+              onTap: () => Navigator.of(context).pop(t.id),
+            ),
+        ],
+      ),
     );
   }
 }
