@@ -25,6 +25,8 @@ class PredictionTypeAdapter extends TypeAdapter<PredictionType> {
         return PredictionType.bullish;
       case 5:
         return PredictionType.bearish;
+      case 6:
+        return PredictionType.flat;
       default:
         return PredictionType.upLimit;
     }
@@ -50,6 +52,9 @@ class PredictionTypeAdapter extends TypeAdapter<PredictionType> {
         break;
       case PredictionType.bearish:
         writer.writeByte(5);
+        break;
+      case PredictionType.flat:
+        writer.writeByte(6);
         break;
     }
   }

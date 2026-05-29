@@ -154,6 +154,16 @@ SettleResult settleUpLimit({
   return SettleResult(hit: hit, hitPercent: pct);
 }
 
+/// 結算平盤：actualClose **嚴格等於** prevClose（用 cents 整數比對避免浮點誤差）。
+SettleResult settleFlat({
+  required double prevClose,
+  required double actualClose,
+}) {
+  final pct = changePercent(prevClose, actualClose) ?? 0.0;
+  final hit = (prevClose * 100).round() == (actualClose * 100).round();
+  return SettleResult(hit: hit, hitPercent: pct);
+}
+
 /// 結算跌停預測：actual 跌幅 ≤ -10%。
 SettleResult settleDownLimit({
   required double prevClose,

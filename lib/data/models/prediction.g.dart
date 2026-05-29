@@ -96,4 +96,5 @@ const _$PredictionTypeEnumMap = {
   PredictionType.customPercent: 'customPercent',
   PredictionType.bullish: 'bullish',
   PredictionType.bearish: 'bearish',
+  PredictionType.flat: 'flat',
 };

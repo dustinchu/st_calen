@@ -53,6 +53,12 @@ class PredictionVisual {
           color: Color(0xFF43A047),
           label: '看空',
         );
+      case PredictionType.flat:
+        return const PredictionVisual(
+          icon: Icons.horizontal_rule,
+          color: Color(0xFF757575),
+          label: '平盤',
+        );
     }
   }
 }

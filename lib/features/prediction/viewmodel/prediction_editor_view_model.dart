@@ -71,6 +71,7 @@ class PredictionDraft {
       case PredictionType.downLimit:
       case PredictionType.bullish:
       case PredictionType.bearish:
+      case PredictionType.flat:
         return true;
     }
   }

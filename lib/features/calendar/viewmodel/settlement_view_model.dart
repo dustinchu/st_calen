@@ -168,6 +168,9 @@ class SettlementViewModel extends _$SettlementViewModel {
       case PredictionType.downLimit:
         if (prevClose == null) return null;
         return settleDownLimit(prevClose: prevClose, actualClose: actualClose);
+      case PredictionType.flat:
+        if (prevClose == null) return null;
+        return settleFlat(prevClose: prevClose, actualClose: actualClose);
     }
   }
 
@@ -248,5 +251,8 @@ bool _judgeHit(Prediction p) {
       return pct >= 10.0 - 1e-9;
     case PredictionType.downLimit:
       return pct <= -10.0 + 1e-9;
+    case PredictionType.flat:
+      // settle 寫入時 cents 嚴格等於 → hitPercent 必為 0.0。
+      return pct == 0.0;
   }
 }

@@ -7,7 +7,7 @@ part of 'settlement_view_model.dart';
 // **************************************************************************
 
 String _$settlementViewModelHash() =>
-    r'23dff269f695a859ba647a4655b478fb0bf15ea7';
+    r'67f85703fcae8703787683827d2f6f68f7f9f4c4';
 
 /// 自動結算 ViewModel：
 /// 訂閱 [calendarViewModelProvider] + autoSettleEnabled，當有「過去日 × 未 settled」

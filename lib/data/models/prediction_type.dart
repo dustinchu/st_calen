@@ -18,4 +18,6 @@ enum PredictionType {
   bullish,
   @HiveField(5)
   bearish,
+  @HiveField(6)
+  flat,
 }

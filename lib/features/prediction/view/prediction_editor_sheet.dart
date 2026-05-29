@@ -199,6 +199,7 @@ class PredictionEditorSheet extends ConsumerWidget {
       case PredictionType.downLimit:
       case PredictionType.bullish:
       case PredictionType.bearish:
+      case PredictionType.flat:
         return const [];
     }
   }
