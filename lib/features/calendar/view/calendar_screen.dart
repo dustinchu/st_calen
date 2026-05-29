@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../app/theme/calendar_themes.dart';
 import '../../../data/models/calendar_doc.dart';
 import '../../settings/viewmodel/settings_view_model.dart';
+import '../../share_image/view/share_preview_screen.dart';
 import '../../stock/view/stock_chips_bar.dart';
 import '../viewmodel/calendar_view_model.dart';
 import 'widgets/calendar_month_view.dart';
@@ -21,6 +22,15 @@ class CalendarScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(symbol ?? '股市行事曆'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.ios_share),
+            tooltip: '分享月曆',
+            onPressed: symbol == null
+                ? null
+                : () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => SharePreviewScreen(symbol: symbol),
+                    )),
+          ),
           IconButton(
             icon: const Icon(Icons.palette_outlined),
             tooltip: '月曆主題',
