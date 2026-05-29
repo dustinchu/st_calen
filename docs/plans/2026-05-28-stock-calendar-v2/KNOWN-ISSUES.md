@@ -7,7 +7,7 @@
 ## 🔴 KI-1：`kSettingsBox` 啟動時未 `openBox`（真機會 crash）
 
 - **發現**：Step 21（2026-05-29）
-- **狀態**：未修（latent，與 Step 21 無關，遵「不碰無關碼」僅記錄）
+- **狀態**：✅ 已修（Step 25 開工 fix commit，2026-05-29；hash 見 `06-steps.md` Step 25 完成紀錄）— bootstrap 在 stocks box 後補 `await Hive.openBox<dynamic>(kSettingsBox)`，對齊既有 meta/calendar/stocks 開法。
 - **症狀**：`kSettingsBox`（Hive `'settings'` box）在 `lib/app/bootstrap.dart` 啟動序列中從未被開啟——bootstrap 只 `openBox` meta / calendar / stocks 三個。但 `settingsLocalDataSourceProvider`（`lib/features/settings/viewmodel/settings_view_model.dart:15`）以**同步** `Hive.box<dynamic>(kSettingsBox)` 取 box。真機啟動 `MyApp` build 讀 `settingsViewModelProvider` 時會 throw `HiveError: Box not found`。
 - **為何單元測試抓不到**：各測試自行 `Hive.openBox` 臨時 box；所有 step 的實機驗收皆延後（`06-steps.md` Step 5~21 全 `[ ]`）。
 - **修法**：`bootstrap.dart` 在 `_ensureSignedIn()` 後加
@@ -22,7 +22,7 @@
 ## 🟡 KI-2：通知首次啟動不自動排程（預設 ON 需 toggle 一次）
 
 - **發現**：Step 21（2026-05-29）
-- **狀態**：依決策刻意為之（嚴守 brief 範圍，user 對齊確認）
+- **狀態**：✅ 已修（Step 25 開工 fix commit，2026-05-29，與 KI-1 同一 commit；hash 見 `06-steps.md` Step 25 完成紀錄）— bootstrap 在 `notificationService.init()` 後讀持久 `AppSettings.notificationsEnabled`（缺值預設 `true`），為 `true` 即 `applyEnabled(true)` 重排。`applyEnabled` 內 `cancelAll` + 同 id `zonedSchedule` 覆蓋，idempotent。
 - **症狀**：`notificationsEnabled` 預設 `true`，但每日提醒只在使用者於設定頁 **toggle 開關**時（`SettingsController.setNotificationsEnabled` → `applyEnabled`）才排程。從未 toggle 的預設使用者收不到 14:30 提醒。
 - **依賴**：完整修法需在啟動時讀持久設定來排程，受 **KI-1** 阻擋（bootstrap 讀 settings 會 crash）。
 - **修法（KI-1 修好後）**：bootstrap 讀 `AppSettings.notificationsEnabled`，若 `true` 呼叫 `notificationService.applyEnabled(true)` 重排（`zonedSchedule` 同 id 覆蓋，idempotent）。

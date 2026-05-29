@@ -17,6 +17,7 @@ import '../core/firebase/fcm_service.dart';
 import '../core/notifications/notification_service.dart';
 import '../core/storage/hive_boxes.dart';
 import '../core/storage/hive_init.dart';
+import '../data/models/app_settings.dart';
 import '../data/sources/remote/device_firestore_ds.dart';
 import 'app.dart';
 
@@ -39,6 +40,9 @@ Future<void> bootstrap() async {
   await Hive.openBox<dynamic>(kCalendarsBox);
   // stocks box 在 bootstrap 開啟，讓 StockListViewModel sync 取得 box。
   await Hive.openBox<dynamic>(kStocksBox);
+  // settings box 在 bootstrap 開啟（KI-1）：settingsLocalDataSourceProvider 以
+  // 同步 Hive.box(kSettingsBox) 取 box，真機啟動 build SettingsViewModel 前若未開會 crash。
+  final settingsBox = await Hive.openBox<dynamic>(kSettingsBox);
   await _ensureSignedIn();
 
   tzdata.initializeTimeZones();
@@ -46,6 +50,13 @@ Future<void> bootstrap() async {
 
   await notificationService.init();
   unawaited(notificationService.requestPermissions());
+  // KI-2：首次啟動依持久設定重排每日提醒。預設 notificationsEnabled=true，
+  // 未曾 toggle 的使用者也能收到 14:30 提醒。applyEnabled 內 cancelAll + 同 id
+  // zonedSchedule 覆蓋，idempotent，重複啟動安全。settings 缺值 → 預設 true。
+  final storedSettings = settingsBox.get(kSettingsKey) as AppSettings?;
+  if (storedSettings?.notificationsEnabled ?? true) {
+    unawaited(notificationService.applyEnabled(true));
+  }
 
   _startFcm();
 
