@@ -91,6 +91,25 @@ flutter:
     - assets/calendar_1.jpg
     - assets/img_black.png
     - assets/img_def.png
+  fonts:
+    # 主介面繁中字體（DESIGN.md typography → fontFamily: notoSans）
+    - family: NotoSansTC
+      fonts:
+        - asset: assets/fonts/NotoSansTC-400.ttf
+          weight: 400
+        - asset: assets/fonts/NotoSansTC-500.ttf
+          weight: 500
+        - asset: assets/fonts/NotoSansTC-700.ttf
+          weight: 700
+    # 數字 / 股票代號字體（DESIGN.md typography → fontFamily: inter）
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-400.ttf
+          weight: 400
+        - asset: assets/fonts/Inter-500.ttf
+          weight: 500
+        - asset: assets/fonts/Inter-700.ttf
+          weight: 700
 
 flutter_native_splash:
   color: "#FFFFFF"
