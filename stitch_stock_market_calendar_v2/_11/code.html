@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-TW"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>股市行事曆 v2 - Onboarding</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&amp;family=Noto+Sans+TC:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #051424;
+            color: #d4e4fa;
+            font-family: 'Noto Sans TC', sans-serif;
+            overflow: hidden;
+        }
+        .snap-x {
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+        }
+        .snap-x::-webkit-scrollbar {
+            display: none;
+        }
+        .snap-center {
+            scroll-snap-align: center;
+        }
+        .glass-card {
+            background: rgba(44, 58, 76, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(140, 144, 159, 0.2);
+        }
+        .onboarding-dot.active {
+            width: 24px;
+            background-color: #adc6ff;
+        }
+        .floating-element {
+            animation: floating 3s ease-in-out infinite;
+        }
+        @keyframes floating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface": "#051424",
+                      "surface-dim": "#051424",
+                      "error": "#ffb4ab",
+                      "outline": "#8c909f",
+                      "on-secondary-fixed-variant": "#930005",
+                      "inverse-primary": "#005ac2",
+                      "inverse-surface": "#d4e4fa",
+                      "secondary": "#ffb4aa",
+                      "primary-fixed-dim": "#adc6ff",
+                      "primary-container": "#4d8eff",
+                      "on-tertiary-fixed-variant": "#00531c",
+                      "on-primary-fixed": "#001a42",
+                      "on-error-container": "#ffdad6",
+                      "on-surface": "#d4e4fa",
+                      "surface-container-highest": "#273647",
+                      "on-primary": "#002e6a",
+                      "on-secondary": "#690003",
+                      "on-primary-container": "#00285d",
+                      "on-surface-variant": "#c2c6d6",
+                      "background": "#051424",
+                      "secondary-container": "#c5020b",
+                      "error-container": "#93000a",
+                      "secondary-fixed-dim": "#ffb4aa",
+                      "surface-tint": "#adc6ff",
+                      "tertiary-fixed-dim": "#53e16f",
+                      "surface-container-high": "#1c2b3c",
+                      "surface-bright": "#2c3a4c",
+                      "tertiary": "#53e16f",
+                      "surface-variant": "#273647",
+                      "inverse-on-surface": "#233143",
+                      "on-background": "#d4e4fa",
+                      "primary": "#adc6ff",
+                      "tertiary-fixed": "#72fe88",
+                      "on-primary-fixed-variant": "#004395",
+                      "surface-container-lowest": "#010f1f",
+                      "on-tertiary-container": "#00320e",
+                      "on-error": "#690005",
+                      "on-tertiary-fixed": "#002107",
+                      "on-secondary-container": "#ffd2cc",
+                      "surface-container": "#122131",
+                      "surface-container-low": "#0d1c2d",
+                      "tertiary-container": "#00a741",
+                      "on-secondary-fixed": "#410001",
+                      "on-tertiary": "#003911",
+                      "outline-variant": "#424754",
+                      "primary-fixed": "#d8e2ff",
+                      "secondary-fixed": "#ffdad5"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit": "4px",
+                      "margin-mobile": "16px",
+                      "xs": "4px",
+                      "lg": "24px",
+                      "gutter": "12px",
+                      "xl": "32px",
+                      "sm": "8px",
+                      "md": "16px"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": ["Noto Sans TC"],
+                      "display-bold": ["Noto Sans TC"],
+                      "body-lg": ["Noto Sans TC"],
+                      "headline-lg": ["Noto Sans TC"],
+                      "label-caps": ["Inter"],
+                      "data-heavy": ["Inter"],
+                      "headline-md": ["Noto Sans TC"],
+                      "body-sm": ["Noto Sans TC"]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                      "display-bold": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                      "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                      "data-heavy": ["18px", {"lineHeight": "22px", "fontWeight": "700"}],
+                      "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="flex flex-col h-screen max-w-md mx-auto relative">
+<!-- Top Navigation (Skip) -->
+<div class="fixed top-0 left-0 w-full px-margin-mobile h-16 flex justify-between items-center z-50">
+<div class="font-display-bold text-headline-lg-mobile text-primary tracking-tight">股市行事曆 v2</div>
+<button class="text-on-surface-variant font-label-caps text-label-caps px-4 py-2 hover:bg-surface-bright/10 rounded-full transition-all">
+            跳過
+        </button>
+</div>
+<!-- Main Swipeable Content -->
+<main class="flex-1 flex overflow-x-auto snap-x scroll-smooth no-scrollbar" id="onboarding-slider">
+<!-- Slide 1: Prediction -->
+<section class="min-w-full h-full flex flex-col items-center justify-center snap-center px-margin-mobile pt-16">
+<div class="relative w-full aspect-square flex items-center justify-center mb-12">
+<!-- Illustration Placeholder (Bento Style) -->
+<div class="absolute inset-0 bg-gradient-to-br from-primary-container/20 to-transparent rounded-3xl blur-3xl opacity-50"></div>
+<div class="relative w-full h-full flex items-center justify-center">
+<div class="w-64 h-80 glass-card rounded-2xl p-6 flex flex-col gap-4 floating-element">
+<div class="h-2 w-12 bg-primary/30 rounded-full"></div>
+<div class="flex-1 flex items-end gap-2">
+<div class="w-1/4 h-[40%] bg-primary/20 rounded-t-lg"></div>
+<div class="w-1/4 h-[60%] bg-primary/40 rounded-t-lg"></div>
+<div class="w-1/4 h-[85%] bg-primary/60 rounded-t-lg"></div>
+<div class="w-1/4 h-[100%] bg-primary rounded-t-lg relative">
+<div class="absolute -top-12 left-1/2 -translate-x-1/2 bg-tertiary text-on-tertiary px-3 py-1 rounded-lg text-label-caps font-label-caps shadow-lg whitespace-nowrap">
+                                    +15.4% 🚀
+                                </div>
+</div>
+</div>
+<div class="flex justify-between items-center mt-2">
+<span class="text-label-caps font-label-caps text-on-surface-variant">預測趨勢</span>
+<span class="material-symbols-outlined text-primary" data-icon="trending_up">trending_up</span>
+</div>
+</div>
+</div>
+</div>
+<div class="text-center">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-2">預測股價</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-[280px]">大數據 AI 模型，精準推估未來走勢，助你掌握買賣先機。</p>
+</div>
+</section>
+<!-- Slide 2: Multi-theme Calendar -->
+<section class="min-w-full h-full flex flex-col items-center justify-center snap-center px-margin-mobile pt-16">
+<div class="relative w-full aspect-square flex items-center justify-center mb-12">
+<div class="absolute inset-0 bg-gradient-to-tr from-secondary-container/10 to-transparent rounded-3xl blur-3xl opacity-40"></div>
+<div class="relative w-full h-full grid grid-cols-2 gap-4 p-4">
+<div class="glass-card rounded-xl p-3 border-secondary/30 rotate-[-4deg] scale-105 z-10 floating-element" style="animation-delay: 0.5s">
+<div class="grid grid-cols-3 gap-1 mb-2">
+<div class="h-6 w-full bg-secondary/20 rounded-sm"></div>
+<div class="h-6 w-full bg-secondary/40 rounded-sm"></div>
+<div class="h-6 w-full bg-secondary/10 rounded-sm"></div>
+</div>
+<div class="h-2 w-1/2 bg-on-surface-variant/20 rounded-full"></div>
+</div>
+<div class="bg-surface-bright rounded-xl p-3 border-2 border-white shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] rotate-[6deg] z-20">
+<div class="font-data-heavy text-label-caps mb-2 text-white">MEME MODE</div>
+<div class="h-10 w-full bg-white flex items-center justify-center text-surface font-bold text-xs">BUY!</div>
+</div>
+<div class="col-span-2 glass-card rounded-xl p-4 flex items-center gap-4 translate-y-2">
+<div class="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="palette">palette</span>
+</div>
+<div class="flex-1">
+<div class="h-2 w-3/4 bg-primary/30 rounded-full mb-2"></div>
+<div class="h-2 w-1/2 bg-primary/10 rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="text-center">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-2">多風格行事曆</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-[280px]">簡約、極客或迷因風格？隨心切換，讓看盤也很有態度。</p>
+</div>
+</section>
+<!-- Slide 3: One-click Share -->
+<section class="min-w-full h-full flex flex-col items-center justify-center snap-center px-margin-mobile pt-16">
+<div class="relative w-full aspect-square flex items-center justify-center mb-12">
+<div class="absolute inset-0 bg-gradient-to-b from-tertiary-container/20 to-transparent rounded-3xl blur-3xl opacity-50"></div>
+<div class="relative w-72 aspect-[9/16] bg-surface rounded-2xl border border-outline/30 overflow-hidden shadow-2xl scale-90 floating-element">
+<img alt="Stock Data Visualization" class="w-full h-32 object-cover opacity-80" data-alt="A cinematic, high-contrast shot of a financial trading dashboard glowing in a dark room. The screen displays complex candle-stick charts and market indicators in vibrant blues and cyans against an OLED black background. The mood is sophisticated, focused, and data-driven, reflecting a modern fintech aesthetic with glassmorphism overlays and sharp digital precision." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7-ZYkPPcP6f_EqvcXS7DCCsgl8bzVa7sje2kUc3zj7AonVCfZ6MJ-VeqMQYE4jnj1i2IjmRUkk4FQWqLSjeu5ZWWaetf4_wr9y2S-jThgK02iaLwADz5bldXDUZ9Ad7Z1MZ0vSm_59Zuj3JLgjviD00aP5003Y5nRmaaR29ddo3uP8wGu5cLybvyK69qu4wgF4z0YzQfSVt38Fl8ffZIhce43Ljmi7VG-BGBtNdXbaJZL2Is48FyJIUuletmYtGIyqMoGTogxdck"/>
+<div class="p-4 space-y-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-tertiary flex items-center justify-center text-on-tertiary">
+<span class="material-symbols-outlined text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<div class="h-2 w-24 bg-tertiary/20 rounded-full"></div>
+</div>
+<div class="bg-surface-container-high rounded-xl p-4 border border-outline-variant/30">
+<div class="text-label-caps font-label-caps text-on-surface-variant mb-1">今日收益</div>
+<div class="text-headline-lg-mobile font-headline-lg-mobile text-tertiary">+NT$ 128,400</div>
+</div>
+<div class="h-20 w-full rounded-xl bg-gradient-to-r from-primary/10 to-tertiary/10 flex items-center justify-center">
+<div class="text-center">
+<span class="material-symbols-outlined text-primary mb-1 block" data-icon="share">share</span>
+<div class="text-[10px] font-label-caps text-on-surface-variant">SAVE TO IMAGE</div>
+</div>
+</div>
+</div>
+<!-- Social Overlay -->
+<div class="absolute bottom-4 left-4 right-4 flex justify-between">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border border-surface bg-primary/40"></div>
+<div class="w-6 h-6 rounded-full border border-surface bg-secondary/40"></div>
+</div>
+<span class="material-symbols-outlined text-primary" data-icon="thumb_up">thumb_up</span>
+</div>
+</div>
+</div>
+<div class="text-center">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-2">一鍵出圖分享</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-[280px]">特製 9:16 分享圖，輕鬆轉發至 LINE 或 Instagram 曬戰績。</p>
+</div>
+</section>
+</main>
+<!-- Bottom Controls -->
+<div class="px-margin-mobile pb-12 pt-4 flex flex-col items-center gap-8">
+<!-- Pagination Dots -->
+<div class="flex gap-2">
+<div class="onboarding-dot active h-2 w-2 bg-on-surface-variant/30 rounded-full transition-all duration-300" id="dot-0"></div>
+<div class="onboarding-dot h-2 w-2 bg-on-surface-variant/30 rounded-full transition-all duration-300" id="dot-1"></div>
+<div class="onboarding-dot h-2 w-2 bg-on-surface-variant/30 rounded-full transition-all duration-300" id="dot-2"></div>
+</div>
+<!-- Action Button -->
+<button class="w-full h-14 bg-primary text-on-primary font-headline-md rounded-2xl shadow-xl shadow-primary/20 active:scale-95 transition-transform flex items-center justify-center gap-2 group" id="next-btn">
+<span id="btn-text">下一步</span>
+<span class="material-symbols-outlined group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<script>
+        const slider = document.getElementById('onboarding-slider');
+        const dots = [
+            document.getElementById('dot-0'),
+            document.getElementById('dot-1'),
+            document.getElementById('dot-2')
+        ];
+        const btnText = document.getElementById('btn-text');
+        const nextBtn = document.getElementById('next-btn');
+
+        slider.addEventListener('scroll', () => {
+            const index = Math.round(slider.scrollLeft / slider.offsetWidth);
+            
+            dots.forEach((dot, i) => {
+                if(i === index) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+
+            if(index === 2) {
+                btnText.innerText = '開始使用';
+            } else {
+                btnText.innerText = '下一步';
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            const index = Math.round(slider.scrollLeft / slider.offsetWidth);
+            if(index < 2) {
+                slider.scrollTo({
+                    left: slider.offsetWidth * (index + 1),
+                    behavior: 'smooth'
+                });
+            } else {
+                // Final Action Logic
+                nextBtn.classList.add('scale-90');
+                setTimeout(() => {
+                    alert('歡迎加入股市行事曆！');
+                    nextBtn.classList.remove('scale-90');
+                }, 200);
+            }
+        });
+    </script>
+</body></html>

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-TW"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Noto+Sans+TC:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface": "#051424",
+                    "surface-dim": "#051424",
+                    "error": "#ffb4ab",
+                    "outline": "#8c909f",
+                    "on-secondary-fixed-variant": "#930005",
+                    "inverse-primary": "#005ac2",
+                    "inverse-surface": "#d4e4fa",
+                    "secondary": "#ffb4aa",
+                    "primary-fixed-dim": "#adc6ff",
+                    "primary-container": "#4d8eff",
+                    "on-tertiary-fixed-variant": "#00531c",
+                    "on-primary-fixed": "#001a42",
+                    "on-error-container": "#ffdad6",
+                    "on-surface": "#d4e4fa",
+                    "surface-container-highest": "#273647",
+                    "on-primary": "#002e6a",
+                    "on-secondary": "#690003",
+                    "on-primary-container": "#00285d",
+                    "on-surface-variant": "#c2c6d6",
+                    "background": "#051424",
+                    "secondary-container": "#c5020b",
+                    "error-container": "#93000a",
+                    "secondary-fixed-dim": "#ffb4aa",
+                    "surface-tint": "#adc6ff",
+                    "tertiary-fixed-dim": "#53e16f",
+                    "surface-container-high": "#1c2b3c",
+                    "surface-bright": "#2c3a4c",
+                    "tertiary": "#53e16f",
+                    "surface-variant": "#273647",
+                    "inverse-on-surface": "#233143",
+                    "on-background": "#d4e4fa",
+                    "primary": "#adc6ff",
+                    "tertiary-fixed": "#72fe88",
+                    "on-primary-fixed-variant": "#004395",
+                    "surface-container-lowest": "#010f1f",
+                    "on-tertiary-container": "#00320e",
+                    "on-error": "#690005",
+                    "on-tertiary-fixed": "#002107",
+                    "on-secondary-container": "#ffd2cc",
+                    "surface-container": "#122131",
+                    "surface-container-low": "#0d1c2d",
+                    "tertiary-container": "#00a741",
+                    "on-secondary-fixed": "#410001",
+                    "on-tertiary": "#003911",
+                    "outline-variant": "#424754",
+                    "primary-fixed": "#d8e2ff",
+                    "secondary-fixed": "#ffdad5"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "margin-mobile": "16px",
+                    "xs": "4px",
+                    "lg": "24px",
+                    "gutter": "12px",
+                    "xl": "32px",
+                    "sm": "8px",
+                    "md": "16px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Noto Sans TC"],
+                    "display-bold": ["Noto Sans TC"],
+                    "body-lg": ["Noto Sans TC"],
+                    "headline-lg": ["Noto Sans TC"],
+                    "label-caps": ["Inter"],
+                    "data-heavy": ["Inter"],
+                    "headline-md": ["Noto Sans TC"],
+                    "body-sm": ["Noto Sans TC"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                    "display-bold": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "data-heavy": ["18px", {"lineHeight": "22px", "fontWeight": "700"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+        }
+        body {
+            background-color: #051424; /* OLED Black from config */
+            color: #d4e4fa;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+        .minimal-border {
+            border: 0.5px solid rgba(140, 144, 159, 0.2);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-margin-mobile h-16 fixed top-0 z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30">
+<div class="flex items-center gap-4">
+<button class="active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-primary" data-icon="menu">menu</span>
+</button>
+<h1 class="text-headline-lg-mobile font-display-bold text-primary dark:text-primary tracking-tight">股市行事曆 v2</h1>
+</div>
+<button class="active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-primary" data-icon="search">search</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-20 pb-32 px-margin-mobile">
+<!-- Minimal Calendar Section -->
+<section class="mb-lg">
+<div class="flex justify-between items-end mb-md">
+<div>
+<p class="text-label-caps font-label-caps text-outline uppercase tracking-widest">October 2024</p>
+<h2 class="text-headline-md-mobile font-headline-md-mobile text-on-surface">投資預測週期</h2>
+</div>
+<div class="flex gap-2">
+<button class="p-2 border border-outline/30 rounded-lg active:scale-90 transition-all"><span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span></button>
+<button class="p-2 border border-outline/30 rounded-lg active:scale-90 transition-all"><span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span></button>
+</div>
+</div>
+<div class="calendar-grid border-t border-l border-outline-variant/20">
+<!-- Day Headers -->
+<div class="p-2 text-center text-label-caps text-outline border-r border-b border-outline-variant/20">S</div>
+<div class="p-2 text-center text-label-caps text-outline border-r border-b border-outline-variant/20">M</div>
+<div class="p-2 text-center text-label-caps text-outline border-r border-b border-outline-variant/20">T</div>
+<div class="p-2 text-center text-label-caps text-outline border-r border-b border-outline-variant/20">W</div>
+<div class="p-2 text-center text-label-caps text-outline border-r border-b border-outline-variant/20">T</div>
+<div class="p-2 text-center text-label-caps text-outline border-r border-b border-outline-variant/20">F</div>
+<div class="p-2 text-center text-label-caps text-outline border-r border-b border-outline-variant/20">S</div>
+<!-- Empty cells for start of month -->
+<div class="aspect-square border-r border-b border-outline-variant/20"></div>
+<div class="aspect-square border-r border-b border-outline-variant/20"></div>
+<!-- Calendar Days -->
+<!-- Example: Hit (Solid) -->
+<div class="aspect-square border-r border-b border-outline-variant/20 p-1 flex flex-col items-center relative group">
+<span class="text-label-caps text-on-surface-variant">01</span>
+<div class="mt-auto mb-1 w-2 h-2 bg-primary rounded-full"></div>
+</div>
+<!-- Example: Miss (Outline) -->
+<div class="aspect-square border-r border-b border-outline-variant/20 p-1 flex flex-col items-center relative">
+<span class="text-label-caps text-on-surface-variant">02</span>
+<div class="mt-auto mb-1 w-2 h-2 border border-primary rounded-full"></div>
+</div>
+<!-- Example: Normal -->
+<div class="aspect-square border-r border-b border-outline-variant/20 p-1 flex flex-col items-center">
+<span class="text-label-caps text-on-surface-variant">03</span>
+</div>
+<!-- Example: Big Day (Glow - Modern Hint) -->
+<div class="aspect-square border-r border-b border-outline-variant/20 p-1 flex flex-col items-center bg-primary/5">
+<span class="text-label-caps text-primary font-bold">04</span>
+<span class="text-[8px] text-primary/80 mt-1 uppercase">TSMC</span>
+<div class="mt-auto mb-1 w-2 h-2 bg-tertiary rounded-full shadow-[0_0_8px_rgba(83,225,111,0.5)]"></div>
+</div>
+<!-- Rest of Days (Simplified for demo) -->
+<script>
+                    const grid = document.querySelector('.calendar-grid');
+                    for(let i=5; i<=31; i++) {
+                        const day = document.createElement('div');
+                        day.className = "aspect-square border-r border-b border-outline-variant/20 p-1 flex flex-col items-center";
+                        day.innerHTML = `<span class="text-label-caps text-on-surface-variant">${i < 10 ? '0'+i : i}</span>`;
+                        if(i % 7 === 0) day.innerHTML += `<div class="mt-auto mb-1 w-2 h-2 bg-on-surface-variant/20 rounded-full"></div>`;
+                        grid.appendChild(day);
+                    }
+                </script>
+</div>
+</section>
+<!-- Bento Stats Section -->
+<div class="grid grid-cols-2 gap-md mb-lg">
+<div class="col-span-1 p-md border border-outline-variant/30 rounded-xl flex flex-col justify-between">
+<span class="text-label-caps text-outline uppercase">Hit Rate</span>
+<div class="mt-2">
+<span class="text-display-bold font-display-bold text-on-surface">85<span class="text-headline-md">%</span></span>
+<p class="text-body-sm text-tertiary">● Win Streak: 4</p>
+</div>
+</div>
+<div class="col-span-1 p-md border border-outline-variant/30 rounded-xl flex flex-col justify-between">
+<span class="text-label-caps text-outline uppercase">Active Trades</span>
+<div class="mt-2">
+<span class="text-display-bold font-display-bold text-on-surface">12</span>
+<p class="text-body-sm text-outline">Targeting Q4</p>
+</div>
+</div>
+</div>
+<!-- Upcoming Events List -->
+<section>
+<h3 class="text-label-caps font-label-caps text-outline uppercase mb-md tracking-widest">關鍵事件</h3>
+<div class="space-y-sm">
+<!-- Event Item -->
+<div class="flex items-center gap-md p-md border border-outline-variant/20 rounded-xl hover:bg-surface-bright/10 transition-colors">
+<div class="w-12 h-12 rounded-lg border border-outline-variant/30 flex flex-col items-center justify-center">
+<span class="text-label-caps font-bold">10</span>
+<span class="text-[10px] text-outline uppercase">OCT</span>
+</div>
+<div class="flex-grow">
+<h4 class="text-body-lg font-headline-md text-on-surface">台積電法說會 (2330)</h4>
+<div class="flex gap-2 mt-1">
+<span class="inline-flex items-center text-[10px] px-2 py-0.5 rounded-full border border-tertiary text-tertiary">● 核心持股</span>
+<span class="inline-flex items-center text-[10px] px-2 py-0.5 rounded-full border border-outline text-outline">高波動</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- Event Item -->
+<div class="flex items-center gap-md p-md border border-outline-variant/20 rounded-xl hover:bg-surface-bright/10 transition-colors">
+<div class="w-12 h-12 rounded-lg border border-outline-variant/30 flex flex-col items-center justify-center">
+<span class="text-label-caps font-bold">15</span>
+<span class="text-[10px] text-outline uppercase">OCT</span>
+</div>
+<div class="flex-grow">
+<h4 class="text-body-lg font-headline-md text-on-surface">鴻海科技日 (2317)</h4>
+<div class="flex gap-2 mt-1">
+<span class="inline-flex items-center text-[10px] px-2 py-0.5 rounded-full border border-outline text-outline">AI 伺服器</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</section>
+</main>
+<!-- FAB: Add Event -->
+<button class="fixed right-6 bottom-32 w-14 h-14 bg-primary text-on-primary-container rounded-full shadow-xl flex items-center justify-center active:scale-90 transition-all z-40">
+<span class="material-symbols-outlined" data-icon="add" style="font-variation-settings: 'wght' 500;">add</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-8 pt-2 bg-surface-container-lowest/90 dark:bg-surface-container-lowest/90 backdrop-blur-2xl border-t border-outline-variant/20 shadow-lg">
+<div class="flex flex-col items-center justify-center bg-primary-container/20 text-primary rounded-xl px-4 py-1 scale-90 transition-all duration-200">
+<span class="material-symbols-outlined" data-icon="calendar_month" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
+<span class="text-label-caps font-label-caps">日曆</span>
+</div>
+<div class="flex flex-col items-center justify-center text-outline p-2 hover:text-primary-fixed">
+<span class="material-symbols-outlined" data-icon="query_stats">query_stats</span>
+<span class="text-label-caps font-label-caps">勝率</span>
+</div>
+<div class="flex flex-col items-center justify-center text-outline p-2 hover:text-primary-fixed">
+<span class="material-symbols-outlined" data-icon="show_chart">show_chart</span>
+<span class="text-label-caps font-label-caps">自選</span>
+</div>
+<div class="flex flex-col items-center justify-center text-outline p-2 hover:text-primary-fixed">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-label-caps font-label-caps">設定</span>
+</div>
+</nav>
+<!-- NavigationDrawer (Hidden by default, triggered by JS) -->
+<div class="fixed inset-0 bg-black/60 z-[59] opacity-0 pointer-events-none transition-opacity duration-300" id="drawer-overlay"></div>
+<aside class="fixed inset-y-0 left-0 z-[60] flex flex-col py-6 bg-surface-container-low dark:bg-surface-container-low h-full w-80 rounded-r-xl -translate-x-full transition-transform duration-300 shadow-2xl" id="drawer">
+<div class="px-6 mb-8 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full border border-primary overflow-hidden">
+<img alt="User" data-alt="A professional headshot of a modern investor, minimalist style, sharp lighting, against a dark blue corporate background. High contrast, clean aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDxf9K04oCTGQbhukyp0SxInfn-aynzFXbdwrJ04MhTwWRzdvHFcJhRWcY0l3is5uBm75kZit3xHMrQve6fqYXuiPvSvLeAgFSpihVFj0yoXYDbT5rk7Omsdlrp_QgnmkMZVXrZ1M74EcFv1Zw5o7hIM0fz-g6izBnbEMQEi4UtjeBfl05YgQekAMp2sNtFmRrPOxNbeyEqXvqhWsuR4GiBvVwL1Xaiy9_2g1ZCcNYgREGiXxRM-Kf_qL_gaDAHZMo6kbFpCa2wgs"/>
+</div>
+<div>
+<h3 class="text-headline-md-mobile font-headline-md-mobile text-primary">散戶大神</h3>
+<p class="text-body-sm text-outline">預測準確率 85%</p>
+</div>
+</div>
+<nav class="flex-grow">
+<div class="mx-2 px-4 py-3 bg-primary-container text-on-primary-container font-bold rounded-full flex items-center gap-4 translate-x-1 transition-transform">
+<span class="material-symbols-outlined" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-body-lg font-body-lg">自選清單</span>
+</div>
+<div class="px-4 py-3 text-on-surface-variant hover:bg-surface-bright/20 flex items-center gap-4 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+<span class="text-body-lg font-body-lg">熱門預測</span>
+</div>
+<div class="px-4 py-3 text-on-surface-variant hover:bg-surface-bright/20 flex items-center gap-4 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+<span class="text-body-lg font-body-lg">社群分享</span>
+</div>
+<div class="px-4 py-3 text-on-surface-variant hover:bg-surface-bright/20 flex items-center gap-4 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="text-body-lg font-body-lg">歷史回顧</span>
+</div>
+<div class="px-4 py-3 text-on-surface-variant hover:bg-surface-bright/20 flex items-center gap-4 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="mail">mail</span>
+<span class="text-body-lg font-body-lg">聯絡支持</span>
+</div>
+</nav>
+<div class="mt-auto px-6">
+<div class="p-md border border-primary/20 rounded-xl bg-primary/5">
+<p class="text-[10px] text-primary uppercase font-bold mb-1">Premium Member</p>
+<p class="text-body-sm text-on-surface-variant">解鎖所有進階數據與AI預測模組</p>
+</div>
+</div>
+</aside>
+<script>
+        const menuBtn = document.querySelector('[data-icon="menu"]').parentElement;
+        const drawer = document.getElementById('drawer');
+        const overlay = document.getElementById('drawer-overlay');
+
+        function toggleDrawer() {
+            drawer.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('opacity-0');
+            overlay.classList.toggle('pointer-events-none');
+        }
+
+        menuBtn.addEventListener('click', toggleDrawer);
+        overlay.addEventListener('click', toggleDrawer);
+
+        // Simple scale interaction for nav items
+        document.querySelectorAll('nav div').forEach(item => {
+            item.addEventListener('click', () => {
+                item.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    item.style.transform = '';
+                }, 100);
+            });
+        });
+    </script>
+</body></html>

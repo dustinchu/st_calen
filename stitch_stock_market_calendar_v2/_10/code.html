@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-TW"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&amp;family=Noto+Sans+TC:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        :root {
+            --notoSans: 'Noto Sans TC', sans-serif;
+            --inter: 'Inter', sans-serif;
+        }
+        body {
+            background-color: #051424;
+            color: #d4e4fa;
+            font-family: var(--notoSans);
+            -webkit-tap-highlight-color: transparent;
+        }
+        .glass-card {
+            background: rgba(28, 43, 60, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(66, 71, 84, 0.3);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #4d8eff;
+        }
+        .toggle-checkbox:checked + .toggle-label .toggle-dot {
+            transform: translateX(20px);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#051424",
+                        "surface-dim": "#051424",
+                        "error": "#ffb4ab",
+                        "outline": "#8c909f",
+                        "on-secondary-fixed-variant": "#930005",
+                        "inverse-primary": "#005ac2",
+                        "inverse-surface": "#d4e4fa",
+                        "secondary": "#ffb4aa",
+                        "primary-fixed-dim": "#adc6ff",
+                        "primary-container": "#4d8eff",
+                        "on-tertiary-fixed-variant": "#00531c",
+                        "on-primary-fixed": "#001a42",
+                        "on-error-container": "#ffdad6",
+                        "on-surface": "#d4e4fa",
+                        "surface-container-highest": "#273647",
+                        "on-primary": "#002e6a",
+                        "on-secondary": "#690003",
+                        "on-primary-container": "#00285d",
+                        "on-surface-variant": "#c2c6d6",
+                        "background": "#051424",
+                        "secondary-container": "#c5020b",
+                        "error-container": "#93000a",
+                        "secondary-fixed-dim": "#ffb4aa",
+                        "surface-tint": "#adc6ff",
+                        "tertiary-fixed-dim": "#53e16f",
+                        "surface-container-high": "#1c2b3c",
+                        "surface-bright": "#2c3a4c",
+                        "tertiary": "#53e16f",
+                        "surface-variant": "#273647",
+                        "inverse-on-surface": "#233143",
+                        "on-background": "#d4e4fa",
+                        "primary": "#adc6ff",
+                        "tertiary-fixed": "#72fe88",
+                        "on-primary-fixed-variant": "#004395",
+                        "surface-container-lowest": "#010f1f",
+                        "on-tertiary-container": "#00320e",
+                        "on-error": "#690005",
+                        "on-tertiary-fixed": "#002107",
+                        "on-secondary-container": "#ffd2cc",
+                        "surface-container": "#122131",
+                        "surface-container-low": "#0d1c2d",
+                        "tertiary-container": "#00a741",
+                        "on-secondary-fixed": "#410001",
+                        "on-tertiary": "#003911",
+                        "outline-variant": "#424754",
+                        "primary-fixed": "#d8e2ff",
+                        "secondary-fixed": "#ffdad5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "xs": "4px",
+                        "lg": "24px",
+                        "gutter": "12px",
+                        "xl": "32px",
+                        "sm": "8px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Noto Sans TC"],
+                        "display-bold": ["Noto Sans TC"],
+                        "body-lg": ["Noto Sans TC"],
+                        "headline-lg": ["Noto Sans TC"],
+                        "label-caps": ["Inter"],
+                        "data-heavy": ["Inter"],
+                        "headline-md": ["Noto Sans TC"],
+                        "body-sm": ["Noto Sans TC"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                        "display-bold": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "data-heavy": ["18px", {"lineHeight": "22px", "fontWeight": "700"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface">
+<!-- Top AppBar -->
+<header class="bg-surface/80 dark:bg-surface/80 backdrop-blur-xl flex justify-between items-center w-full px-margin-mobile h-16 fixed top-0 z-50 border-b border-outline-variant/30">
+<button class="text-primary active:scale-95 transition-transform">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="text-headline-md-mobile font-headline-md-mobile text-primary">設定</h1>
+<button class="text-primary active:scale-95 transition-transform">
+<span class="material-symbols-outlined">search</span>
+</button>
+</header>
+<main class="pt-20 pb-32 px-margin-mobile">
+<!-- Profile Hero Section -->
+<section class="mb-lg p-6 rounded-xl glass-card flex flex-col items-center text-center relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-tertiary"></div>
+<div class="w-24 h-24 rounded-full border-4 border-primary/30 p-1 mb-md">
+<img alt="散戶大神" class="w-full h-full rounded-full object-cover" data-alt="A professional high-fidelity digital 3D avatar of a futuristic retail investor wearing sleek neon-lit streetwear. The character has a confident expression and is set against a dark, minimalist tech background with soft bokeh of stock market candle charts. The lighting is dramatic, using a palette of deep blue and vibrant cyan to match the modern fintech app aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWCzv3D8CkaXReYPt0MiVukwR1IODz8WLqJfJmFu28rK7HZYqGMk_yOLL79T2ZIaBRntZgerBcicZ6Tf55JRf8QXq97l1tJAtvwRhuFWDelS9auciMULkv8qEuPdTliltBkA-fIlIUpkAiNuDprm91r6JtTCoNhJVpEfQI6rjp1pN6bBt77OGmvBL-zT09pBcr7KUhfVofpOCOtfLYjlAdaPA1tJsn-BRwT7qnMlqDElI-nuI8BlvpkHInDcTqIT-QOm_nTKtfOVE"/>
+</div>
+<h2 class="text-headline-lg font-headline-lg text-on-surface mb-xs">散戶大神</h2>
+<p class="text-body-sm font-body-sm text-on-surface-variant flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-tertiary" style="font-variation-settings: 'FILL' 1;">verified</span>
+                Premium 會員
+            </p>
+<div class="mt-md flex gap-gutter">
+<div class="bg-surface-container-high px-4 py-2 rounded-lg">
+<p class="text-label-caps font-label-caps text-outline">勝率</p>
+<p class="text-data-heavy font-data-heavy text-tertiary">85%</p>
+</div>
+<div class="bg-surface-container-high px-4 py-2 rounded-lg">
+<p class="text-label-caps font-label-caps text-outline">預測</p>
+<p class="text-data-heavy font-data-heavy text-primary">128</p>
+</div>
+</div>
+</section>
+<!-- Settings List -->
+<section class="space-y-4">
+<!-- Account Section -->
+<div>
+<p class="text-label-caps font-label-caps text-primary mb-sm px-1">帳戶管理</p>
+<div class="glass-card rounded-xl overflow-hidden divide-y divide-outline-variant/20">
+<div class="p-4 flex items-center justify-between hover:bg-surface-bright/10 active:scale-[0.98] transition-all">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant">link</span>
+<span class="text-body-lg font-body-lg">連結帳號</span>
+</div>
+<span class="text-body-sm text-outline">Apple/Google</span>
+</div>
+</div>
+</div>
+<!-- Notifications & Preferences -->
+<div>
+<p class="text-label-caps font-label-caps text-primary mb-sm px-1">偏好設定</p>
+<div class="glass-card rounded-xl overflow-hidden divide-y divide-outline-variant/20">
+<!-- Toggle Switch Row -->
+<div class="p-4 flex items-center justify-between">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+<span class="text-body-lg font-body-lg">通知設定</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only toggle-checkbox" type="checkbox"/>
+<div class="toggle-label w-11 h-6 bg-surface-container-highest rounded-full transition-colors duration-200">
+<div class="toggle-dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-200"></div>
+</div>
+</label>
+</div>
+<div class="p-4 flex items-center justify-between">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant">payments</span>
+<span class="text-body-lg font-body-lg">自動結算</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only toggle-checkbox" type="checkbox"/>
+<div class="toggle-label w-11 h-6 bg-surface-container-highest rounded-full transition-colors duration-200">
+<div class="toggle-dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-200"></div>
+</div>
+</label>
+</div>
+<div class="p-4 flex items-center justify-between hover:bg-surface-bright/10 active:scale-[0.98] transition-all">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant">palette</span>
+<span class="text-body-lg font-body-lg">主題切換</span>
+</div>
+<span class="text-body-sm text-primary">Dark Mode</span>
+</div>
+</div>
+</div>
+<!-- Stocks Management -->
+<div>
+<p class="text-label-caps font-label-caps text-primary mb-sm px-1">交易工具</p>
+<div class="glass-card rounded-xl overflow-hidden">
+<div class="p-4 flex items-center justify-between hover:bg-surface-bright/10 active:scale-[0.98] transition-all cursor-pointer">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant">star</span>
+<span class="text-body-lg font-body-lg">自選股管理</span>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- About Section -->
+<div>
+<p class="text-label-caps font-label-caps text-primary mb-sm px-1">關於程式</p>
+<div class="glass-card rounded-xl overflow-hidden divide-y divide-outline-variant/20">
+<div class="p-4 flex items-center justify-between hover:bg-surface-bright/10 active:scale-[0.98] transition-all">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant">info</span>
+<span class="text-body-lg font-body-lg">關於 / 服務條款</span>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</div>
+<div class="p-4 flex items-center justify-between hover:bg-surface-bright/10 active:scale-[0.98] transition-all cursor-pointer">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-error">restart_alt</span>
+<span class="text-body-lg font-body-lg text-error">重設資料</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Version Footer -->
+<div class="mt-xl text-center">
+<p class="text-label-caps font-label-caps text-outline/50">股市行事曆 v2.4.0 (Build 88)</p>
+<p class="text-label-caps font-label-caps text-outline/30 mt-xs">MADE FOR TAIWAN INVESTORS</p>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-8 pt-2 bg-surface-container-lowest/90 dark:bg-surface-container-lowest/90 backdrop-blur-2xl rounded-t-xl border-t border-outline-variant/20 shadow-lg">
+<button class="flex flex-col items-center justify-center text-outline p-2 hover:text-primary-fixed">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="text-label-caps font-label-caps">日曆</span>
+</button>
+<button class="flex flex-col items-center justify-center text-outline p-2 hover:text-primary-fixed">
+<span class="material-symbols-outlined">query_stats</span>
+<span class="text-label-caps font-label-caps">勝率</span>
+</button>
+<button class="flex flex-col items-center justify-center text-outline p-2 hover:text-primary-fixed">
+<span class="material-symbols-outlined">show_chart</span>
+<span class="text-label-caps font-label-caps">自選</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-primary-container/20 text-primary rounded-xl px-4 py-1 scale-90 transition-all duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="text-label-caps font-label-caps font-bold">設定</span>
+</button>
+</nav>
+<script>
+        // Simple logic for toggle switches
+        document.querySelectorAll('.toggle-checkbox').forEach(toggle => {
+            toggle.addEventListener('change', (e) => {
+                // Vibration feedback if available
+                if (window.navigator.vibrate) {
+                    window.navigator.vibrate(10);
+                }
+            });
+        });
+
+        // Interactive row scaling
+        document.querySelectorAll('.active\\:scale-\\[0\\.98\\]').forEach(item => {
+            item.addEventListener('mousedown', () => {
+                item.style.transform = 'scale(0.98)';
+            });
+            item.addEventListener('mouseup', () => {
+                item.style.transform = 'scale(1)';
+            });
+            item.addEventListener('mouseleave', () => {
+                item.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body></html>

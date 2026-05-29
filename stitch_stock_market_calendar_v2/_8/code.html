@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-TW"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&amp;family=Noto+Sans+TC:wght@400;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "surface": "#051424",
+                "surface-dim": "#051424",
+                "error": "#ffb4ab",
+                "outline": "#8c909f",
+                "on-secondary-fixed-variant": "#930005",
+                "inverse-primary": "#005ac2",
+                "inverse-surface": "#d4e4fa",
+                "secondary": "#ffb4aa",
+                "primary-fixed-dim": "#adc6ff",
+                "primary-container": "#4d8eff",
+                "on-tertiary-fixed-variant": "#00531c",
+                "on-primary-fixed": "#001a42",
+                "on-error-container": "#ffdad6",
+                "on-surface": "#d4e4fa",
+                "surface-container-highest": "#273647",
+                "on-primary": "#002e6a",
+                "on-secondary": "#690003",
+                "on-primary-container": "#00285d",
+                "on-surface-variant": "#c2c6d6",
+                "background": "#051424",
+                "secondary-container": "#c5020b",
+                "error-container": "#93000a",
+                "secondary-fixed-dim": "#ffb4aa",
+                "surface-tint": "#adc6ff",
+                "tertiary-fixed-dim": "#53e16f",
+                "surface-container-high": "#1c2b3c",
+                "surface-bright": "#2c3a4c",
+                "tertiary": "#53e16f",
+                "surface-variant": "#273647",
+                "inverse-on-surface": "#233143",
+                "on-background": "#d4e4fa",
+                "primary": "#adc6ff",
+                "tertiary-fixed": "#72fe88",
+                "on-primary-fixed-variant": "#004395",
+                "surface-container-lowest": "#010f1f",
+                "on-tertiary-container": "#00320e",
+                "on-error": "#690005",
+                "on-tertiary-fixed": "#002107",
+                "on-secondary-container": "#ffd2cc",
+                "surface-container": "#122131",
+                "surface-container-low": "#0d1c2d",
+                "tertiary-container": "#00a741",
+                "on-secondary-fixed": "#410001",
+                "on-tertiary": "#003911",
+                "outline-variant": "#424754",
+                "primary-fixed": "#d8e2ff",
+                "secondary-fixed": "#ffdad5",
+                "meme-yellow": "#FFFF00",
+                "meme-pink": "#FF00FF"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "12px",
+                "2xl": "16px",
+                "full": "9999px"
+            },
+            "spacing": {
+                "unit": "4px",
+                "margin-mobile": "16px",
+                "xs": "4px",
+                "lg": "24px",
+                "gutter": "12px",
+                "xl": "32px",
+                "sm": "8px",
+                "md": "16px"
+            },
+            "fontFamily": {
+                "headline-lg-mobile": ["Noto Sans TC", "sans-serif"],
+                "display-bold": ["Noto Sans TC", "sans-serif"],
+                "body-lg": ["Noto Sans TC", "sans-serif"],
+                "headline-lg": ["Noto Sans TC", "sans-serif"],
+                "label-caps": ["Inter", "sans-serif"],
+                "data-heavy": ["Inter", "sans-serif"],
+                "headline-md": ["Noto Sans TC", "sans-serif"],
+                "body-sm": ["Noto Sans TC", "sans-serif"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body { background-color: #051424; color: #d4e4fa; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+        .meme-shadow {
+            box-shadow: 4px 4px 0px 0px #FF00FF;
+        }
+        .meme-border {
+            border: 2px solid #FFFFFF;
+        }
+        .fab-glow {
+            box-shadow: 0 0 20px 5px rgba(173, 198, 255, 0.6);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-lg text-on-surface">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-margin-mobile h-16 fixed top-0 z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30">
+<div class="flex items-center gap-2">
+<button class="material-symbols-outlined text-primary hover:bg-surface-bright/10 p-2 rounded-full transition-transform active:scale-95" data-icon="menu">menu</button>
+<h1 class="text-headline-lg-mobile font-display-bold text-primary dark:text-primary tracking-tight">股市行事曆 v2</h1>
+</div>
+<div class="flex items-center">
+<button class="material-symbols-outlined text-primary hover:bg-surface-bright/10 p-2 rounded-full transition-transform active:scale-95" data-icon="search">search</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="pt-20 pb-32 px-margin-mobile min-h-screen">
+<!-- Hero Section: Today's Vibe -->
+<section class="mb-lg">
+<div class="meme-border meme-shadow rounded-2xl p-md bg-surface-container-high flex justify-between items-center overflow-hidden relative">
+<div class="z-10">
+<p class="text-label-caps font-label-caps text-meme-yellow mb-1">MARKET SENTIMENT</p>
+<h2 class="text-headline-lg-mobile font-display-bold text-white">今日多頭勝率 85% 🔥</h2>
+<p class="text-body-sm text-on-surface-variant">少年股神集合！衝鴨！🚀🚀🚀</p>
+</div>
+<div class="text-6xl animate-bounce z-10">💎</div>
+<!-- Abstract visual element -->
+<div class="absolute -right-10 -bottom-10 w-32 h-32 bg-secondary/20 rounded-full blur-3xl"></div>
+</div>
+</section>
+<!-- Calendar Month Header -->
+<div class="flex items-center justify-between mb-md">
+<div class="flex items-center gap-2">
+<h3 class="text-headline-md-mobile font-display-bold text-primary">2024年 10月</h3>
+<span class="material-symbols-outlined text-meme-yellow" data-icon="expand_more">expand_more</span>
+</div>
+<div class="flex gap-2">
+<button class="p-2 bg-surface-variant rounded-lg material-symbols-outlined text-on-surface" data-icon="chevron_left">chevron_left</button>
+<button class="p-2 bg-surface-variant rounded-lg material-symbols-outlined text-on-surface" data-icon="chevron_right">chevron_right</button>
+</div>
+</div>
+<!-- Weekly Header -->
+<div class="calendar-grid mb-sm">
+<div class="text-center text-label-caps font-label-caps text-on-surface-variant">SUN</div>
+<div class="text-center text-label-caps font-label-caps text-on-surface-variant">MON</div>
+<div class="text-center text-label-caps font-label-caps text-on-surface-variant">TUE</div>
+<div class="text-center text-label-caps font-label-caps text-on-surface-variant">WED</div>
+<div class="text-center text-label-caps font-label-caps text-on-surface-variant">THU</div>
+<div class="text-center text-label-caps font-label-caps text-on-surface-variant">FRI</div>
+<div class="text-center text-label-caps font-label-caps text-on-surface-variant">SAT</div>
+</div>
+<!-- Grid Calendar -->
+<div class="calendar-grid">
+<!-- Example row 1 -->
+<div class="aspect-square bg-surface-container-lowest border border-outline-variant/30 rounded-lg flex flex-col items-center justify-center text-on-surface-variant/40">29</div>
+<div class="aspect-square bg-surface-container-lowest border border-outline-variant/30 rounded-lg flex flex-col items-center justify-center text-on-surface-variant/40">30</div>
+<div class="aspect-square bg-surface-container-low border border-outline-variant/30 rounded-lg flex flex-col items-center justify-center relative">
+<span class="text-data-heavy font-data-heavy">1</span>
+<span class="text-xs text-meme-yellow">🐻</span>
+</div>
+<div class="aspect-square bg-surface-container-low border border-outline-variant/30 rounded-lg flex flex-col items-center justify-center">
+<span class="text-data-heavy font-data-heavy">2</span>
+</div>
+<!-- Big Day Cell -->
+<div class="aspect-square bg-primary-container/20 border-2 border-primary rounded-lg flex flex-col items-center justify-center relative overflow-hidden">
+<span class="text-data-heavy font-data-heavy text-white">3</span>
+<span class="text-xs">🚀</span>
+<div class="absolute inset-0 bg-primary/10 animate-pulse"></div>
+</div>
+<div class="aspect-square bg-surface-container-low border border-outline-variant/30 rounded-lg flex flex-col items-center justify-center">
+<span class="text-data-heavy font-data-heavy">4</span>
+<div class="flex gap-0.5 mt-1">
+<div class="w-1 h-1 rounded-full bg-tertiary"></div>
+</div>
+</div>
+<div class="aspect-square bg-surface-container-low border border-outline-variant/30 rounded-lg flex flex-col items-center justify-center">
+<span class="text-data-heavy font-data-heavy">5</span>
+</div>
+<!-- Row 2 -->
+<div class="aspect-square bg-surface-container-low border border-outline-variant/30 rounded-lg flex flex-col items-center justify-center">6</div>
+<div class="aspect-square bg-surface-container-low border border-outline-variant/30 rounded-lg flex flex-col items-center justify-center">7</div>
+<div class="aspect-square bg-surface-container-low border border-outline-variant/30 rounded-lg flex flex-col items-center justify-center relative">
+<span class="text-data-heavy font-data-heavy">8</span>
+<span class="text-xs">💎</span>
+</div>
+<div class="aspect-square bg-secondary-container/20 border-2 border-secondary rounded-lg flex flex-col items-center justify-center relative">
+<span class="text-data-heavy font-data-heavy text-white">9</span>
+<span class="text-lg">🔥</span>
+</div>
+<div class="aspect-square bg-surface-container-low border border-outline-variant/30 rounded-lg flex flex-col items-center justify-center">10</div>
+<div class="aspect-square bg-surface-container-low border border-outline-variant/30 rounded-lg flex flex-col items-center justify-center">11</div>
+<div class="aspect-square bg-surface-container-low border border-outline-variant/30 rounded-lg flex flex-col items-center justify-center">12</div>
+</div>
+<!-- Bento Grid: Trending Insights -->
+<section class="mt-lg grid grid-cols-2 gap-gutter">
+<!-- Small Card 1 -->
+<div class="col-span-1 bg-surface-container-high p-md rounded-2xl flex flex-col justify-between">
+<div>
+<span class="material-symbols-outlined text-tertiary text-3xl mb-sm" data-icon="trending_up">trending_up</span>
+<h4 class="text-label-caps font-label-caps text-on-surface-variant">熱門標的</h4>
+</div>
+<div class="text-headline-md font-display-bold text-white">2330 台積電</div>
+</div>
+<!-- Small Card 2 -->
+<div class="col-span-1 bg-surface-container-high p-md rounded-2xl flex flex-col justify-between">
+<div>
+<span class="material-symbols-outlined text-error text-3xl mb-sm" data-icon="bolt">bolt</span>
+<h4 class="text-label-caps font-label-caps text-on-surface-variant">警示事件</h4>
+</div>
+<div class="text-headline-md font-display-bold text-white">Fed 利率決策</div>
+</div>
+<!-- Large Meme Share Card -->
+<div class="col-span-2 glass-card meme-border p-md rounded-2xl overflow-hidden relative group">
+<div class="flex justify-between items-start mb-md">
+<div>
+<h4 class="text-headline-md font-display-bold text-white mb-1">本週大勝！</h4>
+<p class="text-body-sm text-on-surface-variant">帳面上漲 +24.5%</p>
+</div>
+<button class="bg-primary text-on-primary px-3 py-1 rounded-full text-label-caps font-label-caps">SHARE NOW</button>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded-full bg-primary-container flex items-center justify-center overflow-hidden">
+<img alt="User" class="w-full h-full object-cover" data-alt="A portrait of a confident, trendy young investor in a high-tech dark trading room illuminated by multiple screens with neon blue and pink stock market data. The person has a triumphant expression and is wearing a sleek streetwear hoodie. The lighting is cinematic, featuring high contrast and vibrant color spills that match a social media influencer's curated feed aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTQpBnxteSB1fVc7Hj5_xLBsmgGFkHHLW9FhAuKDHCAk2fsPRY6w7nrKFyfLbGcxAo73Ykn0Ngz6IEi09WBhYy2bVTv87gflKhTUIZJTZ7HfJjEAIPFzWuYSuwZDwOGS9zgvj3WJXoKwhfOmdRHUjAGEj13wzV0yH-L1o5mJKdUbEDm0Ek-i4hX0Ma6QWmqA_B-iALFJ2ifCB_X5GqwANiOlukc30xnRnP3iuZfY1o1TDuL9XFScpJZPqn7og3zoz8OmK0fp4WjHk"/>
+</div>
+<div>
+<p class="text-data-heavy font-data-heavy">散戶大神</p>
+<p class="text-body-sm text-tertiary">💎 Diamond Hands 💎</p>
+</div>
+</div>
+<!-- Abstract visual behind -->
+<div class="absolute right-[-20px] bottom-[-20px] opacity-10 rotate-12">
+<span class="material-symbols-outlined text-[120px]" data-icon="rocket_launch">rocket_launch</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed right-6 bottom-32 w-16 h-16 rounded-full bg-gradient-to-tr from-primary to-primary-container text-on-primary flex items-center justify-center fab-glow transition-transform active:scale-90 z-50">
+<span class="material-symbols-outlined text-4xl" data-icon="add">add</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-8 pt-2 bg-surface-container-lowest/90 dark:bg-surface-container-lowest/90 backdrop-blur-2xl border-t border-outline-variant/20 rounded-t-xl shadow-lg">
+<a class="flex flex-col items-center justify-center bg-primary-container/20 text-primary rounded-xl px-4 py-1 transition-all duration-200 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span class="text-label-caps font-label-caps">日曆</span>
+</a>
+<a class="flex flex-col items-center justify-center text-outline p-2 hover:text-primary-fixed transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="query_stats">query_stats</span>
+<span class="text-label-caps font-label-caps">勝率</span>
+</a>
+<a class="flex flex-col items-center justify-center text-outline p-2 hover:text-primary-fixed transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="show_chart">show_chart</span>
+<span class="text-label-caps font-label-caps">自選</span>
+</a>
+<a class="flex flex-col items-center justify-center text-outline p-2 hover:text-primary-fixed transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-label-caps font-label-caps">設定</span>
+</a>
+</nav>
+<!-- Overlay/Micro-interaction Script -->
+<script>
+        // Simple logic to handle navigation active states for demo
+        const navItems = document.querySelectorAll('nav a');
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                navItems.forEach(i => {
+                    i.classList.remove('bg-primary-container/20', 'text-primary', 'rounded-xl', 'px-4', 'py-1');
+                    i.classList.add('text-outline', 'p-2');
+                });
+                item.classList.remove('text-outline', 'p-2');
+                item.classList.add('bg-primary-container/20', 'text-primary', 'rounded-xl', 'px-4', 'py-1');
+            });
+        });
+
+        // Add a "glimmer" effect to the FAB every 3 seconds
+        setInterval(() => {
+            const fab = document.querySelector('.fab-glow');
+            fab.style.boxShadow = "0 0 30px 10px rgba(173, 198, 255, 0.8)";
+            setTimeout(() => {
+                fab.style.boxShadow = "0 0 20px 5px rgba(173, 198, 255, 0.6)";
+            }, 500);
+        }, 3000);
+    </script>
+</body></html>

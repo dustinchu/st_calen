@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-TW"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&amp;family=Noto+Sans+TC:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface": "#051424",
+                    "surface-dim": "#051424",
+                    "error": "#ffb4ab",
+                    "outline": "#8c909f",
+                    "on-secondary-fixed-variant": "#930005",
+                    "inverse-primary": "#005ac2",
+                    "inverse-surface": "#d4e4fa",
+                    "secondary": "#ffb4aa",
+                    "primary-fixed-dim": "#adc6ff",
+                    "primary-container": "#4d8eff",
+                    "on-tertiary-fixed-variant": "#00531c",
+                    "on-primary-fixed": "#001a42",
+                    "on-error-container": "#ffdad6",
+                    "on-surface": "#d4e4fa",
+                    "surface-container-highest": "#273647",
+                    "on-primary": "#002e6a",
+                    "on-secondary": "#690003",
+                    "on-primary-container": "#00285d",
+                    "on-surface-variant": "#c2c6d6",
+                    "background": "#051424",
+                    "secondary-container": "#c5020b",
+                    "error-container": "#93000a",
+                    "secondary-fixed-dim": "#ffb4aa",
+                    "surface-tint": "#adc6ff",
+                    "tertiary-fixed-dim": "#53e16f",
+                    "surface-container-high": "#1c2b3c",
+                    "surface-bright": "#2c3a4c",
+                    "tertiary": "#53e16f",
+                    "surface-variant": "#273647",
+                    "inverse-on-surface": "#233143",
+                    "on-background": "#d4e4fa",
+                    "primary": "#adc6ff",
+                    "tertiary-fixed": "#72fe88",
+                    "on-primary-fixed-variant": "#004395",
+                    "surface-container-lowest": "#010f1f",
+                    "on-tertiary-container": "#00320e",
+                    "on-error": "#690005",
+                    "on-tertiary-fixed": "#002107",
+                    "on-secondary-container": "#ffd2cc",
+                    "surface-container": "#122131",
+                    "surface-container-low": "#0d1c2d",
+                    "tertiary-container": "#00a741",
+                    "on-secondary-fixed": "#410001",
+                    "on-tertiary": "#003911",
+                    "outline-variant": "#424754",
+                    "primary-fixed": "#d8e2ff",
+                    "secondary-fixed": "#ffdad5"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "margin-mobile": "16px",
+                    "xs": "4px",
+                    "lg": "24px",
+                    "gutter": "12px",
+                    "xl": "32px",
+                    "sm": "8px",
+                    "md": "16px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Noto Sans TC", "sans-serif"],
+                    "display-bold": ["Noto Sans TC", "sans-serif"],
+                    "body-lg": ["Noto Sans TC", "sans-serif"],
+                    "headline-lg": ["Noto Sans TC", "sans-serif"],
+                    "label-caps": ["Inter", "sans-serif"],
+                    "data-heavy": ["Inter", "sans-serif"],
+                    "headline-md": ["Noto Sans TC", "sans-serif"],
+                    "body-sm": ["Noto Sans TC", "sans-serif"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                    "display-bold": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "data-heavy": ["18px", {"lineHeight": "22px", "fontWeight": "700"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(18, 33, 49, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: #adc6ff;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(173, 198, 255, 0.5);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 0px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body-lg min-h-screen overflow-hidden">
+<!-- Background Content (Calendar Main Screen Mockup) -->
+<main class="fixed inset-0 p-4 opacity-40 pointer-events-none scale-[0.98]">
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-center h-16">
+<span class="text-headline-lg-mobile font-display-bold text-primary">股市行事曆 v2</span>
+<span class="material-symbols-outlined text-on-surface">search</span>
+</div>
+<div class="grid grid-cols-7 gap-1 h-[618px]">
+<!-- Skeleton Calendar -->
+<script>
+                    for(let i=0; i<35; i++) {
+                        document.write(`<div class="aspect-square border border-outline-variant/20 rounded-lg flex flex-col p-2 bg-surface-container-low">
+                            <span class="text-xs text-outline">${(i%31)+1}</span>
+                            ${i === 15 ? '<div class="mt-auto h-2 w-full bg-tertiary rounded-full"></div>' : ''}
+                        </div>`);
+                    }
+                </script>
+</div>
+</div>
+</main>
+<!-- Modal Backdrop Blur Overlay -->
+<div class="fixed inset-0 bg-surface-container-lowest/60 backdrop-blur-md z-40"></div>
+<!-- Prediction Editor ModalBottomSheet -->
+<div class="fixed bottom-0 left-0 right-0 z-50 transition-transform duration-500 transform translate-y-0">
+<div class="glass-panel w-full max-w-2xl mx-auto rounded-t-[32px] border-t border-outline-variant/30 flex flex-col shadow-2xl overflow-hidden">
+<!-- Handle -->
+<div class="flex justify-center py-4">
+<div class="w-12 h-1.5 bg-outline-variant rounded-full opacity-50"></div>
+</div>
+<!-- Header -->
+<div class="px-6 pb-4 border-b border-outline-variant/20">
+<div class="flex justify-between items-start">
+<div>
+<h2 class="text-headline-lg-mobile font-headline-lg-mobile text-on-surface tracking-tight">2023/10/16 台積電 2330</h2>
+<div class="flex items-center gap-2 mt-1">
+<span class="inline-block w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="text-label-caps font-label-caps text-tertiary">BULLISH SENTIMENT</span>
+</div>
+</div>
+<button class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+</div>
+<!-- Content Area -->
+<div class="px-6 py-6 overflow-y-auto max-h-[707px] custom-scrollbar">
+<!-- Category Tabs (Horizontal Scrollable) -->
+<div class="flex gap-2 overflow-x-auto pb-4 custom-scrollbar">
+<button class="whitespace-nowrap px-4 py-2 rounded-xl bg-surface-container-high text-on-surface-variant border border-outline-variant/20 text-body-sm font-headline-md">漲停</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-xl bg-surface-container-high text-on-surface-variant border border-outline-variant/20 text-body-sm font-headline-md">跌停</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-xl bg-surface-container-high text-on-surface-variant border border-outline-variant/20 text-body-sm font-headline-md">自訂價</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-xl bg-primary-container text-on-primary-container border border-primary/30 text-body-sm font-headline-md shadow-lg shadow-primary-container/20">自訂%</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-xl bg-surface-container-high text-on-surface-variant border border-outline-variant/20 text-body-sm font-headline-md">看多</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-xl bg-surface-container-high text-on-surface-variant border border-outline-variant/20 text-body-sm font-headline-md">看空</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-xl bg-surface-container-high text-on-surface-variant border border-outline-variant/20 text-body-sm font-headline-md">平盤</button>
+</div>
+<!-- Prediction Value Control -->
+<div class="mt-8 p-6 bg-surface-container-low rounded-3xl border border-outline-variant/10 relative overflow-hidden">
+<!-- Subtle background decoration -->
+<div class="absolute -top-10 -right-10 w-40 h-40 bg-primary/5 blur-3xl rounded-full"></div>
+<div class="flex justify-between items-end mb-8">
+<div>
+<span class="text-label-caps font-label-caps text-outline block mb-1">PREDICTION TARGET</span>
+<div class="flex items-baseline gap-1">
+<span class="text-display-bold font-display-bold text-tertiary">+2.5</span>
+<span class="text-headline-md font-headline-md text-tertiary">%</span>
+</div>
+</div>
+<div class="w-24">
+<input class="w-full bg-surface-bright border-none rounded-xl text-right font-data-heavy text-primary focus:ring-2 focus:ring-primary py-3" step="0.1" type="number" value="2.5"/>
+</div>
+</div>
+<!-- Slider Container -->
+<div class="relative py-4">
+<div class="flex justify-between text-label-caps font-label-caps text-outline mb-2">
+<span>-10%</span>
+<span>0%</span>
+<span>+10%</span>
+</div>
+<input class="w-full h-2 bg-surface-container-highest rounded-lg appearance-none cursor-pointer" max="10" min="-10" step="0.1" type="range" value="2.5"/>
+</div>
+</div>
+<!-- Note Input -->
+<div class="mt-6">
+<label class="text-label-caps font-label-caps text-outline mb-2 block ml-1">INVESTMENT THESIS / NOTES</label>
+<div class="relative group">
+<textarea class="w-full bg-surface-container-low border border-outline-variant/30 rounded-2xl p-4 text-body-lg text-on-surface focus:ring-2 focus:ring-primary focus:border-transparent transition-all placeholder:text-outline-variant/50" placeholder="分享你的預測觀點..." rows="3">台積電法說會看好毛利。</textarea>
+<div class="absolute bottom-4 right-4 text-xs text-outline-variant">
+<span class="material-symbols-outlined text-sm align-middle">edit_note</span>
+</div>
+</div>
+</div>
+<!-- Social Preview Mock (Glassmorphism card) -->
+<div class="mt-8 rounded-2xl overflow-hidden relative border border-outline-variant/20 shadow-xl">
+<img class="w-full h-40 object-cover opacity-60" data-alt="A macro cinematic shot of a high-tech semiconductor wafer with neon blue and cyan lighting reflecting off the intricate circuitry patterns. The image has a futuristic and sophisticated atmosphere, using a dark background with sharp high-contrast highlights on the silver and gold components of the microchip. This visual captures the essence of advanced technology and market precision in a modern trading application style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfS0nvYL1hvlNV9fTWpd1Kma7cxJCNVV9_eq0XOUhh1miD2wbphemcNwW4lD9jhhVAQBL5r9J3MSRv5fbiJt9zNjYnE9yKMbRoOLhadrmzixcXM6akcA8R3Y9eObzsz_IZe2l5BvCdNjxw8nzWK63wHdM_j1JCFayMzN1eiLRD-z5iDevoPC42K0S1U6-6Nw9ibJiySN00UPlcZjSIKqRS56XGZPyhrYft9NMXT71_jGngHV0BqxIRWK9uyJ6DeSbnMkWHGR4nh3A"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-surface/40 to-transparent p-4 flex flex-col justify-end">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">share</span>
+<span class="text-label-caps font-label-caps text-primary">INSTAGRAM READY PREVIEW</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="p-6 bg-surface-container-lowest/80 backdrop-blur-xl border-t border-outline-variant/10 flex gap-4 pb-10">
+<button class="flex-1 py-4 px-6 rounded-2xl bg-surface-bright text-on-surface font-headline-md hover:bg-surface-container-highest transition-transform active:scale-95">
+                    取消
+                </button>
+<button class="flex-[2] py-4 px-6 rounded-2xl bg-primary text-on-primary font-headline-md shadow-lg shadow-primary/30 transition-transform active:scale-95 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-xl">save</span>
+                    儲存預測
+                </button>
+</div>
+</div>
+</div>
+<!-- Navigation Mirroring Shell (Suppressed contextually but included for structure) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-8 pt-2 bg-surface-container-lowest/90 backdrop-blur-2xl border-t border-outline-variant/20 opacity-0 pointer-events-none">
+<div class="flex flex-col items-center justify-center text-outline p-2">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="text-label-caps font-label-caps">日曆</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container/20 text-primary rounded-xl px-4 py-1">
+<span class="material-symbols-outlined">query_stats</span>
+<span class="text-label-caps font-label-caps">勝率</span>
+</div>
+</nav>
+<script>
+        // Micro-interaction for slider update
+        const slider = document.querySelector('input[type="range"]');
+        const numInput = document.querySelector('input[type="number"]');
+        const displayVal = document.querySelector('.text-display-bold');
+
+        slider.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value);
+            const formatted = (val > 0 ? '+' : '') + val.toFixed(1);
+            displayVal.textContent = formatted;
+            numInput.value = val;
+            
+            // Color shift logic
+            if(val > 0) {
+                displayVal.className = 'text-display-bold font-display-bold text-tertiary transition-colors';
+            } else if(val < 0) {
+                displayVal.className = 'text-display-bold font-display-bold text-error transition-colors';
+            } else {
+                displayVal.className = 'text-display-bold font-display-bold text-on-surface transition-colors';
+            }
+        });
+
+        // Numeric input sync
+        numInput.addEventListener('input', (e) => {
+            let val = parseFloat(e.target.value) || 0;
+            if(val > 10) val = 10;
+            if(val < -10) val = -10;
+            slider.value = val;
+            const formatted = (val > 0 ? '+' : '') + val.toFixed(1);
+            displayVal.textContent = formatted;
+        });
+    </script>
+</body></html>

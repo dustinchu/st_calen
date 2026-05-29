@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-TW"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&amp;family=Noto+Sans+TC:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+        /* Taiwan Finance Standard: Up=Red, Down=Green */
+        .market-up { color: #ffb4aa; } /* secondary in config is red-ish */
+        .market-down { color: #53e16f; } /* tertiary in config is green */
+        .bg-market-up { background-color: rgba(255, 180, 170, 0.15); }
+        .bg-market-down { background-color: rgba(83, 225, 111, 0.15); }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#051424",
+                        "surface-dim": "#051424",
+                        "error": "#ffb4ab",
+                        "outline": "#8c909f",
+                        "on-secondary-fixed-variant": "#930005",
+                        "inverse-primary": "#005ac2",
+                        "inverse-surface": "#d4e4fa",
+                        "secondary": "#ffb4aa", /* This serves as our Taiwan 'Up' Red */
+                        "primary-fixed-dim": "#adc6ff",
+                        "primary-container": "#4d8eff",
+                        "on-tertiary-fixed-variant": "#00531c",
+                        "on-primary-fixed": "#001a42",
+                        "on-error-container": "#ffdad6",
+                        "on-surface": "#d4e4fa",
+                        "surface-container-highest": "#273647",
+                        "on-primary": "#002e6a",
+                        "on-secondary": "#690003",
+                        "on-primary-container": "#00285d",
+                        "on-surface-variant": "#c2c6d6",
+                        "background": "#051424",
+                        "secondary-container": "#c5020b",
+                        "error-container": "#93000a",
+                        "secondary-fixed-dim": "#ffb4aa",
+                        "surface-tint": "#adc6ff",
+                        "tertiary-fixed-dim": "#53e16f", /* This serves as our Taiwan 'Down' Green */
+                        "surface-container-high": "#1c2b3c",
+                        "surface-bright": "#2c3a4c",
+                        "tertiary": "#53e16f",
+                        "surface-variant": "#273647",
+                        "inverse-on-surface": "#233143",
+                        "on-background": "#d4e4fa",
+                        "primary": "#adc6ff",
+                        "tertiary-fixed": "#72fe88",
+                        "on-primary-fixed-variant": "#004395",
+                        "surface-container-lowest": "#010f1f",
+                        "on-tertiary-container": "#00320e",
+                        "on-error": "#690005",
+                        "on-tertiary-fixed": "#002107",
+                        "on-secondary-container": "#ffd2cc",
+                        "surface-container": "#122131",
+                        "surface-container-low": "#0d1c2d",
+                        "tertiary-container": "#00a741",
+                        "on-secondary-fixed": "#410001",
+                        "on-tertiary": "#003911",
+                        "outline-variant": "#424754",
+                        "primary-fixed": "#d8e2ff",
+                        "secondary-fixed": "#ffdad5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "xs": "4px",
+                        "lg": "24px",
+                        "gutter": "12px",
+                        "xl": "32px",
+                        "sm": "8px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Noto Sans TC", "sans-serif"],
+                        "display-bold": ["Noto Sans TC", "sans-serif"],
+                        "body-lg": ["Noto Sans TC", "sans-serif"],
+                        "headline-lg": ["Noto Sans TC", "sans-serif"],
+                        "label-caps": ["Inter", "sans-serif"],
+                        "data-heavy": ["Inter", "sans-serif"],
+                        "headline-md": ["Noto Sans TC", "sans-serif"],
+                        "body-sm": ["Noto Sans TC", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                        "display-bold": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "data-heavy": ["18px", {"lineHeight": "22px", "fontWeight": "700"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body-lg min-h-screen pb-32">
+<!-- Top AppBar -->
+<header class="flex justify-between items-center w-full px-margin-mobile h-16 fixed top-0 z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary hover:bg-surface-bright/10 p-2 rounded-full transition-transform active:scale-95" data-icon="menu">menu</button>
+<h1 class="text-headline-lg-mobile font-display-bold text-primary tracking-tight">股市行事曆 v2</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="material-symbols-outlined text-primary hover:bg-surface-bright/10 p-2 rounded-full transition-transform active:scale-95" data-icon="search">search</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-20 px-margin-mobile max-w-4xl mx-auto space-y-6">
+<!-- Market Sentiment Header -->
+<section class="glass-card rounded-xl p-4 flex justify-between items-end border-l-4 border-secondary">
+<div>
+<p class="text-label-caps font-label-caps text-outline uppercase">Market Forecast</p>
+<h2 class="text-headline-md font-headline-md mt-1">2024年 10月</h2>
+</div>
+<div class="text-right">
+<span class="text-label-caps font-label-caps text-on-surface-variant block">勝率 85%</span>
+<span class="text-headline-lg font-data-heavy text-secondary">+12.4% <span class="material-symbols-outlined align-middle" data-icon="trending_up">trending_up</span></span>
+</div>
+</section>
+<!-- Calendar Component -->
+<div class="glass-card rounded-xl overflow-hidden">
+<!-- Day Labels -->
+<div class="calendar-grid bg-surface-container-low py-3 border-b border-outline-variant/30 text-center">
+<span class="text-label-caps font-label-caps text-outline">SUN</span>
+<span class="text-label-caps font-label-caps text-outline">MON</span>
+<span class="text-label-caps font-label-caps text-outline">TUE</span>
+<span class="text-label-caps font-label-caps text-outline">WED</span>
+<span class="text-label-caps font-label-caps text-outline">THU</span>
+<span class="text-label-caps font-label-caps text-outline">FRI</span>
+<span class="text-label-caps font-label-caps text-outline">SAT</span>
+</div>
+<!-- Calendar Cells -->
+<div class="calendar-grid">
+<!-- Row 1 Padding -->
+<div class="aspect-square p-2 border-r border-b border-outline-variant/10 text-on-surface-variant/20">29</div>
+<div class="aspect-square p-2 border-r border-b border-outline-variant/10 text-on-surface-variant/20">30</div>
+<!-- Active Dates -->
+<div class="aspect-square p-2 border-r border-b border-outline-variant/10 flex flex-col justify-between hover:bg-surface-bright/10 cursor-pointer">
+<span class="text-label-caps font-label-caps">01</span>
+<div class="flex flex-wrap gap-1">
+<div class="w-1.5 h-1.5 rounded-full bg-secondary"></div>
+</div>
+</div>
+<!-- Day with Success Prediction -->
+<div class="aspect-square p-2 border-r border-b border-outline-variant/10 flex flex-col justify-between bg-market-up relative group">
+<div class="flex justify-between items-start">
+<span class="text-label-caps font-label-caps font-bold text-secondary">02</span>
+<span class="material-symbols-outlined text-sm text-tertiary" data-icon="check_circle" style="font-size: 14px;">check_circle</span>
+</div>
+<div class="text-center">
+<span class="material-symbols-outlined text-secondary" data-icon="arrow_upward">arrow_upward</span>
+</div>
+</div>
+<div class="aspect-square p-2 border-r border-b border-outline-variant/10 flex flex-col justify-between hover:bg-surface-bright/10">
+<span class="text-label-caps font-label-caps">03</span>
+<div class="flex flex-wrap gap-1"><div class="w-1.5 h-1.5 rounded-full bg-tertiary"></div></div>
+</div>
+<!-- Big Day Glow -->
+<div class="aspect-square p-2 border-r border-b border-outline-variant/10 flex flex-col justify-between bg-primary-container/10 border-2 border-primary/30 relative">
+<span class="text-label-caps font-label-caps text-primary font-bold">04</span>
+<div class="text-center pb-1">
+<span class="text-[10px] font-bold text-primary uppercase">FED</span>
+</div>
+</div>
+<div class="aspect-square p-2 border-b border-outline-variant/10 flex flex-col justify-between hover:bg-surface-bright/10">
+<span class="text-label-caps font-label-caps">05</span>
+</div>
+<!-- Row 2 -->
+<div class="aspect-square p-2 border-r border-b border-outline-variant/10 flex flex-col justify-between hover:bg-surface-bright/10">
+<span class="text-label-caps font-label-caps">06</span>
+</div>
+<!-- Miss Prediction -->
+<div class="aspect-square p-2 border-r border-b border-outline-variant/10 flex flex-col justify-between bg-market-down">
+<div class="flex justify-between items-start">
+<span class="text-label-caps font-label-caps font-bold text-tertiary">07</span>
+<span class="material-symbols-outlined text-sm text-secondary" data-icon="cancel" style="font-size: 14px;">cancel</span>
+</div>
+<div class="text-center">
+<span class="material-symbols-outlined text-tertiary" data-icon="arrow_downward">arrow_downward</span>
+</div>
+</div>
+<div class="aspect-square p-2 border-r border-b border-outline-variant/10 flex flex-col justify-between hover:bg-surface-bright/10">
+<span class="text-label-caps font-label-caps">08</span>
+<div class="flex flex-wrap gap-1"><div class="w-1.5 h-1.5 rounded-full bg-secondary"></div><div class="w-1.5 h-1.5 rounded-full bg-secondary"></div></div>
+</div>
+<div class="aspect-square p-2 border-r border-b border-outline-variant/10 flex flex-col justify-between hover:bg-surface-bright/10">
+<span class="text-label-caps font-label-caps">09</span>
+</div>
+<div class="aspect-square p-2 border-r border-b border-outline-variant/10 flex flex-col justify-between bg-market-up">
+<span class="text-label-caps font-label-caps font-bold text-secondary">10</span>
+<div class="text-center">
+<span class="material-symbols-outlined text-secondary" data-icon="arrow_upward">arrow_upward</span>
+</div>
+</div>
+<div class="aspect-square p-2 border-r border-b border-outline-variant/10 flex flex-col justify-between hover:bg-surface-bright/10">
+<span class="text-label-caps font-label-caps">11</span>
+</div>
+<div class="aspect-square p-2 border-b border-outline-variant/10 flex flex-col justify-between hover:bg-surface-bright/10">
+<span class="text-label-caps font-label-caps">12</span>
+</div>
+<!-- More Rows simplified for UI visual -->
+<div class="aspect-square p-2 border-r border-b border-outline-variant/10 flex flex-col justify-between hover:bg-surface-bright/10">
+<span class="text-label-caps font-label-caps">13</span>
+</div>
+<div class="aspect-square p-2 border-r border-b border-outline-variant/10 flex flex-col justify-between bg-secondary/10 shadow-[inset_0_0_10px_rgba(255,180,170,0.1)]">
+<span class="text-label-caps font-label-caps font-bold text-secondary">14</span>
+<div class="text-[8px] text-secondary font-bold truncate">TSMC</div>
+</div>
+<div class="aspect-square p-2 border-r border-b border-outline-variant/10 flex flex-col justify-between hover:bg-surface-bright/10">
+<span class="text-label-caps font-label-caps">15</span>
+</div>
+<div class="aspect-square p-2 border-r border-b border-outline-variant/10 flex flex-col justify-between hover:bg-surface-bright/10">
+<span class="text-label-caps font-label-caps">16</span>
+</div>
+<div class="aspect-square p-2 border-r border-b border-outline-variant/10 flex flex-col justify-between hover:bg-surface-bright/10">
+<span class="text-label-caps font-label-caps">17</span>
+</div>
+<div class="aspect-square p-2 border-r border-b border-outline-variant/10 flex flex-col justify-between hover:bg-surface-bright/10">
+<span class="text-label-caps font-label-caps">18</span>
+</div>
+<div class="aspect-square p-2 border-b border-outline-variant/10 flex flex-col justify-between hover:bg-surface-bright/10">
+<span class="text-label-caps font-label-caps">19</span>
+</div>
+</div>
+</div>
+<!-- Event Detail Card -->
+<section class="space-y-4">
+<div class="flex justify-between items-center">
+<h3 class="text-headline-md font-headline-md">當日關鍵事件</h3>
+<span class="text-label-caps font-label-caps text-on-surface-variant">10月 14日</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Stock Event 1 -->
+<div class="glass-card rounded-xl p-4 border-l-4 border-secondary relative overflow-hidden group hover:bg-surface-bright/10 transition-all">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-10 h-10 rounded-full bg-secondary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary" data-icon="analytics">analytics</span>
+</div>
+<div>
+<p class="text-body-sm font-body-sm text-outline">法說會</p>
+<h4 class="text-body-lg font-body-lg font-bold">2330 台積電</h4>
+</div>
+</div>
+<p class="text-body-sm text-on-surface-variant mb-4">預計發布 Q3 財報。市場普遍看好 AI 晶片需求，預期毛利率維持 53% 以上。</p>
+<div class="flex justify-between items-center">
+<span class="text-label-caps font-label-caps px-2 py-1 bg-secondary/10 text-secondary rounded">關鍵指標</span>
+<div class="flex gap-2">
+<button class="material-symbols-outlined text-outline hover:text-primary" data-icon="share">share</button>
+<button class="material-symbols-outlined text-outline hover:text-primary" data-icon="notifications">notifications</button>
+</div>
+</div>
+</div>
+<!-- Stock Event 2 -->
+<div class="glass-card rounded-xl p-4 border-l-4 border-tertiary relative overflow-hidden group hover:bg-surface-bright/10 transition-all">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-10 h-10 rounded-full bg-tertiary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary" data-icon="payments">payments</span>
+</div>
+<div>
+<p class="text-body-sm font-body-sm text-outline">除息</p>
+<h4 class="text-body-lg font-body-lg font-bold">0050 元大台灣50</h4>
+</div>
+</div>
+<p class="text-body-sm text-on-surface-variant mb-4">今日除息，預計配發 2.5 元。投資人須注意開盤參考價調整。</p>
+<div class="flex justify-between items-center">
+<span class="text-label-caps font-label-caps px-2 py-1 bg-tertiary/10 text-tertiary rounded">現金流量</span>
+<div class="flex gap-2">
+<button class="material-symbols-outlined text-outline hover:text-primary" data-icon="share">share</button>
+<button class="material-symbols-outlined text-outline hover:text-primary" data-icon="notifications">notifications</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Premium Feature Teaser -->
+<div class="relative h-48 rounded-xl overflow-hidden glass-card group cursor-pointer">
+<img alt="Premium Analysis" class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-40 transition-transform duration-700 group-hover:scale-110" data-alt="A futuristic financial trading floor with multiple holographic screens displaying red and green stock market candles. The atmosphere is intense and high-tech, with sharp neon blue and primary red highlights reflecting off polished dark surfaces. Professional trading data is integrated into a sleek, glass-like digital overlay style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCaj4VwMaB5CEGqSWZUCMcL0ZvXPotYVW0TVIhKkHr78E5nDapXSkxlvo55UHMEOmgNLlOK1PC6U-qpe9g3wY3CzWUKgEwqScO3nCRU3VxCTEcqr7XmCliYU2iWSe08bkxdhIlVsMEKO_hmm4FdXXj2tcOj5B5XZWZHa2VwB8rzjuRGSkBkp6R9fBBfG0ltCQKOXP1kbgoli_ed2raxs2HOxdWT14yZStGMT08I1TWfTw8yKRPZvWNCsbSWE_DMCgT_1cmN6mO5e0c"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-surface/20 to-transparent p-6 flex flex-col justify-end">
+<span class="text-label-caps font-label-caps text-primary mb-1">PRO 會員專屬</span>
+<h3 class="text-headline-md font-headline-md">AI 預測下週行情趨勢</h3>
+<p class="text-body-sm text-on-surface-variant">大數據分析散戶動向，提前佈局領先指標</p>
+</div>
+</div>
+</main>
+<!-- FAB -->
+<button class="fixed bottom-24 right-6 w-14 h-14 rounded-full bg-primary-container text-on-primary-container shadow-lg flex items-center justify-center transition-transform active:scale-90 hover:shadow-primary-container/20 hover:shadow-xl z-40">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-8 pt-2 bg-surface-container-lowest/90 dark:bg-surface-container-lowest/90 backdrop-blur-2xl border-t border-outline-variant/20 shadow-lg">
+<div class="flex flex-col items-center justify-center bg-primary-container/20 text-primary rounded-xl px-4 py-1 transition-all duration-200 scale-90">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span class="text-label-caps font-label-caps mt-0.5">日曆</span>
+</div>
+<div class="flex flex-col items-center justify-center text-outline p-2 hover:text-primary-fixed">
+<span class="material-symbols-outlined" data-icon="query_stats">query_stats</span>
+<span class="text-label-caps font-label-caps mt-0.5">勝率</span>
+</div>
+<div class="flex flex-col items-center justify-center text-outline p-2 hover:text-primary-fixed">
+<span class="material-symbols-outlined" data-icon="show_chart">show_chart</span>
+<span class="text-label-caps font-label-caps mt-0.5">自選</span>
+</div>
+<div class="flex flex-col items-center justify-center text-outline p-2 hover:text-primary-fixed">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-label-caps font-label-caps mt-0.5">設定</span>
+</div>
+</nav>
+<script>
+        // Simple Interaction for Calendar Selection
+        document.querySelectorAll('.calendar-grid > div').forEach(cell => {
+            cell.addEventListener('click', function() {
+                if(this.classList.contains('aspect-square')) {
+                    document.querySelectorAll('.calendar-grid > div').forEach(c => c.classList.remove('ring-2', 'ring-primary', 'z-10'));
+                    this.classList.add('ring-2', 'ring-primary', 'z-10');
+                    
+                    // Simple feedback toast simulation
+                    console.log("Selected date: " + this.innerText.trim().split('\n')[0]);
+                }
+            });
+        });
+
+        // Atmospheric shimmer effect for the glass card
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.glass-card');
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    </script>
+</body></html>

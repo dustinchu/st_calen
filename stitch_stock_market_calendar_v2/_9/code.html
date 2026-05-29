@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-Hant"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&amp;family=Noto+Sans+TC:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .glass-card {
+            background: rgba(39, 54, 71, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(140, 144, 159, 0.2);
+        }
+        .neo-brutalist-shadow {
+            box-shadow: 4px 4px 0px 0px #adc6ff;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #424754;
+            border-radius: 10px;
+        }
+        .active-pill {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#051424",
+                        "surface-dim": "#051424",
+                        "error": "#ffb4ab",
+                        "outline": "#8c909f",
+                        "on-secondary-fixed-variant": "#930005",
+                        "inverse-primary": "#005ac2",
+                        "inverse-surface": "#d4e4fa",
+                        "secondary": "#ffb4aa",
+                        "primary-fixed-dim": "#adc6ff",
+                        "primary-container": "#4d8eff",
+                        "on-tertiary-fixed-variant": "#00531c",
+                        "on-primary-fixed": "#001a42",
+                        "on-error-container": "#ffdad6",
+                        "on-surface": "#d4e4fa",
+                        "surface-container-highest": "#273647",
+                        "on-primary": "#002e6a",
+                        "on-secondary": "#690003",
+                        "on-primary-container": "#00285d",
+                        "on-surface-variant": "#c2c6d6",
+                        "background": "#051424",
+                        "secondary-container": "#c5020b",
+                        "error-container": "#93000a",
+                        "secondary-fixed-dim": "#ffb4aa",
+                        "surface-tint": "#adc6ff",
+                        "tertiary-fixed-dim": "#53e16f",
+                        "surface-container-high": "#1c2b3c",
+                        "surface-bright": "#2c3a4c",
+                        "tertiary": "#53e16f",
+                        "surface-variant": "#273647",
+                        "inverse-on-surface": "#233143",
+                        "on-background": "#d4e4fa",
+                        "primary": "#adc6ff",
+                        "tertiary-fixed": "#72fe88",
+                        "on-primary-fixed-variant": "#004395",
+                        "surface-container-lowest": "#010f1f",
+                        "on-tertiary-container": "#00320e",
+                        "on-error": "#690005",
+                        "on-tertiary-fixed": "#002107",
+                        "on-secondary-container": "#ffd2cc",
+                        "surface-container": "#122131",
+                        "surface-container-low": "#0d1c2d",
+                        "tertiary-container": "#00a741",
+                        "on-secondary-fixed": "#410001",
+                        "on-tertiary": "#003911",
+                        "outline-variant": "#424754",
+                        "primary-fixed": "#d8e2ff",
+                        "secondary-fixed": "#ffdad5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "xs": "4px",
+                        "lg": "24px",
+                        "gutter": "12px",
+                        "xl": "32px",
+                        "sm": "8px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Noto Sans TC"],
+                        "display-bold": ["Noto Sans TC"],
+                        "body-lg": ["Noto Sans TC"],
+                        "headline-lg": ["Noto Sans TC"],
+                        "label-caps": ["Inter"],
+                        "data-heavy": ["Inter"],
+                        "headline-md": ["Noto Sans TC"],
+                        "body-sm": ["Noto Sans TC"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                        "display-bold": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "data-heavy": ["18px", {"lineHeight": "22px", "fontWeight": "700"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface custom-scrollbar">
+<!-- Top App Bar -->
+<header class="flex justify-between items-center w-full px-margin-mobile h-16 fixed top-0 z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30">
+<button class="material-symbols-outlined text-primary hover:bg-surface-bright/10 p-2 rounded-full active:scale-95 transition-transform" data-icon="menu">menu</button>
+<h1 class="text-headline-md-mobile font-display-bold text-primary tracking-tight">我的自選</h1>
+<button class="material-symbols-outlined text-primary hover:bg-surface-bright/10 p-2 rounded-full active:scale-95 transition-transform" data-icon="search" id="trigger-search">search</button>
+</header>
+<main class="pt-20 pb-32 px-margin-mobile space-y-md">
+<!-- Header Section -->
+<div class="flex items-center justify-between mb-2">
+<div>
+<span class="text-label-caps font-label-caps text-outline uppercase">Active Watchlist</span>
+<h2 class="text-headline-lg-mobile font-headline-lg-mobile text-on-surface">預設清單</h2>
+</div>
+<div class="flex gap-2">
+<button class="material-symbols-outlined text-outline p-2 hover:text-primary transition-colors" data-icon="sort">sort</button>
+<button class="material-symbols-outlined text-outline p-2 hover:text-primary transition-colors" data-icon="edit_calendar">edit_calendar</button>
+</div>
+</div>
+<!-- Stock List Container -->
+<div class="space-y-3" id="stock-list">
+<!-- Stock Item 1 -->
+<div class="glass-card p-4 rounded-xl flex items-center justify-between group active:scale-[0.98] transition-all duration-200">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-outline cursor-grab active:cursor-grabbing" data-icon="drag_indicator">drag_indicator</span>
+<div class="flex flex-col">
+<span class="text-body-lg font-bold text-on-surface">台積電</span>
+<span class="text-label-caps font-label-caps text-outline">2330 · TW</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-right">
+<p class="text-data-heavy font-data-heavy text-on-surface">785.00</p>
+<p class="text-label-caps font-label-caps text-tertiary">+1.24%</p>
+</div>
+<button class="material-symbols-outlined text-outline-variant hover:text-error transition-colors p-1" data-icon="delete">delete</button>
+</div>
+</div>
+<!-- Stock Item 2 -->
+<div class="glass-card p-4 rounded-xl flex items-center justify-between group active:scale-[0.98] transition-all duration-200">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-outline cursor-grab active:cursor-grabbing" data-icon="drag_indicator">drag_indicator</span>
+<div class="flex flex-col">
+<span class="text-body-lg font-bold text-on-surface">鴻海</span>
+<span class="text-label-caps font-label-caps text-outline">2317 · TW</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-right">
+<p class="text-data-heavy font-data-heavy text-on-surface">152.50</p>
+<p class="text-label-caps font-label-caps text-tertiary">+0.66%</p>
+</div>
+<button class="material-symbols-outlined text-outline-variant hover:text-error transition-colors p-1" data-icon="delete">delete</button>
+</div>
+</div>
+<!-- Stock Item 3 -->
+<div class="glass-card p-4 rounded-xl flex items-center justify-between group active:scale-[0.98] transition-all duration-200">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-outline cursor-grab active:cursor-grabbing" data-icon="drag_indicator">drag_indicator</span>
+<div class="flex flex-col">
+<span class="text-body-lg font-bold text-on-surface">聯發科</span>
+<span class="text-label-caps font-label-caps text-outline">2454 · TW</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-right">
+<p class="text-data-heavy font-data-heavy text-on-surface">1,120.00</p>
+<p class="text-label-caps font-label-caps text-secondary-container">-0.88%</p>
+</div>
+<button class="material-symbols-outlined text-outline-variant hover:text-error transition-colors p-1" data-icon="delete">delete</button>
+</div>
+</div>
+</div>
+<!-- Add Stock FAB Alternative (Large bottom button) -->
+<div class="fixed bottom-24 left-0 w-full px-margin-mobile z-40">
+<button class="w-full bg-primary-container text-on-primary-container h-14 rounded-xl font-bold flex items-center justify-center gap-2 shadow-2xl active:scale-95 transition-all neo-brutalist-shadow" id="btn-add-stock">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+<span class="text-body-lg">新增股票</span>
+</button>
+</div>
+</main>
+<!-- Search Overlay -->
+<div class="fixed inset-0 bg-surface/95 z-[70] translate-y-full transition-transform duration-300 ease-in-out" id="search-overlay">
+<div class="flex flex-col h-full pt-4">
+<!-- Search Header -->
+<div class="px-margin-mobile flex items-center gap-3 mb-6">
+<button class="material-symbols-outlined text-on-surface p-2" data-icon="arrow_back" id="close-search">arrow_back</button>
+<div class="flex-1 relative">
+<input class="w-full bg-surface-container-highest border-none rounded-xl h-12 px-12 text-on-surface focus:ring-2 focus:ring-primary-container placeholder:text-outline/50" placeholder="搜尋代號或名稱" type="text"/>
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+</div>
+</div>
+<!-- Market Tabs -->
+<div class="flex px-margin-mobile gap-4 border-b border-outline-variant/20 mb-4">
+<button class="pb-3 text-primary border-b-2 border-primary text-label-caps font-label-caps">台灣市場 (TW)</button>
+<button class="pb-3 text-outline text-label-caps font-label-caps">美股市場 (US)</button>
+<button class="pb-3 text-outline text-label-caps font-label-caps">ETF專區</button>
+</div>
+<!-- Search Results -->
+<div class="flex-1 overflow-y-auto px-margin-mobile space-y-2 pb-10">
+<div class="text-label-caps font-label-caps text-outline/60 mt-2 mb-2">熱門搜尋</div>
+<div class="flex items-center justify-between p-3 rounded-xl hover:bg-surface-bright/10 transition-colors">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">廣達</span>
+<span class="text-label-caps text-outline">2382 · TW</span>
+</div>
+<button class="material-symbols-outlined text-primary" data-icon="add_circle">add_circle</button>
+</div>
+<div class="flex items-center justify-between p-3 rounded-xl hover:bg-surface-bright/10 transition-colors">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">緯創</span>
+<span class="text-label-caps text-outline">3231 · TW</span>
+</div>
+<button class="material-symbols-outlined text-primary" data-icon="add_circle">add_circle</button>
+</div>
+<div class="flex items-center justify-between p-3 rounded-xl hover:bg-surface-bright/10 transition-colors">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">NVIDIA</span>
+<span class="text-label-caps text-outline">NVDA · US</span>
+</div>
+<button class="material-symbols-outlined text-primary" data-icon="add_circle">add_circle</button>
+</div>
+<div class="mt-8">
+<div class="rounded-2xl overflow-hidden aspect-[16/9] relative group">
+<img class="w-full h-full object-cover" data-alt="A professional stock market trader dashboard on multiple high-resolution screens in a dark, moody modern home office. The lighting is dominated by deep blues and vibrant neon data visualizations, creating an atmosphere of focus and financial expertise. High-contrast graphs and candlestick charts glow intensely against the OLED black background. The overall aesthetic is sleek, premium fintech, and highly detailed." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlU2s9uYcdbip6MhBMjBkiGlNdZxb6vCdRxP0D_pSiHa5A3hYYS-5bExlof_k1fa351xkz-szTu1MG2k52IWUMnnoxZj0hex2E2-y6aLE3AYACCG29ScLtilBVQ9EFPby6og-FJZOuG6AZvhTelZpYdbhqiEyGAV55RIdpbbizfPzU0BXLqBjubMKt7VhcanabOK1YD2L1PVP0JmZYMt_OiQKQzpWvyt3nQ6FPc3Hxjah-T9JOToIurXr71M60lLcKldPWKlAIQDM"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent opacity-60"></div>
+<div class="absolute bottom-4 left-4">
+<p class="text-white font-bold text-lg">掌握全球市場動態</p>
+<p class="text-on-surface-variant text-xs">即時同步台美股數據</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-8 pt-2 bg-surface-container-lowest/90 dark:bg-surface-container-lowest/90 backdrop-blur-2xl border-t border-outline-variant/20 shadow-lg rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-outline p-2 hover:text-primary-fixed" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span class="text-label-caps font-label-caps">日曆</span>
+</a>
+<a class="flex flex-col items-center justify-center text-outline p-2 hover:text-primary-fixed" href="#">
+<span class="material-symbols-outlined" data-icon="query_stats">query_stats</span>
+<span class="text-label-caps font-label-caps">勝率</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container/20 text-primary rounded-xl px-4 py-1 active:scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="show_chart" style="font-variation-settings: 'FILL' 1;">show_chart</span>
+<span class="text-label-caps font-label-caps font-bold">自選</span>
+</a>
+<a class="flex flex-col items-center justify-center text-outline p-2 hover:text-primary-fixed" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-label-caps font-label-caps">設定</span>
+</a>
+</nav>
+<script>
+        // Search Overlay Logic
+        const btnAddStock = document.getElementById('btn-add-stock');
+        const triggerSearch = document.getElementById('trigger-search');
+        const closeSearch = document.getElementById('close-search');
+        const searchOverlay = document.getElementById('search-overlay');
+
+        function openSearch() {
+            searchOverlay.classList.remove('translate-y-full');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSearchOverlay() {
+            searchOverlay.classList.add('translate-y-full');
+            document.body.style.overflow = '';
+        }
+
+        btnAddStock.addEventListener('click', openSearch);
+        triggerSearch.addEventListener('click', openSearch);
+        closeSearch.addEventListener('click', closeSearchOverlay);
+
+        // Simple Drag Interaction Simulation
+        const items = document.querySelectorAll('#stock-list > div');
+        items.forEach(item => {
+            const dragHandle = item.querySelector('[data-icon="drag_indicator"]');
+            dragHandle.addEventListener('mousedown', () => {
+                item.style.borderColor = 'rgba(173, 198, 255, 0.5)';
+                item.style.backgroundColor = 'rgba(173, 198, 255, 0.1)';
+            });
+            window.addEventListener('mouseup', () => {
+                item.style.borderColor = '';
+                item.style.backgroundColor = '';
+            });
+        });
+
+        // Delete Simulation
+        document.querySelectorAll('[data-icon="delete"]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const card = this.closest('.glass-card');
+                card.style.opacity = '0';
+                card.style.transform = 'translateX(20px)';
+                setTimeout(() => {
+                    card.remove();
+                }, 300);
+            });
+        });
+    </script>
+</body></html>

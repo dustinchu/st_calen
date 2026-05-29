@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-TW"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>股市行事曆 v2 - OLED Edition</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&amp;family=Noto+Sans+TC:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Load Design System Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface": "#000000",
+                    "surface-dim": "#051424",
+                    "error": "#ffb4ab",
+                    "outline": "#8c909f",
+                    "on-secondary-fixed-variant": "#930005",
+                    "inverse-primary": "#005ac2",
+                    "inverse-surface": "#d4e4fa",
+                    "secondary": "#ffb4aa",
+                    "primary-fixed-dim": "#adc6ff",
+                    "primary-container": "#4d8eff",
+                    "on-tertiary-fixed-variant": "#00531c",
+                    "on-primary-fixed": "#001a42",
+                    "on-error-container": "#ffdad6",
+                    "on-surface": "#d4e4fa",
+                    "surface-container-highest": "#273647",
+                    "on-primary": "#002e6a",
+                    "on-secondary": "#690003",
+                    "on-primary-container": "#00285d",
+                    "on-surface-variant": "#c2c6d6",
+                    "background": "#000000",
+                    "secondary-container": "#c5020b",
+                    "error-container": "#93000a",
+                    "secondary-fixed-dim": "#ffb4aa",
+                    "surface-tint": "#adc6ff",
+                    "tertiary-fixed-dim": "#53e16f",
+                    "surface-container-high": "#1c2b3c",
+                    "surface-bright": "#2c3a4c",
+                    "tertiary": "#53e16f",
+                    "surface-variant": "#273647",
+                    "inverse-on-surface": "#233143",
+                    "on-background": "#d4e4fa",
+                    "primary": "#adc6ff",
+                    "tertiary-fixed": "#72fe88",
+                    "on-primary-fixed-variant": "#004395",
+                    "surface-container-lowest": "#010f1f",
+                    "on-tertiary-container": "#00320e",
+                    "on-error": "#690005",
+                    "on-tertiary-fixed": "#002107",
+                    "on-secondary-container": "#ffd2cc",
+                    "surface-container": "#122131",
+                    "surface-container-low": "#0d1c2d",
+                    "tertiary-container": "#00a741",
+                    "on-secondary-fixed": "#410001",
+                    "on-tertiary": "#003911",
+                    "outline-variant": "#424754",
+                    "primary-fixed": "#d8e2ff",
+                    "secondary-fixed": "#ffdad5"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "12px",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "margin-mobile": "16px",
+                    "xs": "4px",
+                    "lg": "24px",
+                    "gutter": "12px",
+                    "xl": "32px",
+                    "sm": "8px",
+                    "md": "16px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Noto Sans TC"],
+                    "display-bold": ["Noto Sans TC"],
+                    "body-lg": ["Noto Sans TC"],
+                    "headline-lg": ["Noto Sans TC"],
+                    "label-caps": ["Inter"],
+                    "data-heavy": ["Inter"],
+                    "headline-md": ["Noto Sans TC"],
+                    "body-sm": ["Noto Sans TC"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                    "display-bold": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "data-heavy": ["18px", {"lineHeight": "22px", "fontWeight": "700"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #000000; color: #d4e4fa; }
+        .glass-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+        .calendar-cell { aspect-ratio: 1/1; border-radius: 4px; background: #0d1c2d; border: 1px solid #1e293b; position: relative; }
+        .calendar-cell.today { border: 1.5px solid #adc6ff; background: rgba(173, 198, 255, 0.1); }
+        .active-glow { box-shadow: 0 0 15px rgba(77, 142, 255, 0.4); border-color: #4d8eff !important; }
+        .hit-status { color: #53e16f; }
+        .miss-status { color: #ffb4ab; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-lg text-body-lg selection:bg-primary/30">
+<!-- TopAppBar -->
+<header class="bg-surface/80 dark:bg-surface/80 backdrop-blur-xl flex justify-between items-center w-full px-margin-mobile h-16 fixed top-0 z-50 border-b border-outline-variant/30">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary" data-icon="menu">menu</span>
+<h1 class="text-headline-lg-mobile font-display-bold text-primary dark:text-primary tracking-tight">股市行事曆 v2</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary" data-icon="search">search</span>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-20 pb-32 px-margin-mobile">
+<!-- Month Selector & Quick Stats -->
+<section class="mb-md flex items-center justify-between">
+<div>
+<h2 class="text-headline-md font-headline-md text-on-surface">2024年 11月</h2>
+<p class="text-label-caps font-label-caps text-outline uppercase">Stock Event Calendar</p>
+</div>
+<button class="bg-surface-container-high p-2 rounded-xl flex items-center gap-1 border border-outline-variant/30">
+<span class="material-symbols-outlined text-sm" data-icon="filter_list">filter_list</span>
+<span class="text-label-caps font-label-caps">篩選器</span>
+</button>
+</section>
+<!-- Stock Chips Horizontal Scroll -->
+<section class="flex gap-sm overflow-x-auto pb-4 no-scrollbar -mx-margin-mobile px-margin-mobile">
+<div class="bg-surface-container-highest px-4 py-2 rounded-full whitespace-nowrap active-glow border border-primary/50 text-primary flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-bold">2330 台積電</span>
+</div>
+<div class="bg-surface-container-low px-4 py-2 rounded-full whitespace-nowrap border border-outline-variant/30 text-on-surface-variant flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span>2454 聯發科</span>
+</div>
+<div class="bg-surface-container-low px-4 py-2 rounded-full whitespace-nowrap border border-outline-variant/30 text-on-surface-variant flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span>2317 鴻海</span>
+</div>
+<div class="bg-surface-container-low px-4 py-2 rounded-full whitespace-nowrap border border-outline-variant/30 text-on-surface-variant flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-outline"></span>
+<span>3008 大立光</span>
+</div>
+</section>
+<!-- Calendar Grid -->
+<section class="mb-lg">
+<div class="grid grid-cols-7 mb-2 text-center text-label-caps font-label-caps text-outline">
+<div>日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div>
+</div>
+<div class="calendar-grid">
+<!-- Row 1 (Partial) -->
+<div class="calendar-cell opacity-30 flex items-center justify-center"><span class="text-xs">27</span></div>
+<div class="calendar-cell opacity-30 flex items-center justify-center"><span class="text-xs">28</span></div>
+<div class="calendar-cell opacity-30 flex items-center justify-center"><span class="text-xs">29</span></div>
+<div class="calendar-cell opacity-30 flex items-center justify-center"><span class="text-xs">30</span></div>
+<div class="calendar-cell opacity-30 flex items-center justify-center"><span class="text-xs">31</span></div>
+<div class="calendar-cell flex flex-col p-1">
+<span class="text-xs font-bold text-on-surface">1</span>
+<div class="mt-auto flex gap-1">
+<div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+</div>
+</div>
+<div class="calendar-cell flex flex-col p-1">
+<span class="text-xs font-bold text-on-surface">2</span>
+</div>
+<!-- Row 2 -->
+<div class="calendar-cell flex flex-col p-1">
+<span class="text-xs font-bold text-on-surface">3</span>
+</div>
+<div class="calendar-cell flex flex-col p-1">
+<span class="text-xs font-bold text-on-surface">4</span>
+<div class="mt-auto flex flex-wrap gap-1">
+<div class="w-1.5 h-1.5 rounded-full bg-tertiary"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+</div>
+</div>
+<div class="calendar-cell flex flex-col p-1 today active-glow">
+<span class="text-xs font-bold text-primary">5</span>
+<div class="mt-auto flex flex-wrap gap-1">
+<div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-error"></div>
+</div>
+</div>
+<div class="calendar-cell flex flex-col p-1">
+<span class="text-xs font-bold text-on-surface">6</span>
+</div>
+<div class="calendar-cell flex flex-col p-1">
+<span class="text-xs font-bold text-on-surface">7</span>
+<div class="mt-auto flex flex-wrap gap-1">
+<div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+</div>
+</div>
+<div class="calendar-cell flex flex-col p-1">
+<span class="text-xs font-bold text-on-surface">8</span>
+</div>
+<div class="calendar-cell flex flex-col p-1">
+<span class="text-xs font-bold text-on-surface">9</span>
+</div>
+<!-- Simplified rows for brevity -->
+<div class="calendar-cell flex flex-col p-1"><span class="text-xs font-bold text-on-surface">10</span></div>
+<div class="calendar-cell flex flex-col p-1"><span class="text-xs font-bold text-on-surface">11</span></div>
+<div class="calendar-cell flex flex-col p-1"><span class="text-xs font-bold text-on-surface">12</span></div>
+<div class="calendar-cell flex flex-col p-1"><span class="text-xs font-bold text-on-surface">13</span></div>
+<div class="calendar-cell flex flex-col p-1"><span class="text-xs font-bold text-on-surface">14</span></div>
+<div class="calendar-cell flex flex-col p-1"><span class="text-xs font-bold text-on-surface">15</span></div>
+<div class="calendar-cell flex flex-col p-1"><span class="text-xs font-bold text-on-surface">16</span></div>
+</div>
+</section>
+<!-- Daily Agenda / Details -->
+<section>
+<div class="flex items-center justify-between mb-sm">
+<h3 class="text-headline-md font-headline-md text-primary">今日事件 (11/5)</h3>
+<span class="text-label-caps font-label-caps text-outline">共 2 個預期事件</span>
+</div>
+<div class="space-y-sm">
+<!-- Event Card 1 -->
+<div class="glass-card p-md rounded-xl flex items-center justify-between">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-primary" data-icon="trending_up">trending_up</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">台積電 法說會預期</p>
+<p class="text-body-sm text-on-surface-variant">預估：毛利率維持 53% 以上</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="hit-status font-bold text-xl">✓</span>
+<span class="text-[10px] font-label-caps text-outline">HIT</span>
+</div>
+</div>
+<!-- Event Card 2 -->
+<div class="glass-card p-md rounded-xl flex items-center justify-between">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-secondary-container/10 flex items-center justify-center border border-secondary-container/20">
+<span class="material-symbols-outlined text-secondary" data-icon="notifications_active">notifications_active</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">鴻海 10月營收公布</p>
+<p class="text-body-sm text-on-surface-variant">預估：年增率 12%</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="miss-status font-bold text-xl">✗</span>
+<span class="text-[10px] font-label-caps text-outline">MISS</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Shareable Quote / Meme Mode -->
+<section class="mt-lg">
+<div class="relative overflow-hidden rounded-xl h-48 bg-surface-container-high border-2 border-primary/20 group">
+<img class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform duration-700" data-alt="A cinematic overhead shot of high-end trading desks in a dark neon-lit environment with glowing digital displays reflecting off black surfaces. The atmosphere is professional yet high-energy, featuring a deep OLED black color palette with vibrant blue and cyan light accents that evoke a sense of future fintech and elite market analysis." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqUrzHEu_VXT738h6S2nrevfRJkIDyqjoOZ2ZY9ZxPpD2466Er_M99BdqjgjX9aaodhD7CWu0uvoNGYPgN4ty-mQ0Ixfh5Drhlioc6nFX__CAo_MXq4dMWKSEkDjemNGEoHPEkdHNc7jrDBDSoHIdCPgaKylp8Drxa0HuRIx3SmnXedKqWZa6ZbCcQrP0OjfTUs2uYWw_eN0NkWGoRrmpKODyl4Rxex5E0UvdrCYSAzquCSWk-qxt82jxUl_tkZg230WkAdOmiqgY"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
+<div class="absolute bottom-4 left-4 right-4">
+<p class="text-headline-md font-display-bold text-primary italic">"To the Moon! 🚀"</p>
+<p class="text-body-sm text-on-surface-variant">今日戰績：2 勝 1 敗</p>
+</div>
+<button class="absolute top-4 right-4 bg-primary text-on-primary-container p-2 rounded-full shadow-lg">
+<span class="material-symbols-outlined text-sm" data-icon="share">share</span>
+</button>
+</div>
+</section>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed bottom-24 right-6 w-14 h-14 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-full shadow-2xl flex items-center justify-center z-50 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-3xl" data-icon="add">add</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-8 pt-2 bg-surface-container-lowest/90 dark:bg-surface-container-lowest/90 backdrop-blur-2xl border-t border-outline-variant/20 shadow-lg">
+<a class="flex flex-col items-center justify-center bg-primary-container/20 text-primary rounded-xl px-4 py-1 active:scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span class="text-label-caps font-label-caps">日曆</span>
+</a>
+<a class="flex flex-col items-center justify-center text-outline p-2 hover:text-primary-fixed" href="#">
+<span class="material-symbols-outlined" data-icon="query_stats">query_stats</span>
+<span class="text-label-caps font-label-caps">勝率</span>
+</a>
+<a class="flex flex-col items-center justify-center text-outline p-2 hover:text-primary-fixed" href="#">
+<span class="material-symbols-outlined" data-icon="show_chart">show_chart</span>
+<span class="text-label-caps font-label-caps">自選</span>
+</a>
+<a class="flex flex-col items-center justify-center text-outline p-2 hover:text-primary-fixed" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-label-caps font-label-caps">設定</span>
+</a>
+</nav>
+<!-- Interactive script for some flair -->
+<script>
+        document.querySelectorAll('.calendar-cell').forEach(cell => {
+            cell.addEventListener('click', function() {
+                document.querySelectorAll('.calendar-cell').forEach(c => c.classList.remove('active-glow'));
+                this.classList.add('active-glow');
+                // Haptic feedback simulation
+                if (window.navigator.vibrate) window.navigator.vibrate(10);
+            });
+        });
+    </script>
+</body></html>

@@ -16,8 +16,9 @@
 | 03 | [03-data-model.md](./03-data-model.md) | Firestore schema、Hive box、freezed models |
 | 04 | [04-backend-spec.md](./04-backend-spec.md) | `stock.wisplu.com.tw` Python 後端 API 規格 |
 | 05 | [05-features.md](./05-features.md) | 各 feature 詳細說明（auth / calendar / prediction / share / report / theme / ads / notify / settings） |
-| 06 | [06-steps.md](./06-steps.md) | **★ 實作步驟（Step 1 ~ N）+ 完成 checkbox + commit/push 規則** |
+| 06 | [06-steps.md](./06-steps.md) | **★ 實作步驟（Step 1 ~ 28）+ 完成 checkbox + commit/push 規則** |
 | 07 | [07-phase2.md](./07-phase2.md) | Phase 2 規劃（主題市集 + RevenueCat 訂閱）|
+| 08 | [08-ui-revamp.md](./08-ui-revamp.md) | **★ UI/UX 視覺改版（Step U1 ~ U12）——Stitch 設計落地、三軸色彩、主題/導航重構；插在 06 的 Step 26 之前** |
 
 ---
 

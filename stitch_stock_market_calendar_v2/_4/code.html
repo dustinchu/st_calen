@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-TW"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>股市行事曆 v2 - 分享預覽</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&amp;family=Noto+Sans+TC:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #051424;
+            color: #d4e4fa;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .neo-brutalist-card {
+            border: 2px solid #ffffff;
+            box-shadow: 4px 4px 0px 0px #ffffff;
+        }
+        .aspect-9-16 { aspect-ratio: 9/16; }
+        .aspect-1-1 { aspect-ratio: 1/1; }
+        .aspect-4-5 { aspect-ratio: 4/5; }
+        
+        .rocket-glow {
+            filter: drop-shadow(0 0 20px rgba(173, 198, 255, 0.4));
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface": "#051424",
+                      "surface-dim": "#051424",
+                      "error": "#ffb4ab",
+                      "outline": "#8c909f",
+                      "on-secondary-fixed-variant": "#930005",
+                      "inverse-primary": "#005ac2",
+                      "inverse-surface": "#d4e4fa",
+                      "secondary": "#ffb4aa",
+                      "primary-fixed-dim": "#adc6ff",
+                      "primary-container": "#4d8eff",
+                      "on-tertiary-fixed-variant": "#00531c",
+                      "on-primary-fixed": "#001a42",
+                      "on-error-container": "#ffdad6",
+                      "on-surface": "#d4e4fa",
+                      "surface-container-highest": "#273647",
+                      "on-primary": "#002e6a",
+                      "on-secondary": "#690003",
+                      "on-primary-container": "#00285d",
+                      "on-surface-variant": "#c2c6d6",
+                      "background": "#051424",
+                      "secondary-container": "#c5020b",
+                      "error-container": "#93000a",
+                      "secondary-fixed-dim": "#ffb4aa",
+                      "surface-tint": "#adc6ff",
+                      "tertiary-fixed-dim": "#53e16f",
+                      "surface-container-high": "#1c2b3c",
+                      "surface-bright": "#2c3a4c",
+                      "tertiary": "#53e16f",
+                      "surface-variant": "#273647",
+                      "inverse-on-surface": "#233143",
+                      "on-background": "#d4e4fa",
+                      "primary": "#adc6ff",
+                      "tertiary-fixed": "#72fe88",
+                      "on-primary-fixed-variant": "#004395",
+                      "surface-container-lowest": "#010f1f",
+                      "on-tertiary-container": "#00320e",
+                      "on-error": "#690005",
+                      "on-tertiary-fixed": "#002107",
+                      "on-secondary-container": "#ffd2cc",
+                      "surface-container": "#122131",
+                      "surface-container-low": "#0d1c2d",
+                      "tertiary-container": "#00a741",
+                      "on-secondary-fixed": "#410001",
+                      "on-tertiary": "#003911",
+                      "outline-variant": "#424754",
+                      "primary-fixed": "#d8e2ff",
+                      "secondary-fixed": "#ffdad5"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit": "4px",
+                      "margin-mobile": "16px",
+                      "xs": "4px",
+                      "lg": "24px",
+                      "gutter": "12px",
+                      "xl": "32px",
+                      "sm": "8px",
+                      "md": "16px"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": ["Noto Sans TC"],
+                      "display-bold": ["Noto Sans TC"],
+                      "body-lg": ["Noto Sans TC"],
+                      "headline-lg": ["Noto Sans TC"],
+                      "label-caps": ["Inter"],
+                      "data-heavy": ["Inter"],
+                      "headline-md": ["Noto Sans TC"],
+                      "body-sm": ["Noto Sans TC"]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                      "display-bold": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                      "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                      "data-heavy": ["18px", {"lineHeight": "22px", "fontWeight": "700"}],
+                      "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+      </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-lg text-on-surface overflow-x-hidden">
+<!-- Top App Bar -->
+<header class="flex justify-between items-center w-full px-margin-mobile h-16 fixed top-0 z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30">
+<button class="flex items-center justify-center p-2 rounded-full hover:bg-surface-bright/10 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-primary">close</span>
+</button>
+<h1 class="text-headline-lg-mobile font-display-bold text-primary tracking-tight">分享預覽</h1>
+<button class="flex items-center justify-center p-2 rounded-full hover:bg-surface-bright/10 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-primary">more_vert</span>
+</button>
+</header>
+<main class="pt-20 pb-40 px-margin-mobile max-w-lg mx-auto min-h-screen">
+<!-- Controls Section -->
+<section class="space-y-6 mb-8">
+<!-- Layout Switcher -->
+<div class="flex flex-col gap-2">
+<span class="text-label-caps font-label-caps text-outline uppercase">版面配置</span>
+<div class="flex bg-surface-container-high p-1 rounded-xl">
+<button class="flex-1 py-2 text-label-caps font-label-caps text-on-surface-variant hover:text-primary transition-colors" id="layout-full">全月</button>
+<button class="flex-1 py-2 text-label-caps font-label-caps bg-primary text-on-primary rounded-lg shadow-sm" id="layout-single">單日</button>
+<button class="flex-1 py-2 text-label-caps font-label-caps text-on-surface-variant hover:text-primary transition-colors" id="layout-stats">戰績</button>
+</div>
+</div>
+<!-- Aspect Ratio Switcher -->
+<div class="flex flex-col gap-2">
+<span class="text-label-caps font-label-caps text-outline uppercase">尺寸比例</span>
+<div class="flex gap-3">
+<button class="aspect-btn active flex-1 flex flex-col items-center gap-1 p-3 rounded-xl border border-outline-variant/50 bg-surface-container-low hover:border-primary/50 transition-all" onclick="changeAspect('9-16')">
+<div class="w-4 h-7 border-2 border-current rounded-sm"></div>
+<span class="text-[10px] font-bold">9:16</span>
+</button>
+<button class="aspect-btn flex-1 flex flex-col items-center gap-1 p-3 rounded-xl border border-outline-variant/50 bg-surface-container-low hover:border-primary/50 transition-all" onclick="changeAspect('1-1')">
+<div class="w-5 h-5 border-2 border-current rounded-sm"></div>
+<span class="text-[10px] font-bold">1:1</span>
+</button>
+<button class="aspect-btn flex-1 flex flex-col items-center gap-1 p-3 rounded-xl border border-outline-variant/50 bg-surface-container-low hover:border-primary/50 transition-all" onclick="changeAspect('4-5')">
+<div class="w-5 h-6 border-2 border-current rounded-sm"></div>
+<span class="text-[10px] font-bold">4:5</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Preview Area -->
+<section class="relative w-full transition-all duration-500 ease-in-out" id="preview-container">
+<div class="w-full aspect-9-16 relative overflow-hidden rounded-[32px] neo-brutalist-card bg-[#051424] flex flex-col items-center justify-center p-8 transition-all duration-500" id="capture-area">
+<!-- Background Decoration -->
+<div class="absolute inset-0 opacity-20 pointer-events-none overflow-hidden">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center">
+<span class="material-symbols-outlined text-[240px] text-primary/30 rocket-glow animate-bounce" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>
+</div>
+<div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/10 via-transparent to-secondary/10"></div>
+<div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0); background-size: 24px 24px;"></div>
+</div>
+<!-- Main Content -->
+<div class="relative z-10 text-center flex flex-col items-center gap-6">
+<div class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-primary/20 border border-primary/30 backdrop-blur-md">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-label-caps font-label-caps text-primary tracking-widest uppercase">單日快訊</span>
+</div>
+<div class="space-y-4">
+<h2 class="text-display-bold font-display-bold text-white leading-tight" id="preview-headline">
+                            明天 台積電<br/>我看漲停 🚀
+                        </h2>
+<p class="text-headline-md font-headline-md text-primary/80">
+                            2023/10/17
+                        </p>
+</div>
+<div class="flex flex-wrap justify-center gap-2 mt-4">
+<div class="glass-card px-4 py-2 rounded-xl border border-white/10">
+<span class="text-label-caps font-label-caps text-outline">目標價</span>
+<div class="text-data-heavy font-data-heavy text-white">680.0</div>
+</div>
+<div class="glass-card px-4 py-2 rounded-xl border border-white/10">
+<span class="text-label-caps font-label-caps text-outline">預期漲幅</span>
+<div class="text-data-heavy font-data-heavy text-tertiary">+10.0%</div>
+</div>
+</div>
+</div>
+<!-- Footer Branding -->
+<div class="absolute bottom-10 left-0 w-full px-10 flex justify-between items-end opacity-60">
+<div class="flex flex-col">
+<span class="text-label-caps font-label-caps text-white text-[10px]">來自</span>
+<span class="font-display-bold text-primary text-lg">股市行事曆 v2</span>
+</div>
+<div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center p-1 overflow-hidden">
+<!-- Mock QR Code -->
+<div class="w-full h-full grid grid-cols-4 grid-rows-4 gap-0.5">
+<div class="bg-black"></div><div class="bg-black"></div><div class="bg-white"></div><div class="bg-black"></div>
+<div class="bg-black"></div><div class="bg-white"></div><div class="bg-black"></div><div class="bg-black"></div>
+<div class="bg-white"></div><div class="bg-black"></div><div class="bg-black"></div><div class="bg-white"></div>
+<div class="bg-black"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-black"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Download Tooltip Interaction -->
+<div class="fixed bottom-32 left-1/2 -translate-x-1/2 bg-on-surface text-surface px-6 py-3 rounded-full font-bold text-sm shadow-2xl opacity-0 translate-y-4 transition-all z-50 pointer-events-none" id="toast">
+                圖片已準備好分享！
+            </div>
+</section>
+</main>
+<!-- Bottom Actions -->
+<div class="fixed bottom-0 left-0 w-full p-margin-mobile bg-gradient-to-t from-surface via-surface to-transparent pt-12 z-[60]">
+<div class="max-w-lg mx-auto flex flex-col gap-3 pb-8">
+<button class="w-full h-14 bg-primary text-on-primary rounded-2xl font-display-bold text-lg flex items-center justify-center gap-2 active:scale-95 transition-transform shadow-lg shadow-primary/20" onclick="handleShare()">
+<span class="material-symbols-outlined">share</span>
+                分享
+            </button>
+<button class="w-full h-14 bg-surface-container-highest/80 backdrop-blur-md text-on-surface rounded-2xl font-headline-md text-md flex items-center justify-center gap-2 active:scale-95 transition-transform border border-outline-variant/30" onclick="handleSave()">
+<span class="material-symbols-outlined">download</span>
+                儲存到相簿
+            </button>
+</div>
+</div>
+<script>
+        function changeAspect(ratio) {
+            const preview = document.getElementById('capture-area');
+            const container = document.getElementById('preview-container');
+            
+            // Remove all aspect classes
+            preview.classList.remove('aspect-9-16', 'aspect-1-1', 'aspect-4-5');
+            
+            // Add new aspect class
+            preview.classList.add(`aspect-${ratio}`);
+            
+            // Update UI buttons
+            document.querySelectorAll('.aspect-btn').forEach(btn => {
+                btn.classList.remove('border-primary', 'text-primary', 'bg-primary-container/10');
+            });
+            event.currentTarget.classList.add('border-primary', 'text-primary', 'bg-primary-container/10');
+
+            // Handle content scaling for smaller aspects
+            const headline = document.getElementById('preview-headline');
+            if (ratio === '1-1') {
+                headline.style.fontSize = '24px';
+            } else {
+                headline.style.fontSize = '';
+            }
+        }
+
+        function handleShare() {
+            showToast("正在啟動系統分享...");
+        }
+
+        function handleSave() {
+            const btn = event.currentTarget;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> 處理中...';
+            
+            setTimeout(() => {
+                showToast("已成功儲存至相簿！");
+                btn.innerHTML = '<span class="material-symbols-outlined">download</span> 儲存到相簿';
+            }, 1500);
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.remove('opacity-0', 'translate-y-4');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-4');
+                toast.classList.remove('opacity-100', 'translate-y-0');
+            }, 3000);
+        }
+
+        // Initialize with 9:16 active
+        document.querySelector('.aspect-btn').classList.add('border-primary', 'text-primary', 'bg-primary-container/10');
+    </script>
+</body></html>
