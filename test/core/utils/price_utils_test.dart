@@ -84,4 +84,51 @@ void main() {
       expect(isDownLimit(prev: -1, current: 10, market: 'tw'), isFalse);
     });
   });
+
+  group('settle helpers (Step 16)', () {
+    test('customPrice 嚴格等於命中', () {
+      final r = settleCustomPrice(predictedPrice: 1000, actualClose: 1000);
+      expect(r.hit, isTrue);
+      expect(r.hitPercent, closeTo(0, 1e-9));
+    });
+
+    test('customPrice 差 0.5 未命中', () {
+      final r = settleCustomPrice(predictedPrice: 1000, actualClose: 1000.5);
+      expect(r.hit, isFalse);
+    });
+
+    test('customPercent 小數第一位相等命中', () {
+      // 預測 +3%，prev 100, actual 103.02 → actual% ≈ 3.02 → diff 0.02 < 0.05
+      final r = settleCustomPercent(
+          predictedPercent: 3, prevClose: 100, actualClose: 103.02);
+      expect(r.hit, isTrue);
+    });
+
+    test('customPercent 差 0.1pp 未命中', () {
+      final r = settleCustomPercent(
+          predictedPercent: 3, prevClose: 100, actualClose: 103.1);
+      expect(r.hit, isFalse);
+    });
+
+    test('bullish 收紅命中、平盤未命中', () {
+      expect(settleBullish(prevClose: 100, actualClose: 101).hit, isTrue);
+      expect(settleBullish(prevClose: 100, actualClose: 100).hit, isFalse);
+      expect(settleBullish(prevClose: 100, actualClose: 99).hit, isFalse);
+    });
+
+    test('bearish 收綠命中、平盤未命中', () {
+      expect(settleBearish(prevClose: 100, actualClose: 99).hit, isTrue);
+      expect(settleBearish(prevClose: 100, actualClose: 100).hit, isFalse);
+    });
+
+    test('upLimit ≥ +10% 命中', () {
+      expect(settleUpLimit(prevClose: 100, actualClose: 110).hit, isTrue);
+      expect(settleUpLimit(prevClose: 100, actualClose: 109.99).hit, isFalse);
+    });
+
+    test('downLimit ≤ -10% 命中', () {
+      expect(settleDownLimit(prevClose: 100, actualClose: 90).hit, isTrue);
+      expect(settleDownLimit(prevClose: 100, actualClose: 90.01).hit, isFalse);
+    });
+  });
 }

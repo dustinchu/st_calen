@@ -23,6 +23,14 @@ class _SpyApi implements StockApiClient {
     calls++;
     return handler(query);
   }
+
+  @override
+  Future<Result<Map<DateTime, double>, AppError>> quotes({
+    required String symbol,
+    required DateTime from,
+    required DateTime to,
+  }) async =>
+      const Result.success(<DateTime, double>{});
 }
 
 void main() {
